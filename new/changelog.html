@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#0b0e13">
+<link rel="canonical" href="https://pisg.github.io/changelog.html">
+<title>Changelog — pisg</title>
+<meta name="description" content="What changed in each release of pisg, newest first. Version 1.0: new themes, new sections, a landing page, several channels in one run, and tools for channel staff.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%230d1117'/><rect x='18' y='52' width='14' height='30' fill='%2358a6ff'/><rect x='38' y='34' width='14' height='48' fill='%233fd18b'/><rect x='58' y='44' width='14' height='38' fill='%23e5b567'/><rect x='78' y='24' width='14' height='58' fill='%23bc8cff'/></svg>">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body id="top">
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="pisg — home">
+      <span><span class="dollar">$</span>&nbsp;pisg</span>
+      <span class="ver">1.0</span>
+    </a>
+    <button class="menu-btn" id="menu-btn" aria-expanded="false" aria-controls="navlinks"><span aria-hidden="true">&#9776;</span><span class="sr-only">Menu</span></button>
+    <nav class="links" id="navlinks" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="index.html#install">Install</a>
+      <a href="index.html#themes">Themes</a>
+      <a href="docs.html">Documentation</a>
+      <a href="changelog.html" aria-current="page">Changelog</a>
+      <span class="sep" aria-hidden="true"></span>
+      <a class="ext" href="demo/">Live example &#8599;</a>
+      <a class="x-reg" href="https://github.com/PISG/pisg/releases">Releases &#8599;</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main" tabindex="-1">
+
+<section style="padding:56px 0 44px">
+  <div class="wrap">
+    <p class="kicker">Changelog</p>
+    <h2>Every release, newest first.</h2>
+    <p class="lede">Release notes for the downloads on the
+    <a href="https://github.com/PISG/pisg/releases">releases page</a>. The complete pre-0.73 history
+    &mdash; every change since 2001 &mdash; is in <code>docs/Changelog</code> in the distribution.</p>
+    <div class="cta-row">
+      <a class="btn" href="#v1.0">1.0</a>
+      <a class="btn" href="#v0.80-preview2">0.80-preview2</a>
+      <a class="btn" href="#v0.80-preview">0.80-preview</a>
+      <a class="btn" href="#v0.73">0.73</a>
+    </div>
+  </div>
+</section>
+
+<section style="padding:0 0 80px;border-bottom:0">
+  <div class="wrap">
+
+  <!-- ================================================================= 1.0 -->
+  <article class="rel now" id="v1.0">
+    <h2>1.0 <span class="tag cur">current</span></h2>
+    <p class="when">September 2026 &mdash; what changed since 0.80-preview2</p>
+
+    <p>pisg 1.0 keeps everything 0.80-preview2 does: the same parsers, the same statistics, the same
+    <code>pisg.cfg</code>. On top of that it has a new look, a set of new sections, a way to run
+    several channels from one folder, safer output, and tools to keep the statistics tidy without
+    editing files by hand.</p>
+
+    <p>Nothing you have set up has to change. The default colour scheme is still <code>default</code>,
+    and every old theme looks as it did. Everything new is opt-in through a colour scheme or an option,
+    except the extra sections, which are on by default (see <a href="#v1.0-upgrading">Upgrading</a>).</p>
+
+    <h3>Highlights</h3>
+    <ul>
+      <li><strong>Five modern themes</strong>, light and dark, that follow the reader's system setting:
+      <code>modern</code>, <code>midnight</code>, <code>amoled</code>, <code>terminal</code> and
+      <code>canada</code>.</li>
+      <li><strong>Seven new sections</strong>: an overview, an interactive <em>who talks to whom</em>
+      map, closest pairs, social roles, time personalities, <em>who carries the channel</em> and
+      signature words.</li>
+      <li><strong>Section navigation</strong>: a menu down the left side on wide screens, a slim bar on
+      phones.</li>
+      <li><strong>A landing page</strong> with the statistics of your statistics: totals, a comparison
+      of every channel, and a button to open each one.</li>
+      <li><strong>Several channels, one run</strong>: a channel that cannot be read no longer stops the
+      others.</li>
+      <li><strong>Profiles people manage themselves</strong> from IRC (<code>!pisginfo</code>,
+      <code>!pisgmerge</code> ...) and <strong>automatic nick merging</strong> for networks with
+      account services.</li>
+      <li><strong>Safer</strong>: a page is replaced only when it is complete, and pisg exits with an
+      error status when it fails.</li>
+    </ul>
+
+    <h3 id="v1.0-look">New look</h3>
+    <ul>
+      <li>Five new colour schemes, all generated from one stylesheet
+      (<code>layout/build-themes.py</code>), so they stay consistent. Use one with
+      <code>&lt;set ColorScheme="modern"&gt;</code>. The old themes are unchanged.</li>
+      <li>Design: ink on paper with colour kept for data. Sections are separated by a thin rule instead
+      of boxes, nicks and figures are set in a monospace face, bars stand on one baseline, and the peak
+      of a chart is the only value labelled.</li>
+      <li>Four time-of-day colours (night, morning, afternoon, evening) used the same way in every
+      chart. They were checked for colour-blind safety on light, dark and pure black backgrounds.</li>
+      <li>Responsive from 360&nbsp;px phones to wide desktop screens. Wide screens get a fixed menu on
+      the left, use the full width, and put short sections side by side in two columns. Wide tables
+      scroll inside their own section and never make the whole page scroll sideways.</li>
+      <li>A viewport tag, so pages scale correctly on phones.</li>
+      <li>Full UTF-8 handling with <code>&lt;set Charset="utf-8"&gt;</code>: quotes, words and nicks in
+      the new sections keep their accented and non-Latin letters.</li>
+      <li>Column titles stay on one line, tables share one left edge, &ldquo;3 days ago&rdquo; no longer
+      breaks, and the shared default avatar is shown small and faded.</li>
+    </ul>
+
+    <h3 id="v1.0-sections">New sections</h3>
+    <p>All are on by default and can be switched off individually.</p>
+    <div class="tablewrap">
+    <table>
+      <thead><tr><th>Section</th><th>What it shows</th><th>Option</th></tr></thead>
+      <tbody>
+        <tr><td>Channel overview</td><td>A headline sentence and the key facts: words, lines per day,
+        busiest and quietest hour, questions, links, top talker, joins, kicks</td>
+        <td><code>ShowOverview</code></td></tr>
+        <tr><td>Who talks to whom</td><td>An interactive map of who addresses, mentions or answers whom.
+        Click a nick or a line for details. Bots are left out</td>
+        <td><code>ShowRelations</code>, <code>RelationNicks</code>, <code>RelationMinWeight</code></td></tr>
+        <tr><td>Closest pairs</td><td>The strongest two-way conversations, with how they talk</td>
+        <td><code>ShowRelations</code></td></tr>
+        <tr><td>Social roles</td><td>Most talked to, most outgoing, connector, best listener, lone wolf</td>
+        <td><code>ShowRelations</code></td></tr>
+        <tr><td>Time personalities</td><td>Who owns the night, morning, afternoon and evening</td>
+        <td><code>ShowTimePersonalities</code></td></tr>
+        <tr><td>Who carries the channel</td><td>How much of the talk comes from the top 1, 3, 5, 10 and 20</td>
+        <td><code>ShowConcentration</code></td></tr>
+        <tr><td>Signature words</td><td>The word each person uses a lot and hardly anyone else does</td>
+        <td><code>ShowSignatureWords</code></td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p>The relation map spaces its nicks by how close they are, not to scale, so a busy channel does not
+    crush the middle of the map. Nicks marked <code>sex="b"</code> or <code>ignore="y"</code> are
+    treated as bots.</p>
+    <p>English and French texts are included. Other languages fall back to English.</p>
+
+    <h3 id="v1.0-nav">Navigation</h3>
+    <ul>
+      <li><strong>Left menu</strong> on screens 1000&nbsp;px and wider: the channel name, every section,
+      and a marker on the section you are reading.</li>
+      <li><strong>Section bar</strong> on narrower screens: a slim bar showing where you are, with a
+      &ldquo;Sections&rdquo; button that opens the whole list. It works without JavaScript
+      (<code>ShowNavBar</code>, on by default).</li>
+      <li><strong>Back button</strong> (<code>HomeLink</code>): an &ldquo;All channels&rdquo; button
+      above the title of every stats page that leads to your landing page.</li>
+    </ul>
+
+    <h3 id="v1.0-landing">Landing page</h3>
+    <p><code>site/index.html</code> is a single static file: no PHP, no cron job, no libraries. It works
+    on any static host, including GitHub Pages. Copy it next to your stats pages.</p>
+    <p>pisg writes <code>channels.json</code> beside each page (option <code>ChannelIndex</code>) and
+    the landing page turns it into the statistics of the statistics:</p>
+    <ul>
+      <li>a headline (lines, channels, days of history) and facts across every channel;</li>
+      <li>one row per channel: share of all lines, nicks, lines per day, its busiest hour, a 24-hour
+      profile in the time-of-day colours, a small chart of the last 30 days, and a
+      <strong>View stats</strong> button;</li>
+      <li>the five busiest people in each channel.</li>
+    </ul>
+    <p>Old links such as <code>index.html#canada</code> still jump to that channel. Names from the JSON
+    are always shown as plain text, and only plain relative <code>.html</code> paths are accepted as
+    links.</p>
+
+    <h3 id="v1.0-options">New options</h3>
+    <div class="tablewrap">
+    <table>
+      <thead><tr><th>Option</th><th>Default</th><th>What it does</th></tr></thead>
+      <tbody>
+        <tr><td><code>ShowOverview</code></td><td>on</td><td>The channel overview section</td></tr>
+        <tr><td><code>ShowRelations</code></td><td>on</td><td>The relation map, closest pairs and social roles</td></tr>
+        <tr><td><code>RelationNicks</code></td><td>30</td><td>How many nicks the relation map shows</td></tr>
+        <tr><td><code>RelationMinWeight</code></td><td>3</td><td>How strong a connection must be to be drawn</td></tr>
+        <tr><td><code>ShowTimePersonalities</code></td><td>on</td><td>Time personalities section</td></tr>
+        <tr><td><code>ShowConcentration</code></td><td>on</td><td><em>Who carries the channel</em> section</td></tr>
+        <tr><td><code>ShowSignatureWords</code></td><td>on</td><td>Signature words section</td></tr>
+        <tr><td><code>ShowNavBar</code></td><td>on</td><td>The section bar and left menu</td></tr>
+        <tr><td><code>HomeLink</code></td><td>empty</td><td>Page the &ldquo;All channels&rdquo; button
+        leads to (<code>index.html</code>, or an http(s) address). Empty or <code>none</code>: no button</td></tr>
+        <tr><td><code>BadUrls</code></td><td>empty</td><td>Words that keep a URL out of the URL
+        statistics. Case-insensitive, matched anywhere in the URL, with <code>*</code> and <code>?</code>
+        wildcards (for example <code>postimg.cc/*</code>)</td></tr>
+        <tr><td><code>ChannelIndex</code></td><td><code>channels.json</code></td><td>File pisg writes
+        for the landing page. <code>none</code> turns it off</td></tr>
+        <tr><td><code>ShareStats</code></td><td>off</td><td>Opt-in sharing of your page's link,
+        maintainer and network. <code>preview</code> shows exactly what would be sent and sends nothing</td></tr>
+        <tr><td><code>ShareLink</code>, <code>ShareWebhook</code></td><td>empty</td><td>Where the shared
+        entry points, and an optional webhook</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p><code>pisg.cfg.example</code> now lists every option with what it does, so it can be copied and
+    used at once.</p>
+
+    <h3 id="v1.0-tools">Tools for the people who run the channel</h3>
+    <p>These are optional and live in <code>scripts/</code>.</p>
+    <ul>
+      <li><strong><code>eggdrop-pisg.tcl</code></strong>: profile commands for an eggdrop, in the
+      channel (<code>!pisg...</code>) and in a private message (<code>pisg...</code>). Nothing is stored
+      in pisg itself: the bot writes <code>users.cfg</code>, which pisg reads with
+      <code>&lt;include="users.cfg"&gt;</code>.
+        <ul>
+          <li><code>!pisghelp [command]</code>: explains each command.</li>
+          <li><code>!pisginfo</code>: set your sex, picture and link.</li>
+          <li><code>!pisgmerge</code> / <code>!pisgunmerge</code>: count your other nicks as one
+          person, or stop.</li>
+          <li><code>!pisgshow</code>, <code>!pisgdel</code>, and <code>!pisgdeluser</code> (bot masters
+          only).</li>
+          <li><code>!pisgstats</code>: replies with the address of the stats page. It is open to
+          everyone, and it no longer runs pisg inside the bot.</li>
+          <li>People are identified by their network account (<code>getaccount</code>, or the account
+          host on Undernet), can only claim the nick they are using, and cannot overwrite a
+          <code>&lt;user&gt;</code> line you wrote by hand. Changes are rate limited. There is a test
+          suite: <code>eggdrop-pisg-test.tcl</code> (107 checks).</li>
+        </ul>
+      </li>
+      <li><strong><code>pisg-autoalias.py</code></strong>: nicks seen with the same authenticated host
+      (<code>*.users.undernet.org</code>) are one person. It writes a file for pisg to include and can
+      run before every pisg run. Your own <code>&lt;user&gt;</code> lines always win. Shared hosts,
+      gateways and bouncers are never merged. Test suite included.</li>
+      <li><strong><code>adiirc2eggdrop.py</code></strong>: turns an AdiIRC (or similar) channel log into
+      eggdrop or <strong>ZNC</strong> logs, so old history can be added to the statistics. It keeps
+      public events only, converts local time to UTC, never overwrites a file, and stops at the moment
+      your real logging starts. <code>--format znc</code> writes what the ZNC log module writes (one
+      file per day, <code>energymech</code> format).</li>
+      <li><strong><code>znc-setup.sh</code></strong>: puts converted logs into a ZNC account's log folder
+      and lets pisg, which runs as a different Unix user, read only the channel folders it needs. It
+      shows what it would do before it changes anything.</li>
+      <li>pisg reads ZNC logs with <code>Format="energymech"</code> and a <code>LogDir</code> per
+      channel.</li>
+    </ul>
+
+    <h3 id="v1.0-multi">Running several channels</h3>
+    <ul>
+      <li>One <code>pisg.cfg</code> can hold any number of <code>&lt;channel&gt;</code> blocks. If a
+      channel cannot be read (a missing log folder, a wrong format), pisg prints
+      <code>Skipped channel #name: reason</code>, carries on with the others, and exits with status 1 so
+      cron or monitoring notices.</li>
+      <li>An error in one channel no longer leaks that channel's nick aliases into the next one.</li>
+      <li>Each channel reads its own <code>LogDir</code> (a folder of dated log files, read in date
+      order), so eggdrop's daily logs and ZNC's one-file-a-day logs can sit side by side in one
+      config.</li>
+    </ul>
+
+    <h3 id="v1.0-reliability">Reliability</h3>
+    <ul>
+      <li>A page is written to a temporary file and moved into place only once it is complete, so an
+      error can never leave a half-written page where the good one was.</li>
+      <li>pisg now exits with status 1 when it fails (it used to exit 0).</li>
+      <li>A section that fails is skipped with a warning; the rest of the page is still written.</li>
+      <li>Long quotes are shortened on a character boundary, so UTF-8 text is no longer cut in half.</li>
+      <li>&ldquo;Most used words&rdquo; no longer lists punctuation or ASCII art.</li>
+      <li>URL statistics honour <code>BadUrls</code>, so spam and image-host links can be left out.</li>
+    </ul>
+
+    <h3 id="v1.0-docs">Documentation</h3>
+    <ul>
+      <li><code>docs/pisg-doc.html</code>: the whole manual as one web page, with a complete example
+      configuration for a <code>#example</code> channel at the end. Built from
+      <code>docs/pisg-doc.xml</code> by <code>docs/xml2html.py</code>.</li>
+      <li><code>pisg.cfg.example</code>: every option, built by
+      <code>docs/gen-example-config.py</code>.</li>
+      <li>New options are documented in the manual, and <code>README.md</code> has a short
+      &ldquo;what's new&rdquo;.</li>
+    </ul>
+
+    <h3 id="v1.0-upgrading">Upgrading</h3>
+    <ol>
+      <li>Replace the program files. Your <code>pisg.cfg</code> keeps working as it is.</li>
+      <li><strong>The new sections are on by default</strong>, in every colour scheme (the old ones show
+      them in a plain style). If you want the old page exactly, set <code>ShowOverview</code>,
+      <code>ShowRelations</code>, <code>ShowTimePersonalities</code>, <code>ShowConcentration</code>,
+      <code>ShowSignatureWords</code> and <code>ShowNavBar</code> to <code>0</code>.</li>
+      <li>To use the new look, add <code>&lt;set ColorScheme="modern"&gt;</code> (or
+      <code>midnight</code>, <code>amoled</code>, <code>terminal</code>, <code>canada</code>).</li>
+      <li><code>pisg</code> now returns exit status 1 on failure. If a script or cron job treated any
+      exit as success, check what it does with the error.</li>
+      <li>For the landing page, copy <code>site/index.html</code> into your output folder and run pisg
+      once so <code>channels.json</code> exists. Add <code>&lt;set HomeLink="index.html"&gt;</code> for
+      the back button.</li>
+    </ol>
+    <p><strong>Requirements</strong> are unchanged for pisg itself (Perl). The optional tools need
+    Python 3 (converter, alias generator), Tcl 8.6 and an eggdrop (the bot script), and
+    <code>JSON::PP</code>, part of core Perl, for <code>ChannelIndex</code>.</p>
+
+    <div class="note good">Everything above is live on this site:
+    <a href="demo/nightshift.html">a busy channel's page</a>,
+    <a href="demo/">the landing page</a>, and
+    <a href="index.html#themes">the themes</a>.</div>
+  </article>
+
+  <!-- ====================================================== 0.80-preview2 -->
+  <article class="rel" id="v0.80-preview2">
+    <h2>0.80-preview2 <span class="tag pre">pre-release</span></h2>
+    <p class="when">21 February 2016</p>
+    <ul>
+      <li>Removed the need for separate <code>.png</code> files &mdash; the bar graphics are embedded in
+      the page.</li>
+      <li>Replaced SourceForge links with GitHub Pages.</li>
+      <li>Greatly improved cache performance.</li>
+    </ul>
+    <p><a href="https://github.com/PISG/pisg/releases/tag/0.80-preview2">Release page &rarr;</a></p>
+  </article>
+
+  <!-- ======================================================= 0.80-preview -->
+  <article class="rel" id="v0.80-preview">
+    <h2>0.80-preview <span class="tag pre">pre-release</span></h2>
+    <p class="when">February 2016</p>
+    <ul>
+      <li>Simple checksums now used for validating the cache.</li>
+      <li>Rounded corners and flatter graphics.</li>
+    </ul>
+  </article>
+
+  <!-- ================================================================ 0.73 -->
+  <article class="rel" id="v0.73">
+    <h2>0.73 <span class="tag old">stable</span></h2>
+    <p class="when">18 January 2012</p>
+    <p>The last stable release of the SourceForge era, and the version most installations still run.
+    The <a href="https://github.com/PISG/pisg/releases/tag/0.73">release page</a> has the assets, and
+    <code>docs/Changelog</code> in the distribution has the full history leading up to it &mdash; every
+    change back to the first release in 2001.</p>
+  </article>
+
+  <!-- ============================================================ earlier -->
+  <article class="rel" id="earlier">
+    <h2>0.1 &rarr; 0.72 <span class="tag old">history</span></h2>
+    <p class="when">2001 &ndash; 2011</p>
+    <p>Eleven years of releases by Morten &ldquo;mbrix&rdquo; Brix Pedersen and contributors, kept in
+    <code>docs/Changelog</code>. The original project page is still on SourceForge:
+    <a href="https://sourceforge.net/projects/pisg/">sourceforge.net/projects/pisg</a>.</p>
+  </article>
+
+  </div>
+</section>
+
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="foot-bottom" style="border-top:0;padding-top:0">
+      <span class="foot-mark"><span style="color:var(--accent)">$</span> pisg 1.0 &mdash; GPL-2.0-or-later</span>
+      <span><a href="index.html">Home</a> &middot; <a href="privacy.html">Privacy</a> &middot;
+      <a href="cookies.html">Cookies</a> &middot; <a href="terms.html">Terms</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/site.js"></script>
+</body>
+</html>
