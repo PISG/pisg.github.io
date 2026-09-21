@@ -349,7 +349,8 @@ kbd{font-family:var(--mono);font-size:.8em;background:var(--panel2);border:1px s
   border-bottom:1px solid var(--border);font-size:13px;color:var(--faint);
 }
 .codebar span{flex:1;font-family:var(--mono)}
-pre.cfg{margin:0;border:0;border-radius:0;max-height:36rem;overflow:auto;font-size:12.5px;line-height:1.5}
+pre.cfg{margin:0;border:0;border-radius:0;max-height:36rem;overflow-y:auto;overflow-x:hidden;font-size:12.5px;line-height:1.5;
+  white-space:pre-wrap;overflow-wrap:anywhere}   /* long lines wrap: no sideways scroll; Copy still gets them whole */
 
 .table-scroll{overflow-x:auto}
 
@@ -423,6 +424,7 @@ body.docs-page{font-size:16px;line-height:1.72;--gut:clamp(24px,3.6vw,60px);--ba
 .docs-page .main li{margin:7px 0}
 .docs-page .main li::marker{color:var(--faint)}
 .docs-page .main pre{font-size:13.5px;max-width:120ch}
+.docs-page .main pre.cfg{max-width:none;font-size:13px}
 .docs-page .main table{max-width:120ch;font-size:14px}
 .docs-page .sec-intro{font-size:17px;color:var(--muted);max-width:74ch;margin-bottom:22px}
 .docs-page .main a:not(.pill):not(.card):not(.anchor):not(.btn){text-decoration:underline;text-decoration-color:rgba(88,166,255,.35);text-underline-offset:3px}
