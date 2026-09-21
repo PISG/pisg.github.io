@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
 """
-Build new/docs/index.html out of the manual pisg ships (docs/pisg-doc.html, generated
-from docs/pisg-doc.xml), plus the chapters that manual does not have yet: the options
-added in 1.0 and the optional tools.
+Build docs/index.html out of the manual pisg ships (docs/pisg-doc.html, generated
+from docs/pisg-doc.xml), plus a chapter that manual does not have: the optional tools.
 
-Input  : SRC below — a copy of the generated pisg-doc.html
+Input  : ../pisg/docs/pisg-doc.html — the pisg repository checked out next to this one.
+         Rebuild it there first (python3 docs/xml2html.py docs/pisg-doc.xml docs/pisg-doc.html).
 Output : docs/index.html
 """
 import io, re, os
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 SITE = os.path.dirname(HERE)                                    # the repository root
-SRC  = r'C:\Users\admin\Desktop\output\pisg-doc.html'
+SRC  = os.path.join(os.path.dirname(SITE), 'pisg', 'docs', 'pisg-doc.html')
 OUT  = os.path.join(SITE, 'docs', 'index.html')
 
 doc = io.open(SRC, encoding='utf-8').read()
@@ -45,7 +45,12 @@ def tidy(html):
     html = re.sub(r'</pre>\s*</p>', '</pre>', html)
     return html
 
-def cards(chapter_html, since=None):
+# options added in 1.0a: they are in the manual's own chapters and get a badge there
+NEW_1_0A = ['ShowOverview', 'ShowRelations', 'RelationNicks', 'RelationMinWeight',
+            'ShowTimePersonalities', 'ShowConcentration', 'ShowSignatureWords',
+            'ShowNavBar', 'HomeLink', 'BadUrls', 'ChannelIndex']
+
+def cards(chapter_html):
     """Turn <section class="option"> blocks into the site's option cards."""
     def one(m):
         oid, name, purpose, body = m.group(1), m.group(2), m.group(3), m.group(4)
@@ -55,7 +60,7 @@ def cards(chapter_html, since=None):
         default = re.search(r'<h4>Default</h4>\s*<p>(.*?)</p>',
                             m.group(4), re.S)
         default = re.sub(r'\s+', ' ', default.group(1)).strip() if default else 'Unset'
-        badge = ' <span class="since">1.0</span>' if since else ''
+        badge = ' <span class="since">1.0a</span>' if oid in NEW_1_0A else ''
         return ('<article class="opt" id="%s" data-k="%s %s">\n'
                 '<h3><a class="anchor" href="#%s" aria-label="Link to %s">%s</a>'
                 '<span class="purpose">%s</span>%s</h3>\n%s\n'
@@ -85,7 +90,7 @@ guide2 = re.sub(
   guide2, flags=re.S)
 
 guide2 = re.sub(
-  r'<p>If you have created a nice stylesheet which other can take advantage of,.*?next version of pisg\.</p>',
+  r'<p>If you have created a nice stylesheet which others? can take advantage of,.*?</p>',
   '<p>The four modern schemes are generated from one palette by '
   '<code>layout/build-themes.py</code>, so to change them all at once &mdash; or add a fifth in the '
   'same style &mdash; edit the palette in that script and run it, rather than editing the CSS files '
@@ -98,7 +103,7 @@ guide2 = re.sub(
 guide2 = re.sub(
   r'<section id="mailing-list-and-bugs"><h3>Obtaining help and reporting bugs</h3>.*?</section>',
   '<section id="mailing-list-and-bugs"><h3>Obtaining help and reporting bugs</h3>\n'
-  '<p>If this page did not answer it, ask in <code>#PISG</code> on Undernet '
+  '<p>If this page did not answer it, ask in <code>#pisg</code> on Undernet '
   '(<code>irc.undernet.org</code>) &mdash; that is where the people who work on pisg are.</p>\n'
   '<p>For bugs, patches and feature requests, use the '
   '<a href="https://github.com/PISG/pisg/issues">issue tracker</a> on GitHub. Say which pisg version '
@@ -111,7 +116,7 @@ guide2 = re.sub(
   guide2, flags=re.S)
 
 # the old manual says "pisg-0.37" in the shell prompt; make it current
-guide2 = guide2.replace('user@host:pisg-0.37$ ./pisg', 'user@host:~/pisg$ ./pisg')
+guide2 = guide2.replace('user@host:pisg-0.37$ ./pisg', 'user@host:~/pisg$ ./pisg')  # older manuals
 
 # ---------------------------------------------------------------------------
 # 2. the reference chapters as cards
@@ -134,107 +139,15 @@ example_ch = example_ch.replace('class="btn copy"', 'class="btn small copybtn"')
 example_ch = example_ch.replace('class="btn"', 'class="btn small"')
 
 # ---------------------------------------------------------------------------
-# 3. the chapter the shipped manual does not have yet: options added in 1.0
+# 3. a short chapter pointing at the options added in 1.0a
 # ---------------------------------------------------------------------------
-def opt(oid, purpose, code, desc, default):
-    return ('<article class="opt" id="%s" data-k="%s %s">\n'
-            '<h3><a class="anchor" href="#%s" aria-label="Link to %s">%s</a>'
-            '<span class="purpose">%s</span> <span class="since">1.0a</span></h3>\n'
-            '<pre>%s</pre>\n<p>%s</p>\n'
-            '<p class="meta"><b>Default:</b> %s</p>\n</article>\n'
-            % (oid, oid.lower(), purpose.lower(), oid, oid, oid, purpose, code, desc, default))
-
-new_opts = []
-new_opts.append(opt('ShowOverview', 'the channel overview section',
-  '&lt;set ShowOverview="1"&gt;',
-  'Shows the <code>Channel overview</code> section at the top of the page: one headline sentence '
-  '(lines, nicks, days) and the key facts &mdash; words, lines per day, busiest and quietest hour, '
-  'questions asked, links shared, top talker, joins and kicks.', '1'))
-
-new_opts.append(opt('ShowRelations', 'who talks to whom',
-  '&lt;set ShowRelations="1"&gt;\n&lt;set RelationNicks="30"&gt;\n&lt;set RelationMinWeight="3"&gt;',
-  'Shows three sections built from the same data: the interactive <code>Who talks to whom</code> map, '
-  '<code>Closest pairs</code> and <code>Social roles</code> (most talked to, most outgoing, connector, '
-  'best listener, lone wolf). A connection is counted when a line starts with someone\'s nick, mentions '
-  'it, or is a quick reply to them. Nicks marked <code>sex="b"</code> or <code>ignore="y"</code> are '
-  'treated as bots and left out. The map needs JavaScript; the two tables below it do not.', '1'))
-
-new_opts.append(opt('RelationNicks', 'how many nicks the map shows',
-  '&lt;set RelationNicks="30"&gt;',
-  'The number of nicks drawn in the relation map, most active first. Past about 40 the map gets hard '
-  'to read on a laptop screen. The tables below it are not affected.', '30'))
-
-new_opts.append(opt('RelationMinWeight', 'the weakest link worth drawing',
-  '&lt;set RelationMinWeight="3"&gt;',
-  'How strong a connection has to be before a line is drawn between two nicks. Raise it on a very busy '
-  'channel where everybody has said something to everybody.', '3'))
-
-new_opts.append(opt('ShowTimePersonalities', 'who owns which part of the day',
-  '&lt;set ShowTimePersonalities="1"&gt;',
-  'Shows the <code>Time personalities</code> section: night owls (0&ndash;5h), early birds (6&ndash;11h), '
-  'afternoon regulars (12&ndash;17h) and evening regulars (18&ndash;23h), with the share of each '
-  'person\'s own lines that falls in that window.', '1'))
-
-new_opts.append(opt('ShowConcentration', 'who carries the channel',
-  '&lt;set ShowConcentration="1"&gt;',
-  'Shows how much of the talking comes from the top 1, 3, 5, 10 and 20 nicks, and how few people it '
-  'takes to account for half of all lines.', '1'))
-
-new_opts.append(opt('ShowSignatureWords', 'everyone&rsquo;s own word',
-  '&lt;set ShowSignatureWords="1"&gt;',
-  'Shows the word each regular uses a lot and hardly anybody else does, how many times they used it, '
-  'and what share of all its uses that is. Words filtered by <a href="#IgnoreWords">IgnoreWords</a> or '
-  'shorter than <a href="#WordLength">WordLength</a> are not considered.', '1'))
-
-new_opts.append(opt('ShowNavBar', 'section navigation on the stats page',
-  '&lt;set ShowNavBar="1"&gt;',
-  'Adds the section menu to the generated page: a fixed list down the left on screens 1000&nbsp;px and '
-  'wider, and a slim bar with a <code>Sections</code> button on narrower ones. The bar is plain HTML '
-  'and works with JavaScript off; JavaScript only adds the marker that follows the section being '
-  'read.', '1'))
-
-new_opts.append(opt('HomeLink', 'the &ldquo;All channels&rdquo; button',
-  '&lt;set HomeLink="index.html"&gt;\n&lt;set HomeLink="https://example.org/stats/"&gt;',
-  'Puts an <code>&larr; All channels</code> button above the page title, pointing at your landing page '
-  '(see <a href="#ChannelIndex">ChannelIndex</a>). A plain relative <code>.html</code> path or an '
-  'http(s) address. Empty, or <code>none</code>, means no button &mdash; which is what you want when '
-  'you publish a single channel.', 'Unset'))
-
-new_opts.append(opt('BadUrls', 'keep URLs out of the URL statistics',
-  '&lt;set BadUrls="postimg.cc/* tinyurl.com/* /ads/"&gt;',
-  'A space separated list of patterns. A URL is left out of <code>Most referenced URLs</code> when any '
-  'pattern matches anywhere in it, case insensitively; <code>*</code> and <code>?</code> work as '
-  'wildcards. This is the blunt instrument for image hosts, tracking links and spam. To drop one exact '
-  'address instead, use <code>&lt;link url="..." ignore="y"&gt;</code> &mdash; see '
-  '<a href="#ignoring-links">Ignoring links</a>.', 'Unset'))
-
-new_opts.append(opt('ChannelIndex', 'the file the landing page reads',
-  '&lt;set ChannelIndex="channels.json"&gt;\n&lt;set ChannelIndex="none"&gt;',
-  'pisg writes a small JSON file next to your pages with one entry per channel: name, network, file, '
-  'lines, words, nicks, days, joins, questions, links, the 24-hour profile, the last 30 days and the '
-  'five busiest nicks. <code>site/index.html</code> from the distribution reads it and needs nothing '
-  'else &mdash; no PHP, no database, no cron job. <code>none</code> switches it off. Needs '
-  '<code>JSON::PP</code>, which is part of core Perl.', 'channels.json'))
-
-new_opts.append(opt('ShareStats', 'opt-in listing of your page',
-  '&lt;set ShareStats="preview"&gt;\n&lt;set ShareStats="1"&gt;',
-  'Off unless you turn it on. When on, pisg submits the entry described by '
-  '<a href="#ShareLink">ShareLink</a> &mdash; the page address, the maintainer name and the network '
-  '&mdash; so your channel can be listed publicly. Nothing from your logs is ever sent. '
-  '<code>preview</code> prints exactly what would be sent and sends nothing, which is the setting to '
-  'try first.', '0'))
-
-new_opts.append(opt('ShareLink', 'what gets shared, and where',
-  '&lt;set ShareLink="https://example.org/stats/nightshift.html"&gt;\n'
-  '&lt;set ShareWebhook="https://example.org/hooks/pisg"&gt;',
-  '<code>ShareLink</code> is the public address of the page a shared entry should point at; without it '
-  'there is nothing useful to share. <code>ShareWebhook</code> optionally posts the same entry to a URL '
-  'of your own, which is how you feed a channel list or a bot you run yourself. Both do nothing while '
-  '<a href="#ShareStats">ShareStats</a> is off.', 'Unset'))
-
 ref_new = ('<p class="sec-intro">The seven sections added in 1.0a are on by default in every colour '
-           'scheme. Set them to <code>0</code> for the page pisg wrote before 1.0 &mdash; see the '
-           '<a href="../changelog/#v1.0-upgrading">upgrade notes</a>.</p>\n' + ''.join(new_opts))
+           'scheme. Set them to <code>0</code> for the page pisg wrote before 1.0a &mdash; see the '
+           '<a href="../changelog/#v1.0-upgrading">upgrade notes</a>. Each option is described in its '
+           'chapter, marked <span class="since">1.0a</span>.</p>\n'
+           + '<div class="pill-row">'
+           + ''.join('<a class="pill" href="#%s">%s</a>' % (o, o) for o in NEW_1_0A)
+           + '</div>')
 
 # ---------------------------------------------------------------------------
 # 4. the tools chapter
@@ -261,7 +174,8 @@ in the channel with <code>!</code> and in a private message without it:</p>
 <tr><td><code>!pisgshow</code></td><td>Show what the bot has stored for you.</td></tr>
 <tr><td><code>!pisgdel</code></td><td>Delete your own entry.</td></tr>
 <tr><td><code>!pisgdeluser</code></td><td>Delete somebody else&rsquo;s entry. Bot masters only.</td></tr>
-<tr><td><code>!pisgstats</code></td><td>Reply with the address of the stats page. Open to everyone.</td></tr>
+<tr><td><code>!pisgstats</code></td><td>Reply with the address of the stats page. Open to everyone; in the
+channel only.</td></tr>
 </tbody>
 </table>
 </div>
@@ -285,8 +199,12 @@ the script on a busy bot.</p>
 authenticated host, such as <code>*.users.undernet.org</code>. This script reads your logs, groups nicks
 by that host, and writes an include file of <code>&lt;user&gt;</code> lines with aliases. Run it before
 pisg, from the same cron job.</p>
-<pre>python3 scripts/pisg-autoalias.py --logdir logs/nightshift/ --out aliases.cfg</pre>
-<pre>&lt;include="aliases.cfg"&gt;</pre>
+<pre>python3 scripts/pisg-autoalias.py --logdir ~/eggdrop/logs --prefix nightshift.log. \\
+    --manual ~/pisg/pisg.cfg --out ~/pisg/aliases.auto.cfg</pre>
+<pre>&lt;include="/home/you/pisg/aliases.auto.cfg"&gt;</pre>
+<p><code>--manual</code> names the config files whose <code>&lt;user&gt;</code> lines are yours (repeat it
+for each); <code>--hosts</code> changes the host pattern for another network; <code>--report</code> prints
+what was merged and what was skipped, and why.</p>
 <p>What it will not do: merge a shared host, a gateway, or a bouncer several people use; and it never
 touches a nick you already described yourself &mdash; your own lines always win. A test suite ships with
 it.</p>
@@ -296,15 +214,18 @@ it.</p>
 <p>Python 3. You have years of channel history in your client&rsquo;s log folder and a bot that only
 started logging last spring. This converts the client logs into the format a bot writes, so the old
 history can join the statistics:</p>
-<pre>python3 scripts/adiirc2eggdrop.py --in "AdiIRC/logs/#nightshift.log" --out logs/nightshift/
-python3 scripts/adiirc2eggdrop.py --in "AdiIRC/logs/#nightshift.log" --out logs/nightshift/ --format znc</pre>
-<p><code>--format znc</code> writes what the ZNC log module writes: one file per day, in
-<code>energymech</code> format. The rules it follows:</p>
+<pre>python3 scripts/adiirc2eggdrop.py "#nightshift.log" logs/ --channel '#nightshift' --nick YourNick \\
+    --tz Europe/Paris --before '2026-01-31 03:00' --prefix nightshift.log.</pre>
+<p><code>--tz</code> is the time zone your client logged in, <code>--before</code> the moment (UTC) your
+bot started logging, and <code>--nick</code> your own nick. Add <code>--dry-run</code> to see what it would
+write. <code>--format znc</code> writes what the ZNC log module writes instead: one
+<code>YYYY-MM-DD.log</code> per day, read with <code>Format="energymech"</code>. The rules it follows:</p>
 <ul>
-  <li>Public channel events only. Private messages, notices and your own server messages are dropped.</li>
+  <li>Public channel events only. Private messages, notices, <code>/whois</code> output and server text are
+  dropped.</li>
   <li>Local timestamps are converted to UTC, which is what bots log in.</li>
   <li>It never overwrites an existing file.</li>
-  <li>It stops at the moment your real logging starts, so nothing is counted twice.</li>
+  <li>It stops at <code>--before</code>, where your real logging starts, so nothing is counted twice.</li>
 </ul>
 </section>
 
@@ -312,12 +233,16 @@ python3 scripts/adiirc2eggdrop.py --in "AdiIRC/logs/#nightshift.log" --out logs/
 <p>Shell. ZNC&rsquo;s logs live under the ZNC user&rsquo;s home directory, and pisg usually runs as
 somebody else. This script puts converted logs into the right ZNC account folder and opens up read
 access to exactly the channel folders pisg needs &mdash; not the whole home directory.</p>
-<pre>scripts/znc-setup.sh --znc-user znc --pisg-user stats --channel '#nightshift'</pre>
-<p>It prints everything it intends to do before it changes anything, so you can read the plan first.</p>
-<p>Once that is done, read the logs like any other folder of daily logs:</p>
+<p>Put the converted logs in <code>~/znc-import/#channel/</code> of the pisg user, then, as the ZNC
+account (or with <code>sudo</code>):</p>
+<pre>PISG_USER=stats bash scripts/znc-setup.sh            # shows what it found and what it would do
+PISG_USER=stats bash scripts/znc-setup.sh --apply    # does it</pre>
+<p>Without <code>--apply</code> it changes nothing, so you can read the plan first. It never deletes or
+replaces a file, and it links each channel folder to <code>~/znc-logs/</code> of the pisg
+user, so the configuration does not need to know ZNC&rsquo;s layout:</p>
 <pre>&lt;channel="#nightshift"&gt;
  Format = "energymech"
- LogDir = "/var/lib/znc/moddata/log/nightshift/"
+ LogDir = "/home/stats/znc-logs/nightshift/"
 &lt;/channel&gt;</pre>
 </section>
 '''
@@ -346,7 +271,7 @@ CHAPTERS = [
 
 body, nav_start, nav_ref, nav_end = [], [], [], []
 for n, (cid, title, html, isref) in enumerate(CHAPTERS, 1):
-    pills = index_pills(html) if isref else ''
+    pills = index_pills(html) if isref and cid != 'reference-new' else ''
     body.append('<section id="%s">\n<h2><span class="hash">#</span>%s</h2>\n%s%s\n</section>'
                 % (cid, title, pills, html))
     # sub-sections of the two guide chapters get their own sidebar entries

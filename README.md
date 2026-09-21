@@ -2,6 +2,7 @@
 
 The website for **pisg**, the Perl IRC Statistics Generator — live at <https://pisg.github.io/>.
 The program itself is at <https://github.com/PISG/pisg>.
+What changed on the site, and when: [`CHANGELOG.md`](CHANGELOG.md).
 
 Static HTML, one stylesheet, two small scripts. No build step, no dependencies, no framework, and
 **no external requests at all**: system fonts, inline SVG icons, and the bar graphics inside the
@@ -27,7 +28,7 @@ no `localStorage`.
 | `/demo/` | `demo/index.html` | The landing page pisg ships as `site/index.html`, reading `demo/channels.json` |
 | `/demo/nightshift.html` | | Example stats page — a very busy channel, every 1.0a section |
 | `/demo/basement.html` | | Example stats page — a quiet channel, with user pictures on |
-| `/demo/themes/…` | | The short sample page in each colour scheme, for the theme gallery |
+| `/demo/themes/…` | | A full sample page in each colour scheme, for the theme gallery |
 | &mdash; | `tools/*.py` | The scripts that generate `docs/`, the classic palettes and everything in `demo/` |
 | &mdash; | `.nojekyll` | Tells GitHub Pages to serve the files as they are, with no Jekyll pass |
 
@@ -37,11 +38,10 @@ no `localStorage`.
 `demo/nightshift.html`, swaps the sixteen palette variables for the ones you pick, injects the result
 into the preview frame and offers the finished file as a download.
 
-The preview is **the full busy-channel example**, not the six-nick sample: all nineteen sections, the
+The preview is **the full busy-channel example**, not a theme sample: all nineteen sections, the
 relation map, the section menu, the tables with user pictures. That is the point of the page — you
 are judging a theme against everything pisg can put on a page. Taking the template from the same file
-also means the downloaded CSS carries the rules for the sections 1.0a added, which the older sample
-pages in `demo/themes/` do not have.
+also means the downloaded CSS carries the rules for every section 1.0a writes.
 
 **The whole editor lives in the sidebar** — the twelve themes (four modern, eight classics), the
 file name, light/dark, the sixteen colours and the readability read-out. The main column holds only
@@ -114,7 +114,12 @@ The numbers, the graphs, the relation map and the markup are untouched, so the p
 real ones at real scale.
 
 The two channels are `#nightshift` (133,944 lines, 915 nicks, 50 days) and `#basement` (6,524 lines,
-285 nicks, 176 days); the theme samples use a third name, `#teatime`, so nothing gets mixed up.
+285 nicks, 176 days).
+
+The theme samples in `demo/themes/` are different: `#teatime` is invented from start to finish.
+`tools/make-themes.py` writes two months of eggdrop logs for forty made-up regulars (fixed random
+seed, so the pages come out the same every time), runs pisg 1.0a from `../pisg` once per scheme, and
+adds the "all themes" link. No real log goes in, so nothing needs replacing.
 `BeanCounter` and `okra` appear in both channels on purpose — the same people turn up in more than
 one room.
 
@@ -124,11 +129,12 @@ The scripts that produced them are in `tools/`:
 | --- | --- |
 | `tools/make-nightshift.py` | `demo/nightshift.html` from a real busy-channel page |
 | `tools/make-basement.py` | `demo/basement.html` from a real small-channel page |
-| `tools/make-themes.py` | `demo/themes/*.html` from the shipped theme samples |
-| `tools/make-docs.py` | `docs.html` from the old site's documentation body plus the 1.0 additions |
+| `tools/make-themes.py` | `demo/themes/*.html`: pisg 1.0a run on an invented channel, once per scheme |
+| `tools/make-docs.py` | `docs/index.html` from the manual in the pisg repository (see below) |
 
-They read their input from paths outside this repository — edit the `SRC` constant at the top of each
-one before re-running. Each prints an audit at the end: if it does not say
+The two example-channel scripts read real stats pages from outside this repository — edit the `SRC`
+constant at the top of each one before re-running. `make-docs.py` needs no editing: it reads
+`../pisg/docs/pisg-doc.html`, so keep the pisg repository checked out next to this one. Each prints an audit at the end: if it does not say
 `leftover source nicks: none`, a real nick made it through and the map at the top of that script needs
 another entry.
 
@@ -163,17 +169,20 @@ bug in the page — on a web server, including GitHub Pages, it works.
 
 ## Where the documentation comes from
 
-`docs/index.html` is **generated from the manual pisg ships** — `docs/pisg-doc.html`, which
-`docs/xml2html.py` builds from `docs/pisg-doc.xml`. `tools/make-docs.py` reads that file, turns each
-`<section class="option">` into a card, and adds the two chapters the shipped manual does not have
-yet: the options added in 1.0aa and the optional tools. It also brings across the complete example
-`pisg.cfg` with its copy and download buttons, and updates three passages that had aged (the colour
-scheme list, the stylesheet advice, and the SourceForge mailing-list pointer).
+`docs/index.html` is **generated from the manual pisg ships** — `docs/pisg-doc.html` in the pisg
+repository, which `docs/xml2html.py` builds from `docs/pisg-doc.xml`. `tools/make-docs.py` reads that
+file, turns each `<section class="option">` into a card, marks the eleven options added in 1.0a with a
+badge, and adds the one chapter the shipped manual does not have: the optional tools in `scripts/`. It
+also brings across the complete example `pisg.cfg` with its copy and download buttons, and rewrites
+three passages for the site (the colour scheme list, the stylesheet advice, and where to get help).
 
-That means the website and the distribution cannot drift: when `pisg-doc.xml` changes, regenerate
-`pisg-doc.html`, point `SRC` at it and re-run `tools/make-docs.py`. The thirteen 1.0a options are still
-written out by hand inside that script — move them into `pisg-doc.xml` and they will come across on
-their own.
+So the website and the distribution cannot drift: change `pisg-doc.xml`, rebuild `pisg-doc.html`
+there, then run `tools/make-docs.py` and `tools/version-assets.py` here.
+
+```sh
+cd ../pisg/docs && python3 xml2html.py pisg-doc.xml pisg-doc.html && cd -
+python3 tools/make-docs.py
+```
 
 The page's shell — full-height sidebar, filter box with a match count, scroll-spy, back-to-top — follows
 the BlackTools documentation page, in this site's own colours.
@@ -190,7 +199,7 @@ option ids, so a new option needs nothing else.
 
 ## Legal pages
 
-`privacy.html`, `cookies.html` and `terms.html` are written for what this site actually is: static
+`privacy/`, `cookies/` and `terms/` are written for what this site actually is: static
 pages on GitHub Pages that set no cookies, run no analytics and collect nothing. That is the easiest
 compliance position there is, and the pages say so plainly rather than hedging. They cover:
 
@@ -206,29 +215,15 @@ compliance position there is, and the pages say so plainly rather than hedging. 
 - **Terms**: GPL first and these terms second, no warranty, a liability cap that explicitly does not
   override non-waivable consumer rights, takedown route, and Quebec/Canada as governing law.
 
-Two things to confirm before publishing: the **governing-law clause** (Quebec is assumed — change it
-if the maintainer is elsewhere), and the **contact route** (currently GitHub issues only; a mailbox
-would be better for a privacy request). These pages were written carefully and in good faith, but
+The **governing law** is Quebec, where the maintainer lives, and the maintainer is named as the
+person in charge of personal information (Law 25), reachable privately through
+<https://dooubletap.github.io/>; public reports go to GitHub issues. These pages were written carefully and in good faith, but
 they are not legal advice — if the project wants certainty, have a lawyer read them once.
 
 ## Still to decide
 
-- **The 1.0a release date.** The site says *September 2026* (`index.html` hero, `changelog/`).
-- **The `canada` theme was dropped from the site.** `CHANGELOG-1.0.md` in the pisg repository still
-  lists it as one of five modern themes, and `build-themes.py` presumably still builds it — remove it
-  there too, or the release notes and the website will disagree. The site now says *four* modern
-  themes and twelve in total.
-- **The theme sample pages** in `demo/themes/` were generated by 0.80-preview2, so they show the
-  older set of sections. The footer version string is rewritten to `v1.0a` by `tools/make-themes.py`,
-  but regenerating them with 1.0a itself would make the gallery show the new sections too — and would
-  make the theme creator's preview a full 1.0a page.
-- **The 1.0 options belong in `docs/pisg-doc.xml`**, so the shipped manual and this site describe the
-  same thing. Until then they live in `tools/make-docs.py`.
-- **The shipped manual still calls itself “pisg 0.73 documentation”.** Worth retitling when
-  `pisg-doc.xml` is next built.
-- **Governing law and a contact address** in `terms/` and `privacy/` (see above).
-- The optional tools' command-line examples in `docs.html` (`pisg-autoalias.py`, `adiirc2eggdrop.py`,
-  `znc-setup.sh`) were written from the changelog. Check the real flag names before publishing.
+Nothing at the moment. Governing law is Quebec; the private contact route is the maintainer's page,
+<https://dooubletap.github.io/>.
 
 ## Publishing
 

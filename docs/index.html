@@ -7,7 +7,7 @@
 <meta name="theme-color" content="#0b0e13">
 <link rel="canonical" href="https://pisg.github.io/docs/">
 <title>Documentation — pisg</title>
-<meta name="description" content="The pisg manual: how to install it, how to write pisg.cfg, what every one of its 108 options does, the optional tools, and a complete example configuration.">
+<meta name="description" content="The pisg manual: how to install it, how to write pisg.cfg, what every one of its 106 options does, the optional tools, and a complete example configuration.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%230d1117'/><rect x='18' y='52' width='14' height='30' fill='%2358a6ff'/><rect x='38' y='34' width='14' height='48' fill='%233fd18b'/><rect x='58' y='44' width='14' height='38' fill='%23e5b567'/><rect x='78' y='24' width='14' height='58' fill='%23bc8cff'/></svg>">
 <link rel="stylesheet" href="../assets/site.css?v=ae94b127">
 </head>
@@ -71,7 +71,7 @@
   <p class="tagline">How to set pisg up, how to write <code>pisg.cfg</code>, and what every option does.</p>
   <div class="badges">
     <span class="badge hot">1.0a</span>
-    <span class="badge">108 options</span>
+    <span class="badge">106 options</span>
     <span class="badge">Perl 5</span>
     <span class="badge gold">GPL-2.0-or-later</span>
     <span class="badge">also ships as <code>docs/pisg-doc.html</code></span>
@@ -270,7 +270,7 @@
     <code>scripts/</code> directory.</p>
 </section>
 <section id="mailing-list-and-bugs"><h3>Obtaining help and reporting bugs</h3>
-<p>If this page did not answer it, ask in <code>#PISG</code> on Undernet (<code>irc.undernet.org</code>) &mdash; that is where the people who work on pisg are.</p>
+<p>If this page did not answer it, ask in <code>#pisg</code> on Undernet (<code>irc.undernet.org</code>) &mdash; that is where the people who work on pisg are.</p>
 <p>For bugs, patches and feature requests, use the <a href="https://github.com/PISG/pisg/issues">issue tracker</a> on GitHub. Say which pisg version you run and which log format, and paste the error: pisg prints the channel it was working on when it stopped.</p>
 <p>The old SourceForge tracker and the <code>pisg-general</code> mailing list are read-only history now. They are still worth searching &mdash; fifteen years of answers are in there &mdash; at <a href="https://sourceforge.net/projects/pisg/">sourceforge.net/projects/pisg</a>.</p>
 </section>
@@ -278,7 +278,7 @@
 
 <section id="reference">
 <h2><span class="hash">#</span>General options</h2>
-<div class="pill-row"><a class="pill" href="#Channel">Channel</a><a class="pill" href="#Format">Format</a><a class="pill" href="#Network">Network</a><a class="pill" href="#OutputFile">OutputFile</a><a class="pill" href="#OutputTag">OutputTag</a><a class="pill" href="#Logfile">Logfile</a><a class="pill" href="#LogDir">LogDir</a><a class="pill" href="#NFiles">NFiles</a><a class="pill" href="#Maintainer">Maintainer</a><a class="pill" href="#ColorScheme">ColorScheme</a><a class="pill" href="#AltColorScheme">AltColorScheme</a><a class="pill" href="#Lang">Lang</a><a class="pill" href="#PageHead">PageHead</a><a class="pill" href="#PageFoot">PageFoot</a><a class="pill" href="#LogPrefix">LogPrefix</a><a class="pill" href="#LogSuffix">LogSuffix</a><a class="pill" href="#Silent">Silent</a><a class="pill" href="#CacheDir">CacheDir</a></div>
+<div class="pill-row"><a class="pill" href="#Channel">Channel</a><a class="pill" href="#Format">Format</a><a class="pill" href="#Network">Network</a><a class="pill" href="#OutputFile">OutputFile</a><a class="pill" href="#OutputTag">OutputTag</a><a class="pill" href="#Logfile">Logfile</a><a class="pill" href="#LogDir">LogDir</a><a class="pill" href="#NFiles">NFiles</a><a class="pill" href="#Maintainer">Maintainer</a><a class="pill" href="#ColorScheme">ColorScheme</a><a class="pill" href="#AltColorScheme">AltColorScheme</a><a class="pill" href="#Lang">Lang</a><a class="pill" href="#PageHead">PageHead</a><a class="pill" href="#PageFoot">PageFoot</a><a class="pill" href="#LogPrefix">LogPrefix</a><a class="pill" href="#LogSuffix">LogSuffix</a><a class="pill" href="#Silent">Silent</a><a class="pill" href="#CacheDir">CacheDir</a><a class="pill" href="#ChannelIndex">ChannelIndex</a><a class="pill" href="#HomeLink">HomeLink</a><a class="pill" href="#ShowNavBar">ShowNavBar</a></div>
 <article class="opt" id="Channel" data-k="channel define channel name">
 <h3><a class="anchor" href="#Channel" aria-label="Link to Channel">Channel</a><span class="purpose">define channel name</span></h3>
 <pre>&lt;channel=&quot;#channel&quot;&gt;
@@ -590,11 +590,44 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
     cache when using different <a href="#NFiles">NFiles</a> settings.</p>
 <p class="meta"><b>Default:</b> Unset</p>
 </article>
+<article class="opt" id="ChannelIndex" data-k="channelindex name of the channel list file for a landing page">
+<h3><a class="anchor" href="#ChannelIndex" aria-label="Link to ChannelIndex">ChannelIndex</a><span class="purpose">name of the channel list file for a landing page</span> <span class="since">1.0a</span></h3>
+<pre>&lt;set ChannelIndex=&quot;channels.json&quot;&gt;</pre>
+<p>Each time pisg writes a channel page, it also updates a small JSON file, next to
+    that page, listing the channels found in the same directory: the channel name as
+    written in the <a href="#Channel">Channel</a> setting, the page file name, the network, when
+    it was updated, and the number of days, nicks and lines. A landing page can read this
+    file to offer a drop-down list of channels (see <code>site/index.html</code>), so
+    nothing has to scan or scrape the HTML pages. Each run only changes the entry of its
+    own channel, and entries whose page no longer exists are removed. Set it to &quot;none&quot;
+    to switch this off.</p>
+<p class="meta"><b>Default:</b> channels.json</p>
+</article>
+<article class="opt" id="HomeLink" data-k="homelink adds a button at the top of every stats page that leads back to your landing page">
+<h3><a class="anchor" href="#HomeLink" aria-label="Link to HomeLink">HomeLink</a><span class="purpose">adds a button at the top of every stats page that leads back to your landing page</span> <span class="since">1.0a</span></h3>
+<pre>&lt;set HomeLink=&quot;index.html&quot;&gt;</pre>
+<p>Shows an &quot;All channels&quot; button above the title of each stats page (translated with the
+    page language). Give the page it should lead to: a file name next to the stats page, such as
+    <code>index.html</code> (the landing page in <code>site/</code>), or a full
+    http(s) address. Leave it empty, or &quot;none&quot;, for no button. Only the newer colour schemes
+    draw it as a button; a scheme set to &quot;none&quot; does not show it.</p>
+<p class="meta"><b>Default:</b> empty (no button)</p>
+</article>
+<article class="opt" id="ShowNavBar" data-k="shownavbar enable/disable the section bar at the top of the page">
+<h3><a class="anchor" href="#ShowNavBar" aria-label="Link to ShowNavBar">ShowNavBar</a><span class="purpose">enable/disable the section bar at the top of the page</span> <span class="since">1.0a</span></h3>
+<pre>&lt;set ShowNavBar=&quot;1&quot;&gt;</pre>
+<p>Adds a slim bar at the top of the stats page that stays in view while scrolling. It shows which
+    section is being read, and a &quot;Sections&quot; button opens a list of every section, laid out in columns so
+    nothing has to be scrolled sideways, whatever the number of sections or the language. It also works
+    without JavaScript. The bar is left out when <a href="#ColorScheme">ColorScheme</a> is &quot;none&quot;,
+    since the page is then meant to be embedded in another one.</p>
+<p class="meta"><b>Default:</b> 1 (enabled)</p>
+</article>
 </section>
 
 <section id="reference-stats">
 <h2><span class="hash">#</span>Statistics options</h2>
-<div class="pill-row"><a class="pill" href="#DailyActivity">DailyActivity</a><a class="pill" href="#ShowActiveTimes">ShowActiveTimes</a><a class="pill" href="#ShowActiveNicks">ShowActiveNicks</a><a class="pill" href="#ShowBigNumbers">ShowBigNumbers</a><a class="pill" href="#ShowTopics">ShowTopics</a><a class="pill" href="#ShowLines">ShowLines</a><a class="pill" href="#ShowWpl">ShowWpl</a><a class="pill" href="#ShowCpl">ShowCpl</a><a class="pill" href="#ShowWords">ShowWords</a><a class="pill" href="#ShowLastSeen">ShowLastSeen</a><a class="pill" href="#ShowTime">ShowTime</a><a class="pill" href="#ShowLineTime">ShowLineTime</a><a class="pill" href="#ShowWordTime">ShowWordTime</a><a class="pill" href="#ShowRandQuote">ShowRandQuote</a><a class="pill" href="#ShowLegend">ShowLegend</a><a class="pill" href="#ShowKickLine">ShowKickLine</a><a class="pill" href="#ShowActionLine">ShowActionLine</a><a class="pill" href="#ShowShoutLine">ShowShoutLine</a><a class="pill" href="#ShowFoulDecimals">ShowFoulDecimals</a><a class="pill" href="#ShowFoulLine">ShowFoulLine</a><a class="pill" href="#ShowViolentLines">ShowViolentLines</a><a class="pill" href="#ShowMuw">ShowMuw</a><a class="pill" href="#ShowMrn">ShowMrn</a><a class="pill" href="#ShowMru">ShowMru</a><a class="pill" href="#ShowCharts">ShowCharts</a><a class="pill" href="#ShowOps">ShowOps</a><a class="pill" href="#ShowVoices">ShowVoices</a><a class="pill" href="#ShowHalfops">ShowHalfops</a><a class="pill" href="#ShowMostNicks">ShowMostNicks</a><a class="pill" href="#ShowActiveGenders">ShowActiveGenders</a><a class="pill" href="#ShowSmileys">ShowSmileys</a><a class="pill" href="#ShowKarma">ShowKarma</a><a class="pill" href="#ShowMostActiveByHour">ShowMostActiveByHour</a><a class="pill" href="#ShowOnlyTop">ShowOnlyTop</a><a class="pill" href="#ShowMostActiveByHourGraph">ShowMostActiveByHourGraph</a><a class="pill" href="#IgnoreWords">IgnoreWords</a><a class="pill" href="#NoIgnoredQuotes">NoIgnoredQuotes</a><a class="pill" href="#FoulWords">FoulWords</a><a class="pill" href="#ViolentWords">ViolentWords</a><a class="pill" href="#MinQuote">MinQuote</a><a class="pill" href="#MaxQuote">MaxQuote</a><a class="pill" href="#WordLength">WordLength</a><a class="pill" href="#QuoteWidth">QuoteWidth</a><a class="pill" href="#BigNumbersThreshold">BigNumbersThreshold</a><a class="pill" href="#ActiveNicks">ActiveNicks</a><a class="pill" href="#ActiveNicks2">ActiveNicks2</a><a class="pill" href="#ActiveNicksByHour">ActiveNicksByHour</a><a class="pill" href="#MostNicksHistory">MostNicksHistory</a><a class="pill" href="#MostNicksVerbose">MostNicksVerbose</a><a class="pill" href="#TopicHistory">TopicHistory</a><a class="pill" href="#UrlHistory">UrlHistory</a><a class="pill" href="#ChartsHistory">ChartsHistory</a><a class="pill" href="#ChartsRegexp">ChartsRegexp</a><a class="pill" href="#WordHistory">WordHistory</a><a class="pill" href="#NickHistory">NickHistory</a><a class="pill" href="#SmileyHistory">SmileyHistory</a><a class="pill" href="#KarmaHistory">KarmaHistory</a><a class="pill" href="#NickTracking">NickTracking</a><a class="pill" href="#NickLimit">NickLimit</a><a class="pill" href="#SortByWords">SortByWords</a></div>
+<div class="pill-row"><a class="pill" href="#DailyActivity">DailyActivity</a><a class="pill" href="#ShowActiveTimes">ShowActiveTimes</a><a class="pill" href="#ShowActiveNicks">ShowActiveNicks</a><a class="pill" href="#ShowBigNumbers">ShowBigNumbers</a><a class="pill" href="#ShowTopics">ShowTopics</a><a class="pill" href="#ShowLines">ShowLines</a><a class="pill" href="#ShowWpl">ShowWpl</a><a class="pill" href="#ShowCpl">ShowCpl</a><a class="pill" href="#ShowWords">ShowWords</a><a class="pill" href="#ShowLastSeen">ShowLastSeen</a><a class="pill" href="#ShowTime">ShowTime</a><a class="pill" href="#ShowLineTime">ShowLineTime</a><a class="pill" href="#ShowWordTime">ShowWordTime</a><a class="pill" href="#ShowRandQuote">ShowRandQuote</a><a class="pill" href="#ShowLegend">ShowLegend</a><a class="pill" href="#ShowKickLine">ShowKickLine</a><a class="pill" href="#ShowActionLine">ShowActionLine</a><a class="pill" href="#ShowShoutLine">ShowShoutLine</a><a class="pill" href="#ShowFoulDecimals">ShowFoulDecimals</a><a class="pill" href="#ShowFoulLine">ShowFoulLine</a><a class="pill" href="#ShowViolentLines">ShowViolentLines</a><a class="pill" href="#ShowMuw">ShowMuw</a><a class="pill" href="#ShowMrn">ShowMrn</a><a class="pill" href="#ShowMru">ShowMru</a><a class="pill" href="#ShowCharts">ShowCharts</a><a class="pill" href="#ShowOps">ShowOps</a><a class="pill" href="#ShowVoices">ShowVoices</a><a class="pill" href="#ShowHalfops">ShowHalfops</a><a class="pill" href="#ShowMostNicks">ShowMostNicks</a><a class="pill" href="#ShowActiveGenders">ShowActiveGenders</a><a class="pill" href="#ShowSmileys">ShowSmileys</a><a class="pill" href="#ShowKarma">ShowKarma</a><a class="pill" href="#ShowMostActiveByHour">ShowMostActiveByHour</a><a class="pill" href="#ShowOnlyTop">ShowOnlyTop</a><a class="pill" href="#ShowMostActiveByHourGraph">ShowMostActiveByHourGraph</a><a class="pill" href="#ShowOverview">ShowOverview</a><a class="pill" href="#ShowRelations">ShowRelations</a><a class="pill" href="#RelationNicks">RelationNicks</a><a class="pill" href="#RelationMinWeight">RelationMinWeight</a><a class="pill" href="#ShowTimePersonalities">ShowTimePersonalities</a><a class="pill" href="#ShowConcentration">ShowConcentration</a><a class="pill" href="#ShowSignatureWords">ShowSignatureWords</a><a class="pill" href="#IgnoreWords">IgnoreWords</a><a class="pill" href="#NoIgnoredQuotes">NoIgnoredQuotes</a><a class="pill" href="#FoulWords">FoulWords</a><a class="pill" href="#ViolentWords">ViolentWords</a><a class="pill" href="#BadUrls">BadUrls</a><a class="pill" href="#MinQuote">MinQuote</a><a class="pill" href="#MaxQuote">MaxQuote</a><a class="pill" href="#WordLength">WordLength</a><a class="pill" href="#QuoteWidth">QuoteWidth</a><a class="pill" href="#BigNumbersThreshold">BigNumbersThreshold</a><a class="pill" href="#ActiveNicks">ActiveNicks</a><a class="pill" href="#ActiveNicks2">ActiveNicks2</a><a class="pill" href="#ActiveNicksByHour">ActiveNicksByHour</a><a class="pill" href="#MostNicksHistory">MostNicksHistory</a><a class="pill" href="#MostNicksVerbose">MostNicksVerbose</a><a class="pill" href="#TopicHistory">TopicHistory</a><a class="pill" href="#UrlHistory">UrlHistory</a><a class="pill" href="#ChartsHistory">ChartsHistory</a><a class="pill" href="#ChartsRegexp">ChartsRegexp</a><a class="pill" href="#WordHistory">WordHistory</a><a class="pill" href="#NickHistory">NickHistory</a><a class="pill" href="#SmileyHistory">SmileyHistory</a><a class="pill" href="#KarmaHistory">KarmaHistory</a><a class="pill" href="#NickTracking">NickTracking</a><a class="pill" href="#NickLimit">NickLimit</a><a class="pill" href="#SortByWords">SortByWords</a></div>
 <article class="opt" id="DailyActivity" data-k="dailyactivity number of days to show in &quot;daily actitity&quot;">
 <h3><a class="anchor" href="#DailyActivity" aria-label="Link to DailyActivity">DailyActivity</a><span class="purpose">number of days to show in &quot;Daily Actitity&quot;</span></h3>
 <pre>&lt;channel=&quot;#channel&quot;&gt;
@@ -1088,6 +1121,63 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
     section.</p>
 <p class="meta"><b>Default:</b> 1 (enabled)</p>
 </article>
+<article class="opt" id="ShowOverview" data-k="showoverview enable/disable the channel overview">
+<h3><a class="anchor" href="#ShowOverview" aria-label="Link to ShowOverview">ShowOverview</a><span class="purpose">enable/disable the channel overview</span> <span class="since">1.0a</span></h3>
+<pre>&lt;set ShowOverview=&quot;1&quot;&gt;</pre>
+<p>Shows a row of key numbers at the top of the page: lines, words, nicks, days covered, lines
+    per day, the busiest and quietest hour, questions, links shared, the top talker and the
+    number of joins and kicks.</p>
+<p class="meta"><b>Default:</b> 1 (enabled)</p>
+</article>
+<article class="opt" id="ShowRelations" data-k="showrelations enable/disable the relation map and its tables">
+<h3><a class="anchor" href="#ShowRelations" aria-label="Link to ShowRelations">ShowRelations</a><span class="purpose">enable/disable the relation map and its tables</span> <span class="since">1.0a</span></h3>
+<pre>&lt;set ShowRelations=&quot;1&quot;&gt;</pre>
+<p>Shows who talks to whom: an interactive map (click a nick or a line for details), a table of
+    the closest pairs, and the &quot;social roles&quot; (who is talked to the most, the best listener, ...).
+    Two people are connected when one starts a line with the other&#x27;s nick (&quot;Bob: hi&quot;), mentions
+    them, or answers right after them. A line addressed to someone counts three times as much as
+    a mention or a quick reply. Nicks that are joined by <a href="#NickTracking">NickTracking</a> or a user alias
+    count as one person. Bots are left out: mark a bot with &lt;user nick=&quot;Bot&quot; sex=&quot;b&quot;&gt; to keep it in the
+    other statistics but off the map, or with ignore=&quot;y&quot; to remove it altogether. Nicks that are also
+    ordinary words (and the channel name) are not counted as mentions.
+    See also <a href="#RelationNicks">RelationNicks</a> and <a href="#RelationMinWeight">RelationMinWeight</a>.</p>
+<p class="meta"><b>Default:</b> 1 (enabled)</p>
+</article>
+<article class="opt" id="RelationNicks" data-k="relationnicks number of nicks on the relation map">
+<h3><a class="anchor" href="#RelationNicks" aria-label="Link to RelationNicks">RelationNicks</a><span class="purpose">number of nicks on the relation map</span> <span class="since">1.0a</span></h3>
+<pre>&lt;set RelationNicks=&quot;30&quot;&gt;</pre>
+<p>The map shows this many of the most active people (bots excluded). More than about 40 makes
+    the picture crowded.</p>
+<p class="meta"><b>Default:</b> 30</p>
+</article>
+<article class="opt" id="RelationMinWeight" data-k="relationminweight minimum connection strength shown as a line on the relation map">
+<h3><a class="anchor" href="#RelationMinWeight" aria-label="Link to RelationMinWeight">RelationMinWeight</a><span class="purpose">minimum connection strength shown as a line on the relation map</span> <span class="since">1.0a</span></h3>
+<pre>&lt;set RelationMinWeight=&quot;3&quot;&gt;</pre>
+<p>Connections weaker than this are not drawn, which keeps the map readable. A line addressed to
+    someone is worth 3, a mention 1 and a quick reply 1. Raise it for a busy channel, lower it for a quiet one.</p>
+<p class="meta"><b>Default:</b> 3</p>
+</article>
+<article class="opt" id="ShowTimePersonalities" data-k="showtimepersonalities enable/disable the time personalities section">
+<h3><a class="anchor" href="#ShowTimePersonalities" aria-label="Link to ShowTimePersonalities">ShowTimePersonalities</a><span class="purpose">enable/disable the time personalities section</span> <span class="since">1.0a</span></h3>
+<pre>&lt;set ShowTimePersonalities=&quot;1&quot;&gt;</pre>
+<p>Shows who chats mostly at night (0-5h), in the morning (6-11h), in the afternoon (12-17h) and
+    in the evening (18-23h), for the people with enough lines. The hours follow <a href="#TimeOffset">TimeOffset</a>.</p>
+<p class="meta"><b>Default:</b> 1 (enabled)</p>
+</article>
+<article class="opt" id="ShowConcentration" data-k="showconcentration enable/disable the &quot;who carries the channel&quot; section">
+<h3><a class="anchor" href="#ShowConcentration" aria-label="Link to ShowConcentration">ShowConcentration</a><span class="purpose">enable/disable the &quot;who carries the channel&quot; section</span> <span class="since">1.0a</span></h3>
+<pre>&lt;set ShowConcentration=&quot;1&quot;&gt;</pre>
+<p>Shows how much of the channel the busiest people write: the share of all lines written by the
+    top 1, 3, 5, 10 and 20 nicks, and how many nicks wrote half of everything.</p>
+<p class="meta"><b>Default:</b> 1 (enabled)</p>
+</article>
+<article class="opt" id="ShowSignatureWords" data-k="showsignaturewords enable/disable the signature words section">
+<h3><a class="anchor" href="#ShowSignatureWords" aria-label="Link to ShowSignatureWords">ShowSignatureWords</a><span class="purpose">enable/disable the signature words section</span> <span class="since">1.0a</span></h3>
+<pre>&lt;set ShowSignatureWords=&quot;1&quot;&gt;</pre>
+<p>Shows, for each of the regular talkers, the word they use a lot and that hardly anyone else uses.
+    Short words, nicks and links are ignored (see <a href="#WordLength">WordLength</a> and <a href="#IgnoreWords">IgnoreWords</a>).</p>
+<p class="meta"><b>Default:</b> 1 (enabled)</p>
+</article>
 <article class="opt" id="IgnoreWords" data-k="ignorewords ignore specified words">
 <h3><a class="anchor" href="#IgnoreWords" aria-label="Link to IgnoreWords">IgnoreWords</a><span class="purpose">ignore specified words</span></h3>
 <pre>&lt;set IgnoreWords=&quot;there about&quot;&gt;</pre>
@@ -1123,6 +1213,31 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
     &quot;violent&quot;. It is a space separated list of words. You can use * like in
     nick aliases. Can not be used in a channel-only context.</p>
 <p class="meta"><b>Default:</b> slaps beats smacks</p>
+</article>
+<article class="opt" id="BadUrls" data-k="badurls words that keep a url out of the url statistics">
+<h3><a class="anchor" href="#BadUrls" aria-label="Link to BadUrls">BadUrls</a><span class="purpose">words that keep a URL out of the URL statistics</span> <span class="since">1.0a</span></h3>
+<pre>&lt;channel=&quot;#channel&quot;&gt;
+ Logfile = &quot;channel.log&quot;
+ Format = &quot;xchat&quot;
+ BadUrls = &quot;imagetwist imgur.com postimg.cc/*&quot;
+&lt;/channel&gt;
+
+&lt;set BadUrls=&quot;imagetwist imgur.com postimg.cc/*&quot;&gt;</pre>
+<p>BadUrls is a list of words, separated by spaces, much like <a href="#FoulWords">FoulWords</a>.
+    A URL that contains any of the words is not counted, so it never shows up in
+    &quot;Most referenced URLs&quot; (see <a href="#ShowMru">ShowMru</a>). Use it to keep spam and
+    unwanted image hosts out of the statistics.
+    A word matches anywhere in the URL, whatever the case, so &quot;imgur.com&quot; also
+    removes &quot;https://i.imgur.com/abc.png&quot;. Two wildcards are understood: * stands for
+    any run of characters and ? for exactly one character. So &quot;postimg.cc/*&quot; removes
+    every link to postimg.cc (including &quot;i.postimg.cc/x.png&quot;) but not
+    &quot;example.org/postimg.cc&quot;, where nothing follows the name, and &quot;*.example.org/*&quot;
+    removes links on any subdomain of example.org but not on example.org itself.
+    Apart from the wildcards the words are plain text, not regular expressions, so
+    characters such as . + ( ) [ ] | mean exactly themselves. A lone * would remove every
+    URL. To hide a single exact address instead, use the
+    <a href="#ignoring-links">link ignore</a> setting.</p>
+<p class="meta"><b>Default:</b> unset (no URLs are removed)</p>
 </article>
 <article class="opt" id="MinQuote" data-k="minquote minimum numbers of letters for a random quote">
 <h3><a class="anchor" href="#MinQuote" aria-label="Link to MinQuote">MinQuote</a><span class="purpose">minimum numbers of letters for a random quote</span></h3>
@@ -1316,7 +1431,7 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
  ChartsRegexp = &quot;(?:is )?(?:np:|(?:now )?playing:? |listening to:? )(?:MPEG stream from)?\s*(.*)&quot;
 &lt;/channel&gt;</pre>
 <p>This option is a perl regexp that is used to recognize songs played. Please
-    tell the pisg mailing list if you have a better default. The regexp MUST
+    open an issue at https://github.com/PISG/pisg/issues if you have a better default. The regexp MUST
     contain a single () pair to extract the song name. See also the perlre(1)
     manpage, <a href="#ShowCharts">ShowCharts</a> and <a href="#ChartsHistory">ChartsHistory</a>.</p>
 <p class="meta"><b>Default:</b> &quot;(?:np:|(?:now )?playing:? (?:MPEG stream from)?)\s*(.*)&quot;</p>
@@ -1412,92 +1527,8 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
 
 <section id="reference-new">
 <h2><span class="hash">#</span>Options added in 1.0a</h2>
-<div class="pill-row"><a class="pill" href="#ShowOverview">ShowOverview</a><a class="pill" href="#ShowRelations">ShowRelations</a><a class="pill" href="#RelationNicks">RelationNicks</a><a class="pill" href="#RelationMinWeight">RelationMinWeight</a><a class="pill" href="#ShowTimePersonalities">ShowTimePersonalities</a><a class="pill" href="#ShowConcentration">ShowConcentration</a><a class="pill" href="#ShowSignatureWords">ShowSignatureWords</a><a class="pill" href="#ShowNavBar">ShowNavBar</a><a class="pill" href="#HomeLink">HomeLink</a><a class="pill" href="#BadUrls">BadUrls</a><a class="pill" href="#ChannelIndex">ChannelIndex</a><a class="pill" href="#ShareStats">ShareStats</a><a class="pill" href="#ShareLink">ShareLink</a></div><p class="sec-intro">The seven sections added in 1.0a are on by default in every colour scheme. Set them to <code>0</code> for the page pisg wrote before 1.0 &mdash; see the <a href="../changelog/#v1.0-upgrading">upgrade notes</a>.</p>
-<article class="opt" id="ShowOverview" data-k="showoverview the channel overview section">
-<h3><a class="anchor" href="#ShowOverview" aria-label="Link to ShowOverview">ShowOverview</a><span class="purpose">the channel overview section</span> <span class="since">1.0a</span></h3>
-<pre>&lt;set ShowOverview="1"&gt;</pre>
-<p>Shows the <code>Channel overview</code> section at the top of the page: one headline sentence (lines, nicks, days) and the key facts &mdash; words, lines per day, busiest and quietest hour, questions asked, links shared, top talker, joins and kicks.</p>
-<p class="meta"><b>Default:</b> 1</p>
-</article>
-<article class="opt" id="ShowRelations" data-k="showrelations who talks to whom">
-<h3><a class="anchor" href="#ShowRelations" aria-label="Link to ShowRelations">ShowRelations</a><span class="purpose">who talks to whom</span> <span class="since">1.0a</span></h3>
-<pre>&lt;set ShowRelations="1"&gt;
-&lt;set RelationNicks="30"&gt;
-&lt;set RelationMinWeight="3"&gt;</pre>
-<p>Shows three sections built from the same data: the interactive <code>Who talks to whom</code> map, <code>Closest pairs</code> and <code>Social roles</code> (most talked to, most outgoing, connector, best listener, lone wolf). A connection is counted when a line starts with someone's nick, mentions it, or is a quick reply to them. Nicks marked <code>sex="b"</code> or <code>ignore="y"</code> are treated as bots and left out. The map needs JavaScript; the two tables below it do not.</p>
-<p class="meta"><b>Default:</b> 1</p>
-</article>
-<article class="opt" id="RelationNicks" data-k="relationnicks how many nicks the map shows">
-<h3><a class="anchor" href="#RelationNicks" aria-label="Link to RelationNicks">RelationNicks</a><span class="purpose">how many nicks the map shows</span> <span class="since">1.0a</span></h3>
-<pre>&lt;set RelationNicks="30"&gt;</pre>
-<p>The number of nicks drawn in the relation map, most active first. Past about 40 the map gets hard to read on a laptop screen. The tables below it are not affected.</p>
-<p class="meta"><b>Default:</b> 30</p>
-</article>
-<article class="opt" id="RelationMinWeight" data-k="relationminweight the weakest link worth drawing">
-<h3><a class="anchor" href="#RelationMinWeight" aria-label="Link to RelationMinWeight">RelationMinWeight</a><span class="purpose">the weakest link worth drawing</span> <span class="since">1.0a</span></h3>
-<pre>&lt;set RelationMinWeight="3"&gt;</pre>
-<p>How strong a connection has to be before a line is drawn between two nicks. Raise it on a very busy channel where everybody has said something to everybody.</p>
-<p class="meta"><b>Default:</b> 3</p>
-</article>
-<article class="opt" id="ShowTimePersonalities" data-k="showtimepersonalities who owns which part of the day">
-<h3><a class="anchor" href="#ShowTimePersonalities" aria-label="Link to ShowTimePersonalities">ShowTimePersonalities</a><span class="purpose">who owns which part of the day</span> <span class="since">1.0a</span></h3>
-<pre>&lt;set ShowTimePersonalities="1"&gt;</pre>
-<p>Shows the <code>Time personalities</code> section: night owls (0&ndash;5h), early birds (6&ndash;11h), afternoon regulars (12&ndash;17h) and evening regulars (18&ndash;23h), with the share of each person's own lines that falls in that window.</p>
-<p class="meta"><b>Default:</b> 1</p>
-</article>
-<article class="opt" id="ShowConcentration" data-k="showconcentration who carries the channel">
-<h3><a class="anchor" href="#ShowConcentration" aria-label="Link to ShowConcentration">ShowConcentration</a><span class="purpose">who carries the channel</span> <span class="since">1.0a</span></h3>
-<pre>&lt;set ShowConcentration="1"&gt;</pre>
-<p>Shows how much of the talking comes from the top 1, 3, 5, 10 and 20 nicks, and how few people it takes to account for half of all lines.</p>
-<p class="meta"><b>Default:</b> 1</p>
-</article>
-<article class="opt" id="ShowSignatureWords" data-k="showsignaturewords everyone&rsquo;s own word">
-<h3><a class="anchor" href="#ShowSignatureWords" aria-label="Link to ShowSignatureWords">ShowSignatureWords</a><span class="purpose">everyone&rsquo;s own word</span> <span class="since">1.0a</span></h3>
-<pre>&lt;set ShowSignatureWords="1"&gt;</pre>
-<p>Shows the word each regular uses a lot and hardly anybody else does, how many times they used it, and what share of all its uses that is. Words filtered by <a href="#IgnoreWords">IgnoreWords</a> or shorter than <a href="#WordLength">WordLength</a> are not considered.</p>
-<p class="meta"><b>Default:</b> 1</p>
-</article>
-<article class="opt" id="ShowNavBar" data-k="shownavbar section navigation on the stats page">
-<h3><a class="anchor" href="#ShowNavBar" aria-label="Link to ShowNavBar">ShowNavBar</a><span class="purpose">section navigation on the stats page</span> <span class="since">1.0a</span></h3>
-<pre>&lt;set ShowNavBar="1"&gt;</pre>
-<p>Adds the section menu to the generated page: a fixed list down the left on screens 1000&nbsp;px and wider, and a slim bar with a <code>Sections</code> button on narrower ones. The bar is plain HTML and works with JavaScript off; JavaScript only adds the marker that follows the section being read.</p>
-<p class="meta"><b>Default:</b> 1</p>
-</article>
-<article class="opt" id="HomeLink" data-k="homelink the &ldquo;all channels&rdquo; button">
-<h3><a class="anchor" href="#HomeLink" aria-label="Link to HomeLink">HomeLink</a><span class="purpose">the &ldquo;All channels&rdquo; button</span> <span class="since">1.0a</span></h3>
-<pre>&lt;set HomeLink="index.html"&gt;
-&lt;set HomeLink="https://example.org/stats/"&gt;</pre>
-<p>Puts an <code>&larr; All channels</code> button above the page title, pointing at your landing page (see <a href="#ChannelIndex">ChannelIndex</a>). A plain relative <code>.html</code> path or an http(s) address. Empty, or <code>none</code>, means no button &mdash; which is what you want when you publish a single channel.</p>
-<p class="meta"><b>Default:</b> Unset</p>
-</article>
-<article class="opt" id="BadUrls" data-k="badurls keep urls out of the url statistics">
-<h3><a class="anchor" href="#BadUrls" aria-label="Link to BadUrls">BadUrls</a><span class="purpose">keep URLs out of the URL statistics</span> <span class="since">1.0a</span></h3>
-<pre>&lt;set BadUrls="postimg.cc/* tinyurl.com/* /ads/"&gt;</pre>
-<p>A space separated list of patterns. A URL is left out of <code>Most referenced URLs</code> when any pattern matches anywhere in it, case insensitively; <code>*</code> and <code>?</code> work as wildcards. This is the blunt instrument for image hosts, tracking links and spam. To drop one exact address instead, use <code>&lt;link url="..." ignore="y"&gt;</code> &mdash; see <a href="#ignoring-links">Ignoring links</a>.</p>
-<p class="meta"><b>Default:</b> Unset</p>
-</article>
-<article class="opt" id="ChannelIndex" data-k="channelindex the file the landing page reads">
-<h3><a class="anchor" href="#ChannelIndex" aria-label="Link to ChannelIndex">ChannelIndex</a><span class="purpose">the file the landing page reads</span> <span class="since">1.0a</span></h3>
-<pre>&lt;set ChannelIndex="channels.json"&gt;
-&lt;set ChannelIndex="none"&gt;</pre>
-<p>pisg writes a small JSON file next to your pages with one entry per channel: name, network, file, lines, words, nicks, days, joins, questions, links, the 24-hour profile, the last 30 days and the five busiest nicks. <code>site/index.html</code> from the distribution reads it and needs nothing else &mdash; no PHP, no database, no cron job. <code>none</code> switches it off. Needs <code>JSON::PP</code>, which is part of core Perl.</p>
-<p class="meta"><b>Default:</b> channels.json</p>
-</article>
-<article class="opt" id="ShareStats" data-k="sharestats opt-in listing of your page">
-<h3><a class="anchor" href="#ShareStats" aria-label="Link to ShareStats">ShareStats</a><span class="purpose">opt-in listing of your page</span> <span class="since">1.0a</span></h3>
-<pre>&lt;set ShareStats="preview"&gt;
-&lt;set ShareStats="1"&gt;</pre>
-<p>Off unless you turn it on. When on, pisg submits the entry described by <a href="#ShareLink">ShareLink</a> &mdash; the page address, the maintainer name and the network &mdash; so your channel can be listed publicly. Nothing from your logs is ever sent. <code>preview</code> prints exactly what would be sent and sends nothing, which is the setting to try first.</p>
-<p class="meta"><b>Default:</b> 0</p>
-</article>
-<article class="opt" id="ShareLink" data-k="sharelink what gets shared, and where">
-<h3><a class="anchor" href="#ShareLink" aria-label="Link to ShareLink">ShareLink</a><span class="purpose">what gets shared, and where</span> <span class="since">1.0a</span></h3>
-<pre>&lt;set ShareLink="https://example.org/stats/nightshift.html"&gt;
-&lt;set ShareWebhook="https://example.org/hooks/pisg"&gt;</pre>
-<p><code>ShareLink</code> is the public address of the page a shared entry should point at; without it there is nothing useful to share. <code>ShareWebhook</code> optionally posts the same entry to a URL of your own, which is how you feed a channel list or a bot you run yourself. Both do nothing while <a href="#ShareStats">ShareStats</a> is off.</p>
-<p class="meta"><b>Default:</b> Unset</p>
-</article>
-
+<p class="sec-intro">The seven sections added in 1.0a are on by default in every colour scheme. Set them to <code>0</code> for the page pisg wrote before 1.0a &mdash; see the <a href="../changelog/#v1.0-upgrading">upgrade notes</a>. Each option is described in its chapter, marked <span class="since">1.0a</span>.</p>
+<div class="pill-row"><a class="pill" href="#ShowOverview">ShowOverview</a><a class="pill" href="#ShowRelations">ShowRelations</a><a class="pill" href="#RelationNicks">RelationNicks</a><a class="pill" href="#RelationMinWeight">RelationMinWeight</a><a class="pill" href="#ShowTimePersonalities">ShowTimePersonalities</a><a class="pill" href="#ShowConcentration">ShowConcentration</a><a class="pill" href="#ShowSignatureWords">ShowSignatureWords</a><a class="pill" href="#ShowNavBar">ShowNavBar</a><a class="pill" href="#HomeLink">HomeLink</a><a class="pill" href="#BadUrls">BadUrls</a><a class="pill" href="#ChannelIndex">ChannelIndex</a></div>
 </section>
 
 <section id="reference-pictures">
@@ -1764,7 +1795,8 @@ in the channel with <code>!</code> and in a private message without it:</p>
 <tr><td><code>!pisgshow</code></td><td>Show what the bot has stored for you.</td></tr>
 <tr><td><code>!pisgdel</code></td><td>Delete your own entry.</td></tr>
 <tr><td><code>!pisgdeluser</code></td><td>Delete somebody else&rsquo;s entry. Bot masters only.</td></tr>
-<tr><td><code>!pisgstats</code></td><td>Reply with the address of the stats page. Open to everyone.</td></tr>
+<tr><td><code>!pisgstats</code></td><td>Reply with the address of the stats page. Open to everyone; in the
+channel only.</td></tr>
 </tbody>
 </table>
 </div>
@@ -1788,8 +1820,12 @@ the script on a busy bot.</p>
 authenticated host, such as <code>*.users.undernet.org</code>. This script reads your logs, groups nicks
 by that host, and writes an include file of <code>&lt;user&gt;</code> lines with aliases. Run it before
 pisg, from the same cron job.</p>
-<pre>python3 scripts/pisg-autoalias.py --logdir logs/nightshift/ --out aliases.cfg</pre>
-<pre>&lt;include="aliases.cfg"&gt;</pre>
+<pre>python3 scripts/pisg-autoalias.py --logdir ~/eggdrop/logs --prefix nightshift.log. \
+    --manual ~/pisg/pisg.cfg --out ~/pisg/aliases.auto.cfg</pre>
+<pre>&lt;include="/home/you/pisg/aliases.auto.cfg"&gt;</pre>
+<p><code>--manual</code> names the config files whose <code>&lt;user&gt;</code> lines are yours (repeat it
+for each); <code>--hosts</code> changes the host pattern for another network; <code>--report</code> prints
+what was merged and what was skipped, and why.</p>
 <p>What it will not do: merge a shared host, a gateway, or a bouncer several people use; and it never
 touches a nick you already described yourself &mdash; your own lines always win. A test suite ships with
 it.</p>
@@ -1799,15 +1835,18 @@ it.</p>
 <p>Python 3. You have years of channel history in your client&rsquo;s log folder and a bot that only
 started logging last spring. This converts the client logs into the format a bot writes, so the old
 history can join the statistics:</p>
-<pre>python3 scripts/adiirc2eggdrop.py --in "AdiIRC/logs/#nightshift.log" --out logs/nightshift/
-python3 scripts/adiirc2eggdrop.py --in "AdiIRC/logs/#nightshift.log" --out logs/nightshift/ --format znc</pre>
-<p><code>--format znc</code> writes what the ZNC log module writes: one file per day, in
-<code>energymech</code> format. The rules it follows:</p>
+<pre>python3 scripts/adiirc2eggdrop.py "#nightshift.log" logs/ --channel '#nightshift' --nick YourNick \
+    --tz Europe/Paris --before '2026-01-31 03:00' --prefix nightshift.log.</pre>
+<p><code>--tz</code> is the time zone your client logged in, <code>--before</code> the moment (UTC) your
+bot started logging, and <code>--nick</code> your own nick. Add <code>--dry-run</code> to see what it would
+write. <code>--format znc</code> writes what the ZNC log module writes instead: one
+<code>YYYY-MM-DD.log</code> per day, read with <code>Format="energymech"</code>. The rules it follows:</p>
 <ul>
-  <li>Public channel events only. Private messages, notices and your own server messages are dropped.</li>
+  <li>Public channel events only. Private messages, notices, <code>/whois</code> output and server text are
+  dropped.</li>
   <li>Local timestamps are converted to UTC, which is what bots log in.</li>
   <li>It never overwrites an existing file.</li>
-  <li>It stops at the moment your real logging starts, so nothing is counted twice.</li>
+  <li>It stops at <code>--before</code>, where your real logging starts, so nothing is counted twice.</li>
 </ul>
 </section>
 
@@ -1815,12 +1854,16 @@ python3 scripts/adiirc2eggdrop.py --in "AdiIRC/logs/#nightshift.log" --out logs/
 <p>Shell. ZNC&rsquo;s logs live under the ZNC user&rsquo;s home directory, and pisg usually runs as
 somebody else. This script puts converted logs into the right ZNC account folder and opens up read
 access to exactly the channel folders pisg needs &mdash; not the whole home directory.</p>
-<pre>scripts/znc-setup.sh --znc-user znc --pisg-user stats --channel '#nightshift'</pre>
-<p>It prints everything it intends to do before it changes anything, so you can read the plan first.</p>
-<p>Once that is done, read the logs like any other folder of daily logs:</p>
+<p>Put the converted logs in <code>~/znc-import/#channel/</code> of the pisg user, then, as the ZNC
+account (or with <code>sudo</code>):</p>
+<pre>PISG_USER=stats bash scripts/znc-setup.sh            # shows what it found and what it would do
+PISG_USER=stats bash scripts/znc-setup.sh --apply    # does it</pre>
+<p>Without <code>--apply</code> it changes nothing, so you can read the plan first. It never deletes or
+replaces a file, and it links each channel folder to <code>~/znc-logs/</code> of the pisg
+user, so the configuration does not need to know ZNC&rsquo;s layout:</p>
 <pre>&lt;channel="#nightshift"&gt;
  Format = "energymech"
- LogDir = "/var/lib/znc/moddata/log/nightshift/"
+ LogDir = "/home/stats/znc-logs/nightshift/"
 &lt;/channel&gt;</pre>
 </section>
 
@@ -1840,7 +1883,7 @@ Options are at pisg's own defaults unless the comment says <em>recommended</em>.
 </ol>
 <div class="codewrap">
 <div class="codebar"><span>pisg.cfg</span>
-<a class="btn small" href="data:text/plain;charset=utf-8,%23%20pisg.cfg.example%20-%20a%20complete%20configuration%20for%20pisg%2C%20ready%20to%20copy.%0A%23%0A%23%20%20%201.%20Copy%20this%20file%20to%20pisg.cfg%0A%23%20%20%202.%20Change%20the%20values%20marked%20%20EDIT%20%20%28log%20path%2C%20format%2C%20network%2C%20output%20file%2C%20name%29%0A%23%20%20%203.%20Run%20./pisg%0A%23%0A%23%20Every%20option%20pisg%20understands%20is%20listed%20below%20with%20its%20meaning.%20Options%20are%20set%20to%0A%23%20pisg%27s%20own%20default%20unless%20the%20comment%20says%20%22recommended%22.%20Lines%20starting%20with%20%23%20are%0A%23%20comments%3B%20an%20option%20shown%20commented%20out%20is%20off/unset%20-%20remove%20the%20%23%20to%20use%20it.%0A%23%0A%23%20Syntax%20reminders%3A%0A%23%20%20%20%3Cset%20Name%3D%22value%22%3E%20%20%20%20%20%20a%20global%20option%2C%20applies%20to%20every%20channel%0A%23%20%20%20%3Cchannel%3D%22%23name%22%3E%20...%20%3C/channel%3E%20%20%20settings%20for%20one%20channel%20%28they%20override%20%3Cset%3E%29%0A%23%20%20%20%3Cuser%20nick%3D%22...%22%20...%3E%20%20%20per-user%20settings%0A%23%20Each%20%3Cset%3E%20must%20be%20on%20one%20line%2C%20and%20every%20value%20must%20be%20in%20quotes.%0A%0A%0A%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%0A%23%20%20GLOBAL%20OPTIONS%20-%20apply%20to%20every%20channel%20below%0A%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%0A%0A%23%20----%20General%20options%20-------------------------------------------------------%0A%0A%23%20use%20a%20different%20color%20scheme%20for%20stats%20page%20-%20recommended%3A%20modern%2C%20light/dark%20theme%3B%0A%23%20try%20midnight%2C%20amoled%2C%20terminal%2C%20or%20default%0A%3Cset%20ColorScheme%3D%22modern%22%3E%0A%0A%23%20alternate%20stylesheets%20for%20stats%20page%20-%20extra%20stylesheets%20the%20visitor%20can%20switch%20to%0A%23%3Cset%20AltColorScheme%3D%22midnight.css%20amoled.css%22%3E%0A%0A%23%20define%20the%20language%20/%20translation%20to%20use%0A%3Cset%20Lang%3D%22EN%22%3E%0A%0A%23%20define%20a%20file%20as%20page%20header%20-%20HTML%20file%20inserted%20above%20the%20statistics%0A%23%3Cset%20PageHead%3D%22header.html%22%3E%0A%0A%23%20define%20a%20file%20as%20page%20footer%20-%20HTML%20file%20inserted%20below%20the%20statistics%0A%23%3Cset%20PageFoot%3D%22footer.html%22%3E%0A%0A%23%20make%20pisg%20silent%2C%20suppress%20messages%0A%3Cset%20Silent%3D%220%22%3E%0A%0A%23%20use%20a%20cache%20to%20speed%20up%20log%20parsing%20-%20cache%20parsed%20logs%20here%20to%20speed%20up%20runs%20%28delete%0A%23%20it%20when%20you%20change%20settings%29%0A%23%3Cset%20CacheDir%3D%22cache/%22%3E%0A%0A%23%20----%20Options%20for%20various%20statistics%20features%20-------------------------------%0A%0A%23%20number%20of%20days%20to%20show%20in%20%22Daily%20Actitity%22%20-%20recommended%3A%20show%20the%20last%2014%20days%20as%20a%0A%23%20bar%20chart%0A%3Cset%20DailyActivity%3D%2214%22%3E%0A%0A%23%20enable/disable%20%22Most%20Active%20Times%22%0A%3Cset%20ShowActiveTimes%3D%221%22%3E%0A%0A%23%20enable/disable%20%22Most%20Active%20Nicks%22%0A%3Cset%20ShowActiveNicks%3D%221%22%3E%0A%0A%23%20enable/disable%20%22Big%20Numbers%22%20sections%0A%3Cset%20ShowBigNumbers%3D%221%22%3E%0A%0A%23%20enable/disable%20%22Latest%20topics%22%20sections%0A%3Cset%20ShowTopics%3D%221%22%3E%0A%0A%23%20enable/disable%20%22number%20of%20lines%22%0A%3Cset%20ShowLines%3D%221%22%3E%0A%0A%23%20enable/disable%20%22words%20per%20line%22%20-%20recommended%3A%20also%20show%20words%20per%20line%0A%3Cset%20ShowWpl%3D%221%22%3E%0A%0A%23%20enable/disable%20%22characters%20per%20line%22%20-%20recommended%3A%20also%20show%20characters%20per%20line%0A%3Cset%20ShowCpl%3D%221%22%3E%0A%0A%23%20enable/disable%20%22number%20of%20words%22%20-%20recommended%3A%20also%20show%20total%20words%0A%3Cset%20ShowWords%3D%221%22%3E%0A%0A%23%20show%20when%20a%20user%20was%20last%20seen%20on%20a%20channel%0A%3Cset%20ShowLastSeen%3D%221%22%3E%0A%0A%23%20show%20when%20a%20nick%20was%20active%0A%3Cset%20ShowTime%3D%221%22%3E%0A%0A%23%20mIRCStats%20like%20behaviour%20of%20time%20bar%0A%3Cset%20ShowLineTime%3D%220%22%3E%0A%0A%23%20ShowLineTime%20like%20behavior%20of%20words%20column%0A%3Cset%20ShowWordTime%3D%220%22%3E%0A%0A%23%20enable%20or%20disable%20the%20random%20quotes%0A%3Cset%20ShowRandQuote%3D%221%22%3E%0A%0A%23%20enable%20or%20disable%20the%20legend%20of%20the%20time%20bars%0A%3Cset%20ShowLegend%3D%221%22%3E%0A%0A%23%20enable%20or%20disable%20the%20kick%20line%0A%3Cset%20ShowKickLine%3D%221%22%3E%0A%0A%23%20enable%20or%20disable%20the%20action%20line%0A%3Cset%20ShowActionLine%3D%221%22%3E%0A%0A%23%20enable%20or%20disable%20the%20shout%20line%0A%3Cset%20ShowShoutLine%3D%221%22%3E%0A%0A%23%20set%20how%20many%20decimals%20to%20show%0A%3Cset%20ShowFoulDecimals%3D%221%22%3E%0A%0A%23%20enable%20or%20disable%20the%20foul%20line%0A%3Cset%20ShowFoulLine%3D%220%22%3E%0A%0A%23%20enable%20or%20disable%20the%20violent%20lines%0A%3Cset%20ShowViolentLines%3D%221%22%3E%0A%0A%23%20enable%20or%20disable%20%22Most%20used%20words%22%0A%3Cset%20ShowMuw%3D%221%22%3E%0A%0A%23%20enable%20or%20disable%20%22Most%20referenced%20nicks%22%0A%3Cset%20ShowMrn%3D%221%22%3E%0A%0A%23%20enable%20or%20disable%20%22Most%20referenced%20URLs%22%0A%3Cset%20ShowMru%3D%221%22%3E%0A%0A%23%20enable%20or%20disable%20channel%20music%20charts%0A%3Cset%20ShowCharts%3D%220%22%3E%0A%0A%23%20enable%20or%20disable%20op%20statistics%0A%3Cset%20ShowOps%3D%221%22%3E%0A%0A%23%20enable%20or%20disable%20voice%20statistics%0A%3Cset%20ShowVoices%3D%220%22%3E%0A%0A%23%20enable%20or%20disable%20halfop%20statistics%0A%3Cset%20ShowHalfops%3D%220%22%3E%0A%0A%23%20show%20who%20changed%20nick%20most%20often%20-%20recommended%3A%20show%20who%20changed%20nick%20most%20often%0A%3Cset%20ShowMostNicks%3D%221%22%3E%0A%0A%23%20show%20stats%20on%20which%20gender%20talked%20most%0A%3Cset%20ShowActiveGenders%3D%220%22%3E%0A%0A%23%20show%20most%20used%20smileys%20-%20recommended%3A%20show%20the%20most%20used%20smileys%0A%3Cset%20ShowSmileys%3D%221%22%3E%0A%0A%23%20show%20channel%20karma%20-%20recommended%3A%20show%20karma%20%28nick%2B%2B%20/%20nick--%29%0A%3Cset%20ShowKarma%3D%221%22%3E%0A%0A%23%20show%20most%20active%20nicks%20by%20hour%20-%20recommended%3A%20show%20the%20most%20active%20nicks%20by%20time%20of%0A%23%20day%0A%3Cset%20ShowMostActiveByHour%3D%221%22%3E%0A%0A%23%20only%20count%20stats%20for%20top%20talkers%2C%20ignore%20less-active%20users%0A%3Cset%20ShowOnlyTop%3D%220%22%3E%0A%0A%23%20show%20graphs%20in%20most%20active%20nicks%20by%20hour%0A%3Cset%20ShowMostActiveByHourGraph%3D%221%22%3E%0A%0A%23%20ignore%20specified%20words%20-%20words%20to%20leave%20out%20of%20the%20word%20statistics%0A%23%3Cset%20IgnoreWords%3D%22badword%20otherword%22%3E%0A%0A%23%20Control%20random%20quote%20output%0A%3Cset%20NoIgnoredQuotes%3D%220%22%3E%0A%0A%23%20specify%20words%20considered%20to%20be%20bad/FoulWords%20language%0A%3Cset%20FoulWords%3D%22ass%20fuck%20bitch%20shit%20scheisse%20schei%C3%9Fe%20kacke%20arsch%20ficker%20ficken%20schlampe%22%3E%0A%0A%23%20specify%20words%20considered%20to%20be%20aggressive/violent%0A%3Cset%20ViolentWords%3D%22slaps%20beats%20smacks%22%3E%0A%0A%23%20minimum%20numbers%20of%20letters%20for%20a%20random%20quote%0A%3Cset%20MinQuote%3D%2225%22%3E%0A%0A%23%20maximum%20numbers%20of%20letters%20for%20a%20random%20quote%0A%3Cset%20MaxQuote%3D%2265%22%3E%0A%0A%23%20minimum%20number%20of%20characters%20in%20an%20interesting%20word%0A%3Cset%20WordLength%3D%225%22%3E%0A%0A%23%20maximum%20allowed%20length%20of%20a%20%22word%22%20with%20no%20spaces%0A%3Cset%20QuoteWidth%3D%2280%22%3E%0A%0A%23%20Minimum%20number%20of%20lines%20per%20user%20for%20some%20%22Big%20Numbers%22%20statistics%0A%3Cset%20BigNumbersThreshold%3D%22sqrt%22%3E%0A%0A%23%20nicks%20to%20show%20in%20%22Most%20Active%20Nicks%22%0A%3Cset%20ActiveNicks%3D%2225%22%3E%0A%0A%23%20nicks%20to%20show%20in%20%22These%20didn%27t%20make%20it..%22%0A%3Cset%20ActiveNicks2%3D%2230%22%3E%0A%0A%23%20number%20of%20nicks%20to%20show%20in%20%22Most%20Active%20Nicks%20By%20Hour%22%0A%3Cset%20ActiveNicksByHour%3D%2210%22%3E%0A%0A%23%20maximum%20number%20of%20nicks%20to%20show%20in%20%22users%20with%20most%20nicknames%22%0A%3Cset%20MostNicksHistory%3D%225%22%3E%0A%0A%23%20show%20nicks%20used%20in%20%22most%20nicks%22%0A%3Cset%20MostNicksVerbose%3D%221%22%3E%0A%0A%23%20maximum%20number%20of%20topics%20to%20show%20-%20recommended%3A%20show%20the%20last%205%20topics%0A%3Cset%20TopicHistory%3D%225%22%3E%0A%0A%23%20maximum%20number%20of%20URLs%20to%20show%0A%3Cset%20UrlHistory%3D%225%22%3E%0A%0A%23%20number%20of%20songs%20to%20show%0A%3Cset%20ChartsHistory%3D%225%22%3E%0A%0A%23%20how%20to%20recognize%20songs%20played%0A%3Cset%20ChartsRegexp%3D%22%28%3F%3Ais%20%29%3F%28%3F%3Anp%3A%7C%28%3F%3Anow%20%29%3Fplaying%3A%3F%20%7Clistening%20to%3A%3F%20%29%28%3F%3AMPEG%20stream%20from%29%3F%5Cs%2A%28.%2A%29%22%3E%0A%0A%23%20maximum%20number%20of%20words%20to%20show%0A%3Cset%20WordHistory%3D%2210%22%3E%0A%0A%23%20maximum%20number%20of%20nicks%20to%20show%20in%20%22Most%20referenced%20nicks%22%0A%3Cset%20NickHistory%3D%225%22%3E%0A%0A%23%20maximum%20number%20of%20smileys%20to%20show%20in%20smiley%20stats%0A%3Cset%20SmileyHistory%3D%2210%22%3E%0A%0A%23%20maximum%20number%20of%20nicks%20to%20show%20in%20%22Karma%22%0A%3Cset%20KarmaHistory%3D%225%22%3E%0A%0A%23%20track%20nick%20changes%20and%20create%20aliases%20-%20recommended%3A%20follow%20nick%20changes%20so%20Seb%2C%20Seb_%0A%23%20and%20Seb-%20count%20as%20one%20person%0A%3Cset%20NickTracking%3D%221%22%3E%0A%0A%23%20maximum%20number%20of%20nicks%20in%20lists%0A%3Cset%20NickLimit%3D%2210%22%3E%0A%0A%23%20sort%20%22most%20active%20nicks%22%20by%20words%0A%3Cset%20SortByWords%3D%220%22%3E%0A%0A%23%20----%20Picture%20options%20-------------------------------------------------------%0A%0A%23%20path%20to%20images%20on%20stats%20page%0A%3Cset%20PicLocation%3D%22.%22%3E%0A%0A%23%20number%20of%20user%20pictures%20per%20row%0A%3Cset%20UserPics%3D%221%22%3E%0A%0A%23%20path%20to%20user%20pictures%20%28HTML%20page%29%20-%20folder%20of%20user%20pictures%2C%20as%20seen%20by%20the%20web%20page%0A%23%3Cset%20ImagePath%3D%22images/%22%3E%0A%0A%23%20use%20a%20default%20user%20picture%20-%20picture%20shown%20for%20users%20who%20have%20none%0A%23%3Cset%20DefaultPic%3D%22images/nobody.png%22%3E%0A%0A%23%20path%20to%20user%20pictures%20%28output%20generation%29%20-%20folder%20of%20user%20pictures%2C%20as%20seen%20by%20pisg%0A%23%20%28for%20pic%3D%22x_%2A.jpg%22%20globs%29%0A%23%3Cset%20ImageGlobPath%3D%22/var/www/pisg/images/%22%3E%0A%0A%23%20define%20a%20standard%20width%20for%20user%20pictures%20-%20show%20every%20user%20picture%20this%20wide%2C%20in%0A%23%20pixels%0A%23%3Cset%20PicWidth%3D%2255%22%3E%0A%0A%23%20define%20a%20standard%20height%20for%20user%20pictures%20-%20show%20every%20user%20picture%20this%20tall%2C%20in%0A%23%20pixels%0A%23%3Cset%20PicHeight%3D%2255%22%3E%0A%0A%23%20----%20Misc%20options%20----------------------------------------------------------%0A%0A%23%20character%20set%20to%20use%20for%20stats%20page%20-%20recommended%3A%20UTF-8%20shows%20accents%2C%20emoji%20and%20non-%0A%23%20Latin%20scripts%20correctly%0A%3Cset%20Charset%3D%22utf-8%22%3E%0A%0A%23%20character%20set%20for%20logfiles%20-%20convert%20logs%20from%20this%20charset%20%28needs%20the%20Text%3A%3AIconv%0A%23%20perl%20module%29%0A%23%3Cset%20LogCharset%3D%22iso-8859-1%22%3E%0A%0A%23%20fallback%20character%20set%20for%20logfiles%20-%20used%20for%20lines%20that%20are%20not%20valid%20in%20LogCharset%0A%23%20%28needs%20Text%3A%3AIconv%29%0A%23%3Cset%20LogCharsetFallback%3D%22iso-8859-1%22%3E%0A%0A%23%20use%20a%20different%20time%20zone%20than%20the%20local%20machine%0A%3Cset%20TimeOffset%3D%22%2B0%22%3E%0A%0A%23%20use%20regular%20expressions%20in%20user%20aliases%0A%3Cset%20RegexpAliases%3D%220%22%3E%0A%0A%23%20filename%20of%20language%20file%0A%3Cset%20LangFile%3D%22lang.txt%22%3E%0A%0A%23%20path%20to%20directory%20with%20CSS%20files%0A%3Cset%20CssDir%3D%22layout/%22%3E%0A%0A%23%20colors%20for%20color%20gradient%20in%20most%20active%20nicks%20section%0A%3Cset%20HiCell%3D%22%23BABADD%22%3E%0A%3Cset%20HiCell2%3D%22%23CCCCCC%22%3E%0A%0A%23%20colors%20for%20color%20gradient%20in%20most%20active%20nicks%20section%0A%3Cset%20HiCell2%3D%22%23CCCCCC%22%3E%0A%0A%23%20dump%20raw%20statistics%20into%20file%20-%20debugging%3A%20dump%20the%20raw%20statistics%20to%20this%20file%0A%23%3Cset%20StatsDump%3D%22stats.dump%22%3E%0A%0A%23%20----%20Advanced%20%28not%20in%20the%20original%20documentation%29%20-------------------------%0A%0A%23%20nicks%20of%20bots%2C%20for%20log%20formats%20that%20cannot%20tell%20bots%20from%20people%20%28DCpp%29%0A%23%3Cset%20BotNicks%3D%22bot1%20bot2%22%3E%0A%0A%23%20width%20in%20pixels%20of%20the%20statistics%20tables%0A%3Cset%20TableWidth%3D%22574%22%3E%0A%0A%23%20image%20id%20of%20the%20horizontal%20bar%20for%20hours%200-5%0A%3Cset%20Pic_H_0%3D%22blue-h%22%3E%0A%0A%23%20image%20id%20of%20the%20horizontal%20bar%20for%20hours%206-11%0A%3Cset%20Pic_H_6%3D%22green-h%22%3E%0A%0A%23%20image%20id%20of%20the%20horizontal%20bar%20for%20hours%2012-17%0A%3Cset%20Pic_H_12%3D%22yellow-h%22%3E%0A%0A%23%20image%20id%20of%20the%20horizontal%20bar%20for%20hours%2018-23%0A%3Cset%20Pic_H_18%3D%22red-h%22%3E%0A%0A%23%20image%20id%20of%20the%20vertical%20bar%20for%20hours%200-5%0A%3Cset%20Pic_V_0%3D%22blue-v%22%3E%0A%0A%23%20image%20id%20of%20the%20vertical%20bar%20for%20hours%206-11%0A%3Cset%20Pic_V_6%3D%22green-v%22%3E%0A%0A%23%20image%20id%20of%20the%20vertical%20bar%20for%20hours%2012-17%0A%3Cset%20Pic_V_12%3D%22yellow-v%22%3E%0A%0A%23%20image%20id%20of%20the%20vertical%20bar%20for%20hours%2018-23%0A%3Cset%20Pic_V_18%3D%22red-v%22%3E%0A%0A%0A%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%0A%23%20%20YOUR%20CHANNEL%20-%20copy%20this%20block%20for%20each%20extra%20channel%0A%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%0A%0A%3Cchannel%3D%22%23example%22%3E%0A%20%20%23%20Logfile%3A%20the%20log%20to%20read%3B%20you%20can%20list%20several%20Logfile%20lines%20%20EDIT%0A%20%20Logfile%3D%22/path/to/example.log%22%0A%0A%20%20%23%20LogDir%3A%20use%20INSTEAD%20of%20Logfile%20to%20read%20a%20whole%20folder%20of%20dated%20logs%0A%20%20%23LogDir%3D%22/path/to/logs/%22%0A%0A%20%20%23%20LogPrefix%3A%20with%20LogDir%3A%20only%20read%20files%20starting%20with%20this%0A%20%20%23LogPrefix%3D%22example.log.%22%0A%0A%20%20%23%20LogSuffix%3A%20with%20LogDir%3A%20date%20format%20at%20the%20end%20of%20the%20file%20names%2C%20so%20they%20sort%20by%0A%20%20%23%20date%0A%20%20%23LogSuffix%3D%22.%25d%25b%25Y%22%0A%0A%20%20%23%20NFiles%3A%20with%20LogDir%3A%20only%20parse%20the%20newest%20N%20files%20%280%20%3D%20all%29%0A%20%20%23NFiles%3D%2230%22%0A%0A%20%20%23%20Format%3A%20your%20log%20format%3A%20eggdrop%2C%20mIRC%2C%20xchat%2C%20irssi%2C%20...%20%28see%20docs/FORMATS%29%20%20EDIT%0A%20%20Format%3D%22eggdrop%22%0A%0A%20%20%23%20Network%3A%20the%20IRC%20network%2C%20shown%20on%20the%20page%20%20EDIT%0A%20%20Network%3D%22ExampleNet%22%0A%0A%20%20%23%20OutputFile%3A%20the%20page%20pisg%20writes%20%20EDIT%0A%20%20OutputFile%3D%22/var/www/html/example.html%22%0A%0A%20%20%23%20OutputTag%3A%20replaces%20%25t%20in%20OutputFile%3B%20used%20with%20the%20-nf%20/%20-t%20command%20line%20options%0A%20%20%23OutputTag%3D%22-week%22%0A%0A%20%20%23%20Maintainer%3A%20who%20is%20named%20as%20maintainer%20on%20the%20page%20%20EDIT%0A%20%20Maintainer%3D%22Your%20Name%22%0A%0A%20%20%23%20LogType%3A%20only%20%22Logfile%22%20exists%2C%20leave%20it%0A%20%20LogType%3D%22Logfile%22%0A%0A%20%20%23%20Any%20global%20option%20can%20be%20overridden%20for%20this%20channel%20only%2C%20for%20example%3A%0A%20%20%23Lang%3D%22FR%22%0A%20%20%23ColorScheme%3D%22midnight%22%0A%3C/channel%3E%0A%0A%0A%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%0A%23%20%20USERS%20-%20link%20nicks%20together%2C%20add%20pictures%2C%20mark%20bots%0A%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%0A%23%20nick%20%20%20%20the%20name%20shown%20in%20the%20stats%20%28required%29%0A%23%20alias%20%20%20other%20nicks%20of%20the%20same%20person%2C%20space%20separated%3B%20%2A%20matches%20anything%0A%23%20%20%20%20%20%20%20%20%20%28Joe%2A%20also%20counts%20Joe_%2C%20Joe%5Eaway%20...%29.%20NickTracking%3D%221%22%20also%20finds%20many%0A%23%20pic%20%20%20%20%20picture%20shown%20next%20to%20the%20user%20%20%20%20%20%20bigpic%20%20larger%20picture%20it%20links%20to%0A%23%20link%20%20%20%20a%20web%20address%20or%20e-mail%20address%20%20%20%20%20%20sex%20%20%20%20%20m%2C%20f%20or%20b%20%28bot%29%0A%23%20ignore%20%20y%20%3D%20leave%20this%20nick%20out%20of%20the%20stats%20altogether%20%28for%20bots%29%0A%0A%3Cuser%20nick%3D%22Alice%22%20alias%3D%22Alice_%20Alice-%2A%20AliceAway%22%20pic%3D%22alice.png%22%20link%3D%22https%3A//example.com/alice%22%20sex%3D%22f%22%3E%0A%3Cuser%20nick%3D%22Bob%22%20alias%3D%22Bob_%20Bobby%22%20pic%3D%22bob.png%22%20bigpic%3D%22bob-big.png%22%20link%3D%22bob%40example.com%22%20sex%3D%22m%22%3E%0A%3Cuser%20nick%3D%22ChanBot%22%20sex%3D%22b%22%20ignore%3D%22y%22%3E%0A%0A%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%0A%23%20%20LINKS%20-%20keep%20addresses%20out%20of%20%22Most%20referenced%20URLs%22%0A%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%0A%3Clink%20url%3D%22https%3A//example.com/spam%22%20ignore%3D%22y%22%3E%0A%0A%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%0A%23%20%20INCLUDE%20-%20share%20users%20between%20channels%20or%20config%20files%0A%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%0A%23%20Put%20your%20%3Cuser%3E%20lines%20in%20users.cfg%20and%20load%20them%20here%20%28an%20included%20file%20cannot%0A%23%20include%20another%20file%29%3A%0A%23%3Cinclude%3D%22users.cfg%22%3E%0A" download="pisg.cfg">Download</a>
+<a class="btn small" href="data:text/plain;charset=utf-8,%23%20pisg.cfg.example%20-%20a%20complete%20configuration%20for%20pisg%2C%20ready%20to%20copy.%0A%23%0A%23%20%20%201.%20Copy%20this%20file%20to%20pisg.cfg%0A%23%20%20%202.%20Change%20the%20values%20marked%20%20EDIT%20%20%28log%20path%2C%20format%2C%20network%2C%20output%20file%2C%20name%29%0A%23%20%20%203.%20Run%20./pisg%0A%23%0A%23%20Every%20option%20pisg%20understands%20is%20listed%20below%20with%20its%20meaning.%20Options%20are%20set%20to%0A%23%20pisg%27s%20own%20default%20unless%20the%20comment%20says%20%22recommended%22.%20Lines%20starting%20with%20%23%20are%0A%23%20comments%3B%20an%20option%20shown%20commented%20out%20is%20off/unset%20-%20remove%20the%20%23%20to%20use%20it.%0A%23%0A%23%20Syntax%20reminders%3A%0A%23%20%20%20%3Cset%20Name%3D%22value%22%3E%20%20%20%20%20%20a%20global%20option%2C%20applies%20to%20every%20channel%0A%23%20%20%20%3Cchannel%3D%22%23name%22%3E%20...%20%3C/channel%3E%20%20%20settings%20for%20one%20channel%20%28they%20override%20%3Cset%3E%29%0A%23%20%20%20%3Cuser%20nick%3D%22...%22%20...%3E%20%20%20per-user%20settings%0A%23%20Each%20%3Cset%3E%20must%20be%20on%20one%20line%2C%20and%20every%20value%20must%20be%20in%20quotes.%0A%0A%0A%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%0A%23%20%20GLOBAL%20OPTIONS%20-%20apply%20to%20every%20channel%20below%0A%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%0A%0A%23%20----%20General%20options%20-------------------------------------------------------%0A%0A%23%20use%20a%20different%20color%20scheme%20for%20stats%20page%20-%20recommended%3A%20modern%2C%20light/dark%20theme%3B%0A%23%20try%20midnight%2C%20amoled%2C%20terminal%2C%20or%20default%0A%3Cset%20ColorScheme%3D%22modern%22%3E%0A%0A%23%20alternate%20stylesheets%20for%20stats%20page%20-%20extra%20stylesheets%20the%20visitor%20can%20switch%20to%0A%23%3Cset%20AltColorScheme%3D%22midnight.css%20amoled.css%22%3E%0A%0A%23%20define%20the%20language%20/%20translation%20to%20use%0A%3Cset%20Lang%3D%22EN%22%3E%0A%0A%23%20define%20a%20file%20as%20page%20header%20-%20HTML%20file%20inserted%20above%20the%20statistics%0A%23%3Cset%20PageHead%3D%22header.html%22%3E%0A%0A%23%20define%20a%20file%20as%20page%20footer%20-%20HTML%20file%20inserted%20below%20the%20statistics%0A%23%3Cset%20PageFoot%3D%22footer.html%22%3E%0A%0A%23%20make%20pisg%20silent%2C%20suppress%20messages%0A%3Cset%20Silent%3D%220%22%3E%0A%0A%23%20use%20a%20cache%20to%20speed%20up%20log%20parsing%20-%20cache%20parsed%20logs%20here%20to%20speed%20up%20runs%20%28delete%0A%23%20it%20when%20you%20change%20settings%29%0A%23%3Cset%20CacheDir%3D%22cache/%22%3E%0A%0A%23%20name%20of%20the%20channel%20list%20file%20for%20a%20landing%20page%0A%3Cset%20ChannelIndex%3D%22channels.json%22%3E%0A%0A%23%20adds%20a%20button%20at%20the%20top%20of%20every%20stats%20page%20that%20leads%20back%20to%20your%20landing%20page%0A%3Cset%20HomeLink%3D%22%22%3E%0A%0A%23%20enable/disable%20the%20section%20bar%20at%20the%20top%20of%20the%20page%0A%3Cset%20ShowNavBar%3D%221%22%3E%0A%0A%23%20----%20Options%20for%20various%20statistics%20features%20-------------------------------%0A%0A%23%20number%20of%20days%20to%20show%20in%20%22Daily%20Actitity%22%20-%20recommended%3A%20show%20the%20last%2014%20days%20as%20a%0A%23%20bar%20chart%0A%3Cset%20DailyActivity%3D%2214%22%3E%0A%0A%23%20enable/disable%20%22Most%20Active%20Times%22%0A%3Cset%20ShowActiveTimes%3D%221%22%3E%0A%0A%23%20enable/disable%20%22Most%20Active%20Nicks%22%0A%3Cset%20ShowActiveNicks%3D%221%22%3E%0A%0A%23%20enable/disable%20%22Big%20Numbers%22%20sections%0A%3Cset%20ShowBigNumbers%3D%221%22%3E%0A%0A%23%20enable/disable%20%22Latest%20topics%22%20sections%0A%3Cset%20ShowTopics%3D%221%22%3E%0A%0A%23%20enable/disable%20%22number%20of%20lines%22%0A%3Cset%20ShowLines%3D%221%22%3E%0A%0A%23%20enable/disable%20%22words%20per%20line%22%20-%20recommended%3A%20also%20show%20words%20per%20line%0A%3Cset%20ShowWpl%3D%221%22%3E%0A%0A%23%20enable/disable%20%22characters%20per%20line%22%20-%20recommended%3A%20also%20show%20characters%20per%20line%0A%3Cset%20ShowCpl%3D%221%22%3E%0A%0A%23%20enable/disable%20%22number%20of%20words%22%20-%20recommended%3A%20also%20show%20total%20words%0A%3Cset%20ShowWords%3D%221%22%3E%0A%0A%23%20show%20when%20a%20user%20was%20last%20seen%20on%20a%20channel%0A%3Cset%20ShowLastSeen%3D%221%22%3E%0A%0A%23%20show%20when%20a%20nick%20was%20active%0A%3Cset%20ShowTime%3D%221%22%3E%0A%0A%23%20mIRCStats%20like%20behaviour%20of%20time%20bar%0A%3Cset%20ShowLineTime%3D%220%22%3E%0A%0A%23%20ShowLineTime%20like%20behavior%20of%20words%20column%0A%3Cset%20ShowWordTime%3D%220%22%3E%0A%0A%23%20enable%20or%20disable%20the%20random%20quotes%0A%3Cset%20ShowRandQuote%3D%221%22%3E%0A%0A%23%20enable%20or%20disable%20the%20legend%20of%20the%20time%20bars%0A%3Cset%20ShowLegend%3D%221%22%3E%0A%0A%23%20enable%20or%20disable%20the%20kick%20line%0A%3Cset%20ShowKickLine%3D%221%22%3E%0A%0A%23%20enable%20or%20disable%20the%20action%20line%0A%3Cset%20ShowActionLine%3D%221%22%3E%0A%0A%23%20enable%20or%20disable%20the%20shout%20line%0A%3Cset%20ShowShoutLine%3D%221%22%3E%0A%0A%23%20set%20how%20many%20decimals%20to%20show%0A%3Cset%20ShowFoulDecimals%3D%221%22%3E%0A%0A%23%20enable%20or%20disable%20the%20foul%20line%0A%3Cset%20ShowFoulLine%3D%220%22%3E%0A%0A%23%20enable%20or%20disable%20the%20violent%20lines%0A%3Cset%20ShowViolentLines%3D%221%22%3E%0A%0A%23%20enable%20or%20disable%20%22Most%20used%20words%22%0A%3Cset%20ShowMuw%3D%221%22%3E%0A%0A%23%20enable%20or%20disable%20%22Most%20referenced%20nicks%22%0A%3Cset%20ShowMrn%3D%221%22%3E%0A%0A%23%20enable%20or%20disable%20%22Most%20referenced%20URLs%22%0A%3Cset%20ShowMru%3D%221%22%3E%0A%0A%23%20enable%20or%20disable%20channel%20music%20charts%0A%3Cset%20ShowCharts%3D%220%22%3E%0A%0A%23%20enable%20or%20disable%20op%20statistics%0A%3Cset%20ShowOps%3D%221%22%3E%0A%0A%23%20enable%20or%20disable%20voice%20statistics%0A%3Cset%20ShowVoices%3D%220%22%3E%0A%0A%23%20enable%20or%20disable%20halfop%20statistics%0A%3Cset%20ShowHalfops%3D%220%22%3E%0A%0A%23%20show%20who%20changed%20nick%20most%20often%20-%20recommended%3A%20show%20who%20changed%20nick%20most%20often%0A%3Cset%20ShowMostNicks%3D%221%22%3E%0A%0A%23%20show%20stats%20on%20which%20gender%20talked%20most%0A%3Cset%20ShowActiveGenders%3D%220%22%3E%0A%0A%23%20show%20most%20used%20smileys%20-%20recommended%3A%20show%20the%20most%20used%20smileys%0A%3Cset%20ShowSmileys%3D%221%22%3E%0A%0A%23%20show%20channel%20karma%20-%20recommended%3A%20show%20karma%20%28nick%2B%2B%20/%20nick--%29%0A%3Cset%20ShowKarma%3D%221%22%3E%0A%0A%23%20show%20most%20active%20nicks%20by%20hour%20-%20recommended%3A%20show%20the%20most%20active%20nicks%20by%20time%20of%0A%23%20day%0A%3Cset%20ShowMostActiveByHour%3D%221%22%3E%0A%0A%23%20only%20count%20stats%20for%20top%20talkers%2C%20ignore%20less-active%20users%0A%3Cset%20ShowOnlyTop%3D%220%22%3E%0A%0A%23%20show%20graphs%20in%20most%20active%20nicks%20by%20hour%0A%3Cset%20ShowMostActiveByHourGraph%3D%221%22%3E%0A%0A%23%20enable/disable%20the%20channel%20overview%0A%3Cset%20ShowOverview%3D%221%22%3E%0A%0A%23%20enable/disable%20the%20relation%20map%20and%20its%20tables%0A%3Cset%20ShowRelations%3D%221%22%3E%0A%0A%23%20number%20of%20nicks%20on%20the%20relation%20map%0A%3Cset%20RelationNicks%3D%2230%22%3E%0A%0A%23%20minimum%20connection%20strength%20shown%20as%20a%20line%20on%20the%20relation%20map%0A%3Cset%20RelationMinWeight%3D%223%22%3E%0A%0A%23%20enable/disable%20the%20time%20personalities%20section%0A%3Cset%20ShowTimePersonalities%3D%221%22%3E%0A%0A%23%20enable/disable%20the%20%22who%20carries%20the%20channel%22%20section%0A%3Cset%20ShowConcentration%3D%221%22%3E%0A%0A%23%20enable/disable%20the%20signature%20words%20section%0A%3Cset%20ShowSignatureWords%3D%221%22%3E%0A%0A%23%20ignore%20specified%20words%20-%20words%20to%20leave%20out%20of%20the%20word%20statistics%0A%23%3Cset%20IgnoreWords%3D%22badword%20otherword%22%3E%0A%0A%23%20Control%20random%20quote%20output%0A%3Cset%20NoIgnoredQuotes%3D%220%22%3E%0A%0A%23%20specify%20words%20considered%20to%20be%20bad/FoulWords%20language%0A%3Cset%20FoulWords%3D%22ass%20fuck%20bitch%20shit%20scheisse%20schei%C3%9Fe%20kacke%20arsch%20ficker%20ficken%20schlampe%22%3E%0A%0A%23%20specify%20words%20considered%20to%20be%20aggressive/violent%0A%3Cset%20ViolentWords%3D%22slaps%20beats%20smacks%22%3E%0A%0A%23%20words%20that%20keep%20a%20URL%20out%20of%20the%20URL%20statistics%20-%20matched%20anywhere%20in%20a%20URL%2C%20any%20case%3B%0A%23%20%2A%20%3D%20any%20characters%2C%20%3F%20%3D%20one%3B%20for%20spam%20and%20unwanted%20image%20hosts%0A%23%3Cset%20BadUrls%3D%22imagetwist%20imgur.com%20postimg.cc/%2A%22%3E%0A%0A%23%20minimum%20numbers%20of%20letters%20for%20a%20random%20quote%0A%3Cset%20MinQuote%3D%2225%22%3E%0A%0A%23%20maximum%20numbers%20of%20letters%20for%20a%20random%20quote%0A%3Cset%20MaxQuote%3D%2265%22%3E%0A%0A%23%20minimum%20number%20of%20characters%20in%20an%20interesting%20word%0A%3Cset%20WordLength%3D%225%22%3E%0A%0A%23%20maximum%20allowed%20length%20of%20a%20%22word%22%20with%20no%20spaces%0A%3Cset%20QuoteWidth%3D%2280%22%3E%0A%0A%23%20Minimum%20number%20of%20lines%20per%20user%20for%20some%20%22Big%20Numbers%22%20statistics%0A%3Cset%20BigNumbersThreshold%3D%22sqrt%22%3E%0A%0A%23%20nicks%20to%20show%20in%20%22Most%20Active%20Nicks%22%0A%3Cset%20ActiveNicks%3D%2225%22%3E%0A%0A%23%20nicks%20to%20show%20in%20%22These%20didn%27t%20make%20it..%22%0A%3Cset%20ActiveNicks2%3D%2230%22%3E%0A%0A%23%20number%20of%20nicks%20to%20show%20in%20%22Most%20Active%20Nicks%20By%20Hour%22%0A%3Cset%20ActiveNicksByHour%3D%2210%22%3E%0A%0A%23%20maximum%20number%20of%20nicks%20to%20show%20in%20%22users%20with%20most%20nicknames%22%0A%3Cset%20MostNicksHistory%3D%225%22%3E%0A%0A%23%20show%20nicks%20used%20in%20%22most%20nicks%22%0A%3Cset%20MostNicksVerbose%3D%221%22%3E%0A%0A%23%20maximum%20number%20of%20topics%20to%20show%20-%20recommended%3A%20show%20the%20last%205%20topics%0A%3Cset%20TopicHistory%3D%225%22%3E%0A%0A%23%20maximum%20number%20of%20URLs%20to%20show%0A%3Cset%20UrlHistory%3D%225%22%3E%0A%0A%23%20number%20of%20songs%20to%20show%0A%3Cset%20ChartsHistory%3D%225%22%3E%0A%0A%23%20how%20to%20recognize%20songs%20played%0A%3Cset%20ChartsRegexp%3D%22%28%3F%3Ais%20%29%3F%28%3F%3Anp%3A%7C%28%3F%3Anow%20%29%3Fplaying%3A%3F%20%7Clistening%20to%3A%3F%20%29%28%3F%3AMPEG%20stream%20from%29%3F%5Cs%2A%28.%2A%29%22%3E%0A%0A%23%20maximum%20number%20of%20words%20to%20show%0A%3Cset%20WordHistory%3D%2210%22%3E%0A%0A%23%20maximum%20number%20of%20nicks%20to%20show%20in%20%22Most%20referenced%20nicks%22%0A%3Cset%20NickHistory%3D%225%22%3E%0A%0A%23%20maximum%20number%20of%20smileys%20to%20show%20in%20smiley%20stats%0A%3Cset%20SmileyHistory%3D%2210%22%3E%0A%0A%23%20maximum%20number%20of%20nicks%20to%20show%20in%20%22Karma%22%0A%3Cset%20KarmaHistory%3D%225%22%3E%0A%0A%23%20track%20nick%20changes%20and%20create%20aliases%20-%20recommended%3A%20follow%20nick%20changes%20so%20Alice%2C%0A%23%20Alice_%20and%20Alice-%20count%20as%20one%20person%0A%3Cset%20NickTracking%3D%221%22%3E%0A%0A%23%20maximum%20number%20of%20nicks%20in%20lists%0A%3Cset%20NickLimit%3D%2210%22%3E%0A%0A%23%20sort%20%22most%20active%20nicks%22%20by%20words%0A%3Cset%20SortByWords%3D%220%22%3E%0A%0A%23%20----%20Picture%20options%20-------------------------------------------------------%0A%0A%23%20path%20to%20images%20on%20stats%20page%0A%3Cset%20PicLocation%3D%22.%22%3E%0A%0A%23%20number%20of%20user%20pictures%20per%20row%0A%3Cset%20UserPics%3D%221%22%3E%0A%0A%23%20path%20to%20user%20pictures%20%28HTML%20page%29%20-%20folder%20of%20user%20pictures%2C%20as%20seen%20by%20the%20web%20page%0A%23%3Cset%20ImagePath%3D%22images/%22%3E%0A%0A%23%20use%20a%20default%20user%20picture%20-%20picture%20shown%20for%20users%20who%20have%20none%0A%23%3Cset%20DefaultPic%3D%22images/nobody.png%22%3E%0A%0A%23%20path%20to%20user%20pictures%20%28output%20generation%29%20-%20folder%20of%20user%20pictures%2C%20as%20seen%20by%20pisg%0A%23%20%28for%20pic%3D%22x_%2A.jpg%22%20globs%29%0A%23%3Cset%20ImageGlobPath%3D%22/var/www/pisg/images/%22%3E%0A%0A%23%20define%20a%20standard%20width%20for%20user%20pictures%20-%20show%20every%20user%20picture%20this%20wide%2C%20in%0A%23%20pixels%0A%23%3Cset%20PicWidth%3D%2255%22%3E%0A%0A%23%20define%20a%20standard%20height%20for%20user%20pictures%20-%20show%20every%20user%20picture%20this%20tall%2C%20in%0A%23%20pixels%0A%23%3Cset%20PicHeight%3D%2255%22%3E%0A%0A%23%20----%20Misc%20options%20----------------------------------------------------------%0A%0A%23%20character%20set%20to%20use%20for%20stats%20page%20-%20recommended%3A%20UTF-8%20shows%20accents%2C%20emoji%20and%20non-%0A%23%20Latin%20scripts%20correctly%0A%3Cset%20Charset%3D%22utf-8%22%3E%0A%0A%23%20character%20set%20for%20logfiles%20-%20convert%20logs%20from%20this%20charset%20%28needs%20the%20Text%3A%3AIconv%0A%23%20perl%20module%29%0A%23%3Cset%20LogCharset%3D%22iso-8859-1%22%3E%0A%0A%23%20fallback%20character%20set%20for%20logfiles%20-%20used%20for%20lines%20that%20are%20not%20valid%20in%20LogCharset%0A%23%20%28needs%20Text%3A%3AIconv%29%0A%23%3Cset%20LogCharsetFallback%3D%22iso-8859-1%22%3E%0A%0A%23%20use%20a%20different%20time%20zone%20than%20the%20local%20machine%0A%3Cset%20TimeOffset%3D%22%2B0%22%3E%0A%0A%23%20use%20regular%20expressions%20in%20user%20aliases%0A%3Cset%20RegexpAliases%3D%220%22%3E%0A%0A%23%20filename%20of%20language%20file%0A%3Cset%20LangFile%3D%22lang.txt%22%3E%0A%0A%23%20path%20to%20directory%20with%20CSS%20files%0A%3Cset%20CssDir%3D%22layout/%22%3E%0A%0A%23%20colors%20for%20color%20gradient%20in%20most%20active%20nicks%20section%0A%3Cset%20HiCell%3D%22%23BABADD%22%3E%0A%3Cset%20HiCell2%3D%22%23CCCCCC%22%3E%0A%0A%23%20colors%20for%20color%20gradient%20in%20most%20active%20nicks%20section%0A%3Cset%20HiCell2%3D%22%23CCCCCC%22%3E%0A%0A%23%20dump%20raw%20statistics%20into%20file%20-%20debugging%3A%20dump%20the%20raw%20statistics%20to%20this%20file%0A%23%3Cset%20StatsDump%3D%22stats.dump%22%3E%0A%0A%23%20----%20Advanced%20%28not%20in%20the%20original%20documentation%29%20-------------------------%0A%0A%23%20nicks%20of%20bots%2C%20for%20log%20formats%20that%20cannot%20tell%20bots%20from%20people%20%28DCpp%29%0A%23%3Cset%20BotNicks%3D%22bot1%20bot2%22%3E%0A%0A%23%20width%20in%20pixels%20of%20the%20statistics%20tables%0A%3Cset%20TableWidth%3D%22574%22%3E%0A%0A%23%20image%20id%20of%20the%20horizontal%20bar%20for%20hours%200-5%0A%3Cset%20Pic_H_0%3D%22blue-h%22%3E%0A%0A%23%20image%20id%20of%20the%20horizontal%20bar%20for%20hours%206-11%0A%3Cset%20Pic_H_6%3D%22green-h%22%3E%0A%0A%23%20image%20id%20of%20the%20horizontal%20bar%20for%20hours%2012-17%0A%3Cset%20Pic_H_12%3D%22yellow-h%22%3E%0A%0A%23%20image%20id%20of%20the%20horizontal%20bar%20for%20hours%2018-23%0A%3Cset%20Pic_H_18%3D%22red-h%22%3E%0A%0A%23%20image%20id%20of%20the%20vertical%20bar%20for%20hours%200-5%0A%3Cset%20Pic_V_0%3D%22blue-v%22%3E%0A%0A%23%20image%20id%20of%20the%20vertical%20bar%20for%20hours%206-11%0A%3Cset%20Pic_V_6%3D%22green-v%22%3E%0A%0A%23%20image%20id%20of%20the%20vertical%20bar%20for%20hours%2012-17%0A%3Cset%20Pic_V_12%3D%22yellow-v%22%3E%0A%0A%23%20image%20id%20of%20the%20vertical%20bar%20for%20hours%2018-23%0A%3Cset%20Pic_V_18%3D%22red-v%22%3E%0A%0A%0A%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%0A%23%20%20YOUR%20CHANNEL%20-%20copy%20this%20block%20for%20each%20extra%20channel%0A%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%0A%0A%3Cchannel%3D%22%23example%22%3E%0A%20%20%23%20Logfile%3A%20the%20log%20to%20read%3B%20you%20can%20list%20several%20Logfile%20lines%20%20EDIT%0A%20%20Logfile%3D%22/path/to/example.log%22%0A%0A%20%20%23%20LogDir%3A%20use%20INSTEAD%20of%20Logfile%20to%20read%20a%20whole%20folder%20of%20dated%20logs%0A%20%20%23LogDir%3D%22/path/to/logs/%22%0A%0A%20%20%23%20LogPrefix%3A%20with%20LogDir%3A%20only%20read%20files%20starting%20with%20this%0A%20%20%23LogPrefix%3D%22example.log.%22%0A%0A%20%20%23%20LogSuffix%3A%20with%20LogDir%3A%20date%20format%20at%20the%20end%20of%20the%20file%20names%2C%20so%20they%20sort%20by%0A%20%20%23%20date%0A%20%20%23LogSuffix%3D%22.%25d%25b%25Y%22%0A%0A%20%20%23%20NFiles%3A%20with%20LogDir%3A%20only%20parse%20the%20newest%20N%20files%20%280%20%3D%20all%29%0A%20%20%23NFiles%3D%2230%22%0A%0A%20%20%23%20Format%3A%20your%20log%20format%3A%20eggdrop%2C%20mIRC%2C%20xchat%2C%20irssi%2C%20...%20%28see%20docs/FORMATS%29%20%20EDIT%0A%20%20Format%3D%22eggdrop%22%0A%0A%20%20%23%20Network%3A%20the%20IRC%20network%2C%20shown%20on%20the%20page%20%20EDIT%0A%20%20Network%3D%22ExampleNet%22%0A%0A%20%20%23%20OutputFile%3A%20the%20page%20pisg%20writes%20%20EDIT%0A%20%20OutputFile%3D%22/var/www/html/example.html%22%0A%0A%20%20%23%20OutputTag%3A%20replaces%20%25t%20in%20OutputFile%3B%20used%20with%20the%20-nf%20/%20-t%20command%20line%20options%0A%20%20%23OutputTag%3D%22-week%22%0A%0A%20%20%23%20Maintainer%3A%20who%20is%20named%20as%20maintainer%20on%20the%20page%20%20EDIT%0A%20%20Maintainer%3D%22Your%20Name%22%0A%0A%20%20%23%20LogType%3A%20only%20%22Logfile%22%20exists%2C%20leave%20it%0A%20%20LogType%3D%22Logfile%22%0A%0A%20%20%23%20Any%20global%20option%20can%20be%20overridden%20for%20this%20channel%20only%2C%20for%20example%3A%0A%20%20%23Lang%3D%22FR%22%0A%20%20%23ColorScheme%3D%22midnight%22%0A%3C/channel%3E%0A%0A%0A%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%0A%23%20%20USERS%20-%20link%20nicks%20together%2C%20add%20pictures%2C%20mark%20bots%0A%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%0A%23%20nick%20%20%20%20the%20name%20shown%20in%20the%20stats%20%28required%29%0A%23%20alias%20%20%20other%20nicks%20of%20the%20same%20person%2C%20space%20separated%3B%20%2A%20matches%20anything%0A%23%20%20%20%20%20%20%20%20%20%28Joe%2A%20also%20counts%20Joe_%2C%20Joe%5Eaway%20...%29.%20NickTracking%3D%221%22%20also%20finds%20many%0A%23%20pic%20%20%20%20%20picture%20shown%20next%20to%20the%20user%20%20%20%20%20%20bigpic%20%20larger%20picture%20it%20links%20to%0A%23%20link%20%20%20%20a%20web%20address%20or%20e-mail%20address%20%20%20%20%20%20sex%20%20%20%20%20m%2C%20f%20or%20b%20%28bot%29%0A%23%20ignore%20%20y%20%3D%20leave%20this%20nick%20out%20of%20the%20stats%20altogether%20%28for%20bots%29%0A%0A%3Cuser%20nick%3D%22Alice%22%20alias%3D%22Alice_%20Alice-%2A%20AliceAway%22%20pic%3D%22alice.png%22%20link%3D%22https%3A//example.com/alice%22%20sex%3D%22f%22%3E%0A%3Cuser%20nick%3D%22Bob%22%20alias%3D%22Bob_%20Bobby%22%20pic%3D%22bob.png%22%20bigpic%3D%22bob-big.png%22%20link%3D%22bob%40example.com%22%20sex%3D%22m%22%3E%0A%3Cuser%20nick%3D%22ChanBot%22%20sex%3D%22b%22%20ignore%3D%22y%22%3E%0A%3Cuser%20nick%3D%22Seb%22%20alias%3D%22Seb-%20Seb_%22%20pic%3D%22https%3A//r2.fivemanage.com/X8I0LGoLdHY2Wx9DdTrvx/Pics/me.png%22%20sex%3D%22m%22%20link%3D%22https%3A//dooubletap.github.io/%22%3E%0A%0A%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%0A%23%20%20LINKS%20-%20keep%20addresses%20out%20of%20%22Most%20referenced%20URLs%22%0A%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%0A%3Clink%20url%3D%22https%3A//example.com/spam%22%20ignore%3D%22y%22%3E%0A%0A%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%0A%23%20%20INCLUDE%20-%20share%20users%20between%20channels%20or%20config%20files%0A%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%23%0A%23%20Put%20your%20%3Cuser%3E%20lines%20in%20users.cfg%20and%20load%20them%20here%20%28an%20included%20file%20cannot%0A%23%20include%20another%20file%29%3A%0A%23%3Cinclude%3D%22users.cfg%22%3E%0A" download="pisg.cfg">Download</a>
 <button class="btn small copybtn" type="button" data-target="cfg-example">Copy</button></div>
 <pre id="cfg-example" class="cfg"># pisg.cfg.example - a complete configuration for pisg, ready to copy.
 #
@@ -1887,6 +1930,15 @@ Options are at pisg's own defaults unless the comment says <em>recommended</em>.
 # use a cache to speed up log parsing - cache parsed logs here to speed up runs (delete
 # it when you change settings)
 #&lt;set CacheDir=&quot;cache/&quot;&gt;
+
+# name of the channel list file for a landing page
+&lt;set ChannelIndex=&quot;channels.json&quot;&gt;
+
+# adds a button at the top of every stats page that leads back to your landing page
+&lt;set HomeLink=&quot;&quot;&gt;
+
+# enable/disable the section bar at the top of the page
+&lt;set ShowNavBar=&quot;1&quot;&gt;
 
 # ---- Options for various statistics features -------------------------------
 
@@ -1997,6 +2049,27 @@ Options are at pisg's own defaults unless the comment says <em>recommended</em>.
 # show graphs in most active nicks by hour
 &lt;set ShowMostActiveByHourGraph=&quot;1&quot;&gt;
 
+# enable/disable the channel overview
+&lt;set ShowOverview=&quot;1&quot;&gt;
+
+# enable/disable the relation map and its tables
+&lt;set ShowRelations=&quot;1&quot;&gt;
+
+# number of nicks on the relation map
+&lt;set RelationNicks=&quot;30&quot;&gt;
+
+# minimum connection strength shown as a line on the relation map
+&lt;set RelationMinWeight=&quot;3&quot;&gt;
+
+# enable/disable the time personalities section
+&lt;set ShowTimePersonalities=&quot;1&quot;&gt;
+
+# enable/disable the &quot;who carries the channel&quot; section
+&lt;set ShowConcentration=&quot;1&quot;&gt;
+
+# enable/disable the signature words section
+&lt;set ShowSignatureWords=&quot;1&quot;&gt;
+
 # ignore specified words - words to leave out of the word statistics
 #&lt;set IgnoreWords=&quot;badword otherword&quot;&gt;
 
@@ -2008,6 +2081,10 @@ Options are at pisg's own defaults unless the comment says <em>recommended</em>.
 
 # specify words considered to be aggressive/violent
 &lt;set ViolentWords=&quot;slaps beats smacks&quot;&gt;
+
+# words that keep a URL out of the URL statistics - matched anywhere in a URL, any case;
+# * = any characters, ? = one; for spam and unwanted image hosts
+#&lt;set BadUrls=&quot;imagetwist imgur.com postimg.cc/*&quot;&gt;
 
 # minimum numbers of letters for a random quote
 &lt;set MinQuote=&quot;25&quot;&gt;
@@ -2063,8 +2140,8 @@ Options are at pisg's own defaults unless the comment says <em>recommended</em>.
 # maximum number of nicks to show in &quot;Karma&quot;
 &lt;set KarmaHistory=&quot;5&quot;&gt;
 
-# track nick changes and create aliases - recommended: follow nick changes so Seb, Seb_
-# and Seb- count as one person
+# track nick changes and create aliases - recommended: follow nick changes so Alice,
+# Alice_ and Alice- count as one person
 &lt;set NickTracking=&quot;1&quot;&gt;
 
 # maximum number of nicks in lists
@@ -2226,6 +2303,7 @@ Options are at pisg's own defaults unless the comment says <em>recommended</em>.
 &lt;user nick=&quot;Alice&quot; alias=&quot;Alice_ Alice-* AliceAway&quot; pic=&quot;alice.png&quot; link=&quot;https://example.com/alice&quot; sex=&quot;f&quot;&gt;
 &lt;user nick=&quot;Bob&quot; alias=&quot;Bob_ Bobby&quot; pic=&quot;bob.png&quot; bigpic=&quot;bob-big.png&quot; link=&quot;bob@example.com&quot; sex=&quot;m&quot;&gt;
 &lt;user nick=&quot;ChanBot&quot; sex=&quot;b&quot; ignore=&quot;y&quot;&gt;
+&lt;user nick=&quot;Seb&quot; alias=&quot;Seb- Seb_&quot; pic=&quot;https://r2.fivemanage.com/X8I0LGoLdHY2Wx9DdTrvx/Pics/me.png&quot; sex=&quot;m&quot; link=&quot;https://dooubletap.github.io/&quot;&gt;
 
 ##############################################################################
 #  LINKS - keep addresses out of &quot;Most referenced URLs&quot;

@@ -1,229 +1,360 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>#teatime @ Undernet stats by vox</title>
+<style type="text/css" id="pisg-base">
+/* Base styles for the newer sections (navigation bar, overview, relation map, roles ...).
+   pisg puts this in front of the theme, so any theme can restyle these classes, and
+   the old themes still show them properly. Colours come from the theme's variables
+   when it has them (modern, midnight ...), otherwise from the page's own text colour. */
+
+html { scroll-behavior: smooth; }
+.card { scroll-margin-top: 64px; }
+
+.pisg-nav {
+  position: sticky; top: 0; z-index: 30; margin: 0 0 8px; text-align: left;
+  background: var(--bg, #fff); border-bottom: 1px solid rgba(128, 128, 128, .35);
+}
+.nav-menu > summary {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 10px 2px; cursor: pointer; list-style: none; user-select: none;
+}
+.nav-menu > summary::-webkit-details-marker { display: none; }
+.nav-current { font-weight: 600; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nav-toggle { flex: 0 0 auto; font-size: 13px; opacity: .8; }
+.nav-toggle::after { content: ""; display: inline-block; width: 6px; height: 6px; margin: 0 2px 2px 8px;
+  border: solid currentColor; border-width: 0 1.5px 1.5px 0; transform: rotate(45deg); transition: transform .15s; }
+.nav-menu[open] .nav-toggle::after { transform: rotate(-135deg); margin-bottom: -2px; }
+.nav-list {
+  position: absolute; left: 0; right: 0; top: 100%; z-index: 40; margin: 0; padding: 8px;
+  list-style: none; max-height: 70vh; overflow-y: auto;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 0 12px;
+  background: var(--bg, #fff); border: 1px solid rgba(128, 128, 128, .35); border-top: 0;
+  box-shadow: 0 18px 30px -12px rgba(0, 0, 0, .28);
+}
+.nav-list a { display: block; padding: 8px 10px; border-radius: 6px; text-decoration: none; }
+.nav-list a:hover { background: rgba(128, 128, 128, .18); text-decoration: none; }
+.nav-list a.active { font-weight: 700; }
+.nav-list a.active::before { content: "\2022"; margin-right: 8px; }
+.nav-menu > summary:focus-visible { outline: 2px solid currentColor; outline-offset: -2px; }
+
+.intro { margin: 4px 0 12px; text-align: left; opacity: .85; }
+
+.hero { margin: 2px 0 18px; font-size: clamp(20px, 2.6vw, 26px); line-height: 1.3; font-weight: 600; text-wrap: balance; }
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 0 48px; margin: 0; }
+.fact { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid rgba(128, 128, 128, .3); }
+.fact dt { opacity: .75; }
+.fact dd { margin: 0; text-align: right; font-weight: 600; }
+.fact dd small { display: block; font-weight: 400; opacity: .7; }
+
+.cardgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 10px; margin: 6px 0; }
+.minicard {
+  display: flex; flex-direction: column; gap: 2px; text-align: left;
+  padding: 12px 14px; border: 1px solid rgba(128, 128, 128, .35); border-radius: 12px;
+}
+.mc-title { font-size: 11px; letter-spacing: .06em; text-transform: uppercase; opacity: .7; }
+.mc-name { font-size: 20px; font-weight: 700; line-height: 1.3; word-break: break-word; }
+.mc-desc { font-size: 12px; opacity: .7; }
+.mc-value { margin-top: 6px; font-size: 13px; font-weight: 600; }
+.mc-list { margin: 8px 0 0; padding: 0; list-style: none; }
+.mc-list li { display: flex; justify-content: space-between; gap: 8px; padding: 3px 0; border-top: 1px solid rgba(128, 128, 128, .25); }
+.mc-list span { opacity: .75; }
+
+.bar { display: inline-block; vertical-align: middle; width: 130px; max-width: 100%; height: 8px; border-radius: 4px; background: rgba(128, 128, 128, .28); overflow: hidden; }
+.bar span { display: block; height: 100%; border-radius: 4px; background: var(--accent, currentColor); opacity: .85; }
+.sigword { font-weight: 600; }
+
+/* ---- relation map ---- */
+.relmap { display: grid; grid-template-columns: minmax(0, 3fr) minmax(230px, 1fr); gap: 14px; align-items: start; text-align: left; }
+@media (max-width: 820px) { .relmap { grid-template-columns: 1fr; } }
+.relmap-canvas svg { display: block; width: 100%; height: auto; border: 1px solid rgba(128, 128, 128, .3); border-radius: 12px; }
+.relmap-legend { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-bottom: 8px; font-size: 12px; }
+.relmap-legend .lg i { display: inline-block; width: 10px; height: 10px; margin-right: 5px; border-radius: 50%; vertical-align: middle; }
+.lg0 i { background: var(--t0, #4a3aa7); } .lg1 i { background: var(--t1, #eda100); }
+.lg2 i { background: var(--t2, #1baf7a); } .lg3 i { background: var(--t3, #eb6834); }
+.relmap-info { padding: 12px 14px; min-height: 7em; border: 1px solid rgba(128, 128, 128, .35); border-radius: 12px; font-size: 13px; }
+.ri-title { margin: 0 0 4px; font-size: 17px; }
+.ri-sub { margin: 10px 0 4px; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; opacity: .7; }
+.ri-meta, .ri-row { margin: 2px 0; opacity: .9; }
+.ri-list { margin: 0; padding: 0; list-style: none; }
+.ri-list li { display: flex; justify-content: space-between; gap: 8px; padding: 3px 0; border-top: 1px solid rgba(128, 128, 128, .25); }
+.ri-num { opacity: .7; }
+.ri-link { padding: 0; border: 0; background: none; color: inherit; font: inherit; font-weight: 600; text-decoration: underline; cursor: pointer; }
+
+.rm-line { stroke: currentColor; stroke-opacity: .32; stroke-linecap: round; }
+.rm-hit { stroke: transparent; cursor: pointer; }
+.rm-edge:hover .rm-line, .rm-edge.hl .rm-line { stroke-opacity: .8; }
+.rm-edge.sel .rm-line { stroke: var(--accent, currentColor); stroke-opacity: 1; }
+.rm-node { cursor: pointer; outline: none; }
+.rm-node circle { stroke: rgba(255, 255, 255, .55); stroke-width: 2; }
+.rm-node text { font-size: 12px; fill: currentColor; paint-order: stroke; stroke: var(--card, var(--bg, transparent)); stroke-width: 3px; stroke-linejoin: round; pointer-events: none; }
+.rm-node.t0 circle { fill: var(--t0, #4a3aa7); } .rm-node.t1 circle { fill: var(--t1, #eda100); }
+.rm-node.t2 circle { fill: var(--t2, #1baf7a); } .rm-node.t3 circle { fill: var(--t3, #eb6834); }
+.rm-node:focus-visible circle, .rm-node.sel circle { stroke: var(--accent, currentColor); stroke-width: 4; }
+svg.dim .rm-node:not(.hl) { opacity: .28; }
+svg.dim .rm-edge:not(.hl) { opacity: .1; }
+
+/* labels that found no free space appear on hover, focus, selection, or as a neighbour of one */
+.rm-lbl.off { opacity: 0; }
+.rm-node:hover .rm-lbl.off, .rm-node:focus .rm-lbl.off, .rm-node.hl .rm-lbl.off, .rm-node.sel .rm-lbl.off { opacity: 1; }
+.minicard.t0 { border-top: 3px solid var(--t0, #4a3aa7); } .minicard.t1 { border-top: 3px solid var(--t1, #eda100); }
+.minicard.t2 { border-top: 3px solid var(--t2, #1baf7a); } .minicard.t3 { border-top: 3px solid var(--t3, #eb6834); }
+td.asmall .v { display: inline; }
+
+/* The left-hand menu only exists in themes that lay it out (see build-themes.py). */
+.nav-side { display: none; }
+
+.homebar { margin: 0 0 10px; text-align: left; }
+</style>
 <style type="text/css" title="amoled">
-/* <!-- pisg theme: amoled - Pure black with a violet accent, always dark.
+/* <!-- pisg theme: amoled - Pure black, always dark.
    Generated by layout/build-themes.py, edit the palette there. --> */
 :root {
   color-scheme: dark;
   --bg: #000000;
-  --fg: #e6e9ee;
-  --muted: #8b95a3;
-  --card: #0b0b0f;
-  --row: #050508;
-  --row-alt: #101018;
-  --line: #2b2b3c;
-  --accent: #b18cff;
-  --head: #f2f4f8;
-  --blue: #5b8def;
-  --green: #2fbf8f;
-  --yellow: #e5b13a;
-  --red: #ef6b6b;
-  --male: #9db4ff;
-  --female: #ff9fd0;
-  --shadow: 0 1px 2px rgba(0,0,0,.5), 0 10px 28px rgba(0,0,0,.35);
+  --surface: #0a0b0d;
+  --fg: #e8ebef;
+  --muted: #98a2ae;
+  --line: #1c2027;
+  --line2: #2c323b;
+  --hover: #101216;
+  --mark: #3987e5;
+  --t0: #9085e9;
+  --t1: #c98500;
+  --t2: #199e70;
+  --t3: #d95926;
+  --male: #7aa7ea;
+  --female: #e58ab5;
+  --shadow: 0 18px 32px -14px rgba(0,0,0,.9);
 }
 
-/* <!-- pisg output is table markup. Each section is wrapped in <div class="card">
-   by the generator; these rules box the sections up and restyle the existing
-   classes (headtext, hicell, tdtop, rankc ...) inside them. --> */
+/* <!-- pisg output is table markup, so these rules restyle the existing classes (headtext, hicell,
+   tdtop, rankc ...). The generator wraps each section in <div class="card" id="...">. --> */
 
-html { -webkit-text-size-adjust: 100%; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
 
 body {
   margin: 0;
-  padding: 28px 16px 56px;
+  padding: 32px 24px 96px;
   background: var(--bg);
   color: var(--fg);
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   font-size: 15px;
-  line-height: 1.5;
+  line-height: 1.55;
 }
+body > div { max-width: 1040px; margin: 0 auto; text-align: left; }   /* <!-- pisg centres it with align=center --> */
 
-/* <!-- pisg wraps everything in <div align="center"> --> */
-body > div { max-width: 1040px; margin: 0 auto; }
-
-/* <!-- The fixed 925/929px table widths are attributes, so plain CSS overrides them. --> */
+/* <!-- Fixed 925/929px table widths are attributes, so plain CSS overrides them. --> */
 table { border-collapse: separate; border-spacing: 0; max-width: 100%; }
 table[width] { width: 100%; }
-table[width="520"] { width: auto; margin: 6px auto 0; }
+table[width="520"] { width: auto; margin: 10px 0 0; }
+td { color: var(--fg); font-family: inherit; font-size: 14px; text-align: left; padding: 9px 10px; vertical-align: middle; overflow-wrap: anywhere; }   /* <!-- long URLs and nicks wrap instead of forcing a scrollbar --> */
 
-td {
-  color: var(--fg);
-  font-family: inherit;
-  font-size: 14px;
-  text-align: left;
-  padding: 8px 10px;
-  vertical-align: middle;
-}
+a, a:link, a:visited { color: inherit; font-weight: 600; text-decoration: underline; text-decoration-color: var(--line2); text-underline-offset: 3px; }
+a:hover { text-decoration-color: currentColor; }
+a:focus-visible, summary:focus-visible, button:focus-visible { outline: 2px solid var(--fg); outline-offset: 2px; }
+a.background, a.background:link, a.background:visited { color: var(--muted); font-weight: 500; }
 
-a, a:link, a:visited { color: var(--accent); text-decoration: none; font-weight: 600; }
-a:hover { text-decoration: underline; }
-a.background, a.background:link, a.background:visited { color: var(--muted); }
-
-/* <!-- Page heading --> */
+/* <!-- ---- Masthead: reads like an IRC header, "#channel @ network" ---- --> */
 .title, #pagetitle1 {
-  margin: 6px 0 6px;
-  font-size: 32px;
+  margin: 4px 0 8px;
+  font-family: ui-monospace, "SF Mono", "Cascadia Mono", "JetBrains Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  font-size: clamp(24px, 4.6vw, 40px);
   line-height: 1.15;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  color: var(--head);
-}
-.subtitle { margin: 0 0 8px; color: var(--muted); font-size: 14px; }
-.subtitle b { color: var(--fg); }
-
-/* <!-- ---- Cards ------------------------------------------------------------ --> */
-.card {
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: 16px;
-  box-shadow: var(--shadow);
-  padding: 18px 20px 14px;
-  margin: 20px 0;
-  text-align: left;
-  overflow-x: auto;          /* <!-- wide tables scroll inside their card on phones --> */
-}
-.card > br { display: none; }
-.card > table { margin-left: auto; margin-right: auto; }
-
-/* <!-- Card title --> */
-.headlinebg { background: none; padding: 0; }
-.headtext {
-  margin: 0;
-  padding: 2px 0 2px 12px;
-  border-left: 4px solid var(--accent);
-  background: none;
-  color: var(--head);
-  font-size: 17px;
   font-weight: 700;
-  text-align: left;
+  letter-spacing: -0.035em;
+  color: var(--fg);
+  overflow-wrap: anywhere;
 }
-.card > table:first-of-type { margin-bottom: 10px; }
+.subtitle { margin: 0 0 18px; color: var(--muted); font-size: 14px; }
+.subtitle b { color: var(--fg); font-weight: 600; }
+
+/* <!-- ---- Sections: a rule and space, no boxes ---- --> */
+.card { margin: 56px 0 0; padding: 20px 0 0; border-top: 1px solid var(--line2); overflow-x: auto; text-align: left; scroll-margin-top: 64px; }
+.card > br { display: none; }
+.pisg-nav + .card { margin-top: 28px; border-top: 0; padding-top: 0; }
+#overview .headlinebg { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }   /* <!-- the sentence below is its headline; the menu still links here --> */
+.card > table:first-of-type { margin-bottom: 8px; }
+.headlinebg { background: none; padding: 0; }
+.headtext { margin: 0; padding: 0; border: 0; background: none; color: var(--fg);
+            font-size: 20px; line-height: 1.25; font-weight: 650; letter-spacing: -0.01em; text-align: left; }
+.intro { margin: 2px 0 16px; max-width: 68ch; color: var(--muted); }
+
+/* <!-- ---- Wide screens: a menu down the left, the page fills the rest ---- --> */
+body { container-type: inline-size; }
+.nav-side { display: none; }
+@media (min-width: 1000px) {
+  body { padding-left: 272px; padding-right: 28px; }
+  body > div { max-width: 1720px; }
+  .pisg-nav { box-sizing: border-box; position: fixed; top: 0; left: 0; bottom: 0; width: 232px; margin: 0; padding: 26px 12px 24px 24px;
+              border: 0; border-right: 1px solid var(--line2); background: var(--bg); overflow-y: auto; z-index: 30; }
+  .nav-menu { display: none; }
+  .nav-side { display: block; }
+  .nav-brand, .nav-brand:link, .nav-brand:visited { display: block; margin: 0 0 18px; font-family: ui-monospace, "SF Mono", "Cascadia Mono", "JetBrains Mono", Menlo, Consolas, "Liberation Mono", monospace; font-size: 18px; font-weight: 700;
+              letter-spacing: -0.02em; text-decoration: none; overflow-wrap: anywhere; }
+  .nav-side-list { margin: 0; padding: 0; list-style: none; }
+  .nav-side-list a, .nav-side-list a:link, .nav-side-list a:visited { display: block; margin-left: -10px; padding: 6px 10px; border-left: 2px solid transparent;
+              color: var(--muted); font-size: 14px; font-weight: 500; text-decoration: none; }
+  .nav-side-list a:hover { color: var(--fg); background: var(--hover); }
+  .nav-side-list a.active { color: var(--fg); font-weight: 650; border-left-color: var(--mark); }
+  .card { scroll-margin-top: 24px; }
+  .card td:not(.headtext):not(.headlinebg) { padding-left: 8px; padding-right: 8px; }   /* <!-- the 10-column nick table just fits beside the menu --> */
+  .pisg-nav + .card { margin-top: 20px; }
+}
+/* <!-- Two short sections share a row when the page is wide enough (measured on the page, so it also holds inside a frame). --> */
+@container (min-width: 1080px) {
+  body > div { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 56px; grid-auto-flow: dense; }
+  body > div > * { grid-column: 1 / -1; }
+  body > div > .card.half { grid-column: auto; }
+}
+
+/* <!-- Way back to the landing page (option HomeLink) --> */
+.homebar { margin: 0 0 14px; text-align: left; }
+.homebtn, .homebtn:link, .homebtn:visited { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border: 1px solid var(--line2); border-radius: 6px;
+  background: var(--surface); color: var(--fg); font-size: 13px; font-weight: 600; line-height: 1.3; text-decoration: none; }
+.homebtn:hover { background: var(--hover); border-color: var(--fg); }
 
 /* <!-- Column titles --> */
-.tdtop {
-  background: none;
-  color: var(--muted);
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: .06em;
-  border-bottom: 2px solid var(--line);
-  padding: 8px 10px;
-}
+.tdtop { background: none; color: var(--muted); font-size: 11px; font-weight: 600; letter-spacing: .08em;
+         text-transform: uppercase; border-bottom: 1px solid var(--line2); padding: 8px 10px; }
+.tdtop { white-space: nowrap; }   /* <!-- column titles stay on one line; the table scrolls instead --> */
 .tdtop b { font-weight: 600; }
 
-/* <!-- Rows of "big numbers": one line each, divided by hairlines --> */
-.hicell {
-  background: none;
-  border-bottom: 1px solid var(--line);
-  border-radius: 0;
-  padding: 11px 6px;
-}
+/* <!-- Rows: one hairline each --> */
+.hicell { background: none; border-bottom: 1px solid var(--line); border-radius: 0; padding: 11px 10px; }
 .hicell10 { background: none; font-size: 12px; border-bottom: 1px solid var(--line); }
 tr:last-child > .hicell { border-bottom: 0; }
+/* <!-- pisg writes an inline colour gradient on the top-nicks rows (HiCell/HiCell2); the theme owns colour. --> */
+td[style*="background-color"] { background: transparent !important; border-bottom: 1px solid var(--line); }
+tr:hover > td[style*="background-color"], tr:hover > .rankc, tr:hover > .hirankc { background: var(--hover) !important; }
 
-/* <!-- Rows of the top-nicks table. pisg writes an inline background gradient here
-   (HiCell/HiCell2); override it so the theme controls colours. --> */
-td[style*="background-color"] {
-  background: transparent !important;
-  border-bottom: 1px solid var(--line);
-}
-tr:hover > td[style*="background-color"],
-tr:hover > .rankc, tr:hover > .hirankc { background: var(--row-alt) !important; }
-
-/* <!-- Rank numbers --> */
-.rankc, .hirankc, .rankc10 {
-  background: transparent;
-  color: var(--muted);
-  font-weight: 600;
-  text-align: center;
-  border-bottom: 1px solid var(--line);
-}
-.hirankc { color: var(--accent); font-weight: 800; }
-.rankc10 { font-size: 12px; text-align: left; }
-
+.rankc, .hirankc, .rankc10 { background: transparent; color: var(--muted); font-family: ui-monospace, "SF Mono", "Cascadia Mono", "JetBrains Mono", Menlo, Consolas, "Liberation Mono", monospace; font-size: 12px;
+                              font-weight: 500; text-align: center; border-bottom: 1px solid var(--line); }
+.hirankc { color: var(--fg); font-weight: 700; }
+.rankc, .hirankc, .rankc10 { white-space: nowrap; }
+.rankc10 { text-align: left; }
+/* <!-- nicks are set in monospace, as in an IRC client --> */
+.rankc + td, .hirankc + td { font-family: ui-monospace, "SF Mono", "Cascadia Mono", "JetBrains Mono", Menlo, Consolas, "Liberation Mono", monospace; font-weight: 600; }
 .small, .asmall { color: var(--muted); font-family: inherit; font-size: 12px; }
 .asmall { text-align: center; }
 
-/* <!-- ---- Bar charts ------------------------------------------------------- --> */
-/* <!-- Each column is a narrow cell; the value sits on top and the bar underneath,
-   with no gap. The <img> src is a transparent 1px png, so colour is the
-   background. --> */
-table:not([width]) { margin: 4px auto 6px; }
-td.asmall { padding: 0 3px; line-height: 1.3; }
-td.asmall br { display: none; }               /* <!-- the <br> between segments made gaps --> */
-td.rankc10center, td.hirankc10center {
-  background: none;
-  border: 0;
-  color: var(--muted);
-  font-size: 11px;
-  text-align: center;
-  padding: 5px 3px 0;
-  min-width: 22px;
-}
-td.hirankc10center { color: var(--accent); font-weight: 700; }
+/* <!-- ---- Bar charts (marks: thin, 4px rounded data end, 2px gap between segments) ---- --> */
+table:not([width]) { width: 100%; table-layout: fixed; margin: 6px 0; }
+td.asmall { padding: 0 2px; line-height: 1.3; vertical-align: bottom; }   /* <!-- bars stand on one baseline --> */
+table:not([width]) tr:first-child > td.asmall { border-bottom: 1px solid var(--line2); }
+td.asmall br { display: none; }
+td.rankc10center, td.hirankc10center { background: none; border: 0; color: var(--muted); font-family: ui-monospace, "SF Mono", "Cascadia Mono", "JetBrains Mono", Menlo, Consolas, "Liberation Mono", monospace;
+                                         font-size: 11px; text-align: center; padding: 6px 0 0; min-width: 0; letter-spacing: -0.02em; }   /* <!-- no side padding: 24 narrow columns must not poke out of the table --> */
+td.hirankc10center { color: var(--fg); font-weight: 700; }
+/* <!-- a number over every bar is noise: the peak keeps its label, the rest are in the tooltip --> */
+td.asmall .v { display: none; }
+td.asmall .v.pk { display: block; color: var(--fg); font-family: ui-monospace, "SF Mono", "Cascadia Mono", "JetBrains Mono", Menlo, Consolas, "Liberation Mono", monospace; font-weight: 600; }
+.rankc10center.skip { visibility: hidden; }
 
-img[id$="-v"] {
-  display: block;
-  width: 16px;
-  margin: 0 auto;
-  border-radius: 0;
-}
+img[id$="-v"] { display: block; width: min(64%, 22px); margin: 0 auto; border-radius: 0; }
 img[id$="-v"]:first-of-type { border-radius: 4px 4px 0 0; }
-img[id$="-v"]:last-of-type  { border-radius: 0; }
-img[id$="-v"]:only-of-type  { border-radius: 4px 4px 0 0; }
+img[id$="-v"]:not(:first-of-type) { margin-top: 2px; }
+img[id$="-v"]:only-of-type { border-radius: 4px 4px 0 0; }
+img[id$="-h"] { height: 8px; vertical-align: middle; margin: 0 1px 0 0; border-radius: 0; }
+td[nowrap] img[id$="-h"] { background: var(--mark); margin-right: 0; }   /* <!-- lines: one value, one colour; the "when" column keeps the four --> */
+img[id$="-h"]:first-of-type { border-radius: 4px 0 0 4px; }
+img[id$="-h"]:last-of-type { margin-right: 0; border-radius: 0 4px 4px 0; }
+img[id$="-h"]:only-of-type { border-radius: 4px; }
+td.asmall img[id$="-h"] { margin-right: 6px; }
+table[width="520"] img[id$="-h"] { width: 14px; height: 8px; border-radius: 2px; }   /* <!-- legend: a colour key, not a bar --> */
+table[width="520"] td.asmall { text-align: left; padding: 0 14px 0 0; white-space: nowrap; }
+/* <!-- the colour key wraps instead of forcing a sideways scrollbar on a narrow screen --> */
+table[width="520"] { display: flex; flex-wrap: wrap; gap: 4px 0; width: auto; max-width: 100%; }
+table[width="520"] tbody, table[width="520"] tr { display: contents; }
+img[id="blue-h"],   img[id="blue-v"]   { background: var(--t0); }
+img[id="green-h"],  img[id="green-v"]  { background: var(--t1); }
+img[id="yellow-h"], img[id="yellow-v"] { background: var(--t2); }
+img[id="red-h"],    img[id="red-v"]    { background: var(--t3); }
 
-img[id$="-h"] {
-  height: 10px;
-  vertical-align: middle;
-  margin: 0;
-  border-radius: 0;
-}
-img[id$="-h"]:first-of-type { border-radius: 5px 0 0 5px; }
-img[id$="-h"]:last-of-type  { border-radius: 0 5px 5px 0; }
-img[id$="-h"]:only-of-type  { border-radius: 5px; }
-/* <!-- legend swatches (a lone 40px img followed by text) --> */
-td.asmall img[id$="-h"] { margin-right: 4px; }
+td[rowspan] img { width: 36px; height: 36px; object-fit: cover; border-radius: 50%; display: block; margin: 0 auto; }
+td[rowspan] img.defpic { width: 26px; height: 26px; opacity: .3; }   /* <!-- the shared default picture: a quiet placeholder --> */
 
-img[id="blue-h"],   img[id="blue-v"]   { background: var(--blue); }
-img[id="green-h"],  img[id="green-v"]  { background: var(--green); }
-img[id="yellow-h"], img[id="yellow-v"] { background: var(--yellow); }
-img[id="red-h"],    img[id="red-v"]    { background: var(--red); }
-
-/* <!-- Avatars --> */
-td[rowspan] img {
-  width: 44px;
-  height: 44px;
-  object-fit: cover;
-  border-radius: 50%;
-  border: 2px solid var(--line);
-  display: block;
-  margin: 0 auto;
-}
-
-/* <!-- Gender colours, when ShowActiveGenders/user sex is set --> */
+/* <!-- ranked tables: one left edge, and no stray rule under the last row --> */
+tr:first-child > td:not([class]):first-child { border-bottom: 1px solid var(--line2); }
+tr:last-child > .rankc, tr:last-child > .hirankc, tr:last-child > td[style*="background-color"] { border-bottom: 0; }
+.rankc, .hirankc { width: 44px; }
+td[style*="background-color"] { white-space: nowrap; }          /* <!-- "3 days ago" stays on one line ... --> */
+td[style*="background-color"].quote { white-space: normal; }    /* <!-- ... only the quote may wrap --> */
 .male, .male a { color: var(--male); }
 .female, .female a { color: var(--female); }
 .bot, .bot a { color: var(--muted); font-style: italic; }
 
-#totallines { margin-top: 8px; color: var(--muted); font-size: 12px; }
-#footer { margin-top: 4px; color: var(--muted); }
+/* <!-- single-series bars --> */
+.bar { display: inline-block; vertical-align: middle; width: 140px; max-width: 100%; height: 8px; border-radius: 4px; background: var(--line); overflow: hidden; }
+.bar span { display: block; height: 100%; border-radius: 4px; background: var(--mark); opacity: 1; }
+.sigword { font-family: ui-monospace, "SF Mono", "Cascadia Mono", "JetBrains Mono", Menlo, Consolas, "Liberation Mono", monospace; font-weight: 600; }
+
+/* <!-- "These didn't make it to the top:" is a bare <b><i> under the table; give it the same voice as a column title --> */
+.card > b { display: block; margin: 26px 0 4px; color: var(--muted); font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
+.card > b > i { font-style: normal; }
+
+#totallines { margin-top: 56px; padding-top: 14px; border-top: 1px solid var(--line2); color: var(--muted); font-size: 12px; }
+#footer { margin-top: 2px; color: var(--muted); }
 #footer .small { font-size: 12px; }
+::selection { background: var(--fg); color: var(--bg); }
 
-::selection { background: var(--accent); color: var(--bg); }
+/* <!-- ---- Section menu: one slim bar, one panel ---- --> */
+.pisg-nav { background: var(--bg); border-bottom-color: var(--line2); margin-bottom: 0; }
+.nav-current { color: var(--fg); font-weight: 650; }
+.nav-toggle { color: var(--muted); opacity: 1; }
+.nav-list { background: var(--surface); border-color: var(--line2); box-shadow: var(--shadow); }
+.nav-list a, .nav-list a:link, .nav-list a:visited { color: var(--fg); font-weight: 500; text-decoration: none; }
+.nav-list a:hover { background: var(--hover); }
+.nav-list a.active { font-weight: 700; }
 
-/* <!-- Phones --> */
+/* <!-- ---- Overview: a sentence and a list of facts, not a wall of tiles ---- --> */
+.hero { margin: 2px 0 22px; font-size: clamp(20px, 2.6vw, 26px); line-height: 1.3; font-weight: 650; letter-spacing: -0.02em; text-wrap: balance; }
+.hero b { font-family: ui-monospace, "SF Mono", "Cascadia Mono", "JetBrains Mono", Menlo, Consolas, "Liberation Mono", monospace; font-weight: 700; letter-spacing: -0.05em; }
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 0 56px; margin: 0; }
+.fact { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding: 11px 0; border-bottom: 1px solid var(--line); }
+.fact dt { color: var(--muted); }
+.fact dd { margin: 0; text-align: right; font-family: ui-monospace, "SF Mono", "Cascadia Mono", "JetBrains Mono", Menlo, Consolas, "Liberation Mono", monospace; font-weight: 600; font-variant-numeric: tabular-nums; }
+.fact dd small { display: block; color: var(--muted); font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; font-size: 12px; font-weight: 400; }
+
+/* <!-- ---- Roles, personalities: columns split by a rule, no boxes ---- --> */
+.cardgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(168px, 1fr)); gap: 28px 32px; margin: 8px 0 0; }
+.minicard { display: flex; flex-direction: column; gap: 3px; padding: 12px 0 0; border: 0; border-top: 1px solid var(--line2); border-radius: 0; background: none; text-align: left; }
+.mc-title { color: var(--muted); font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
+.mc-name { font-family: ui-monospace, "SF Mono", "Cascadia Mono", "JetBrains Mono", Menlo, Consolas, "Liberation Mono", monospace; font-size: 19px; font-weight: 700; line-height: 1.3; overflow-wrap: anywhere; }
+.mc-desc { color: var(--muted); font-size: 13px; }
+.mc-value { margin-top: 6px; font-size: 13px; font-weight: 600; }
+.mc-list { margin: 8px 0 0; padding: 0; list-style: none; }
+.mc-list li { display: flex; justify-content: space-between; gap: 8px; padding: 5px 0; border-top: 1px solid var(--line); font-family: ui-monospace, "SF Mono", "Cascadia Mono", "JetBrains Mono", Menlo, Consolas, "Liberation Mono", monospace; font-size: 13px; }
+.mc-list span { color: var(--muted); }
+.minicard.t0 { border-top: 3px solid var(--t0); } .minicard.t1 { border-top: 3px solid var(--t1); }
+.minicard.t2 { border-top: 3px solid var(--t2); } .minicard.t3 { border-top: 3px solid var(--t3); }
+
+/* <!-- ---- Relation map: the one lifted surface ---- --> */
+.relmap-canvas svg { box-sizing: border-box; background: var(--surface); border: 1px solid var(--line2); border-radius: 8px; }   /* <!-- width:100% must include the border --> */
+.relmap-info { background: none; border: 0; border-top: 1px solid var(--line2); border-radius: 0; padding: 12px 0 0; }
+.relmap-legend { color: var(--muted); }
+.ri-title { font-family: ui-monospace, "SF Mono", "Cascadia Mono", "JetBrains Mono", Menlo, Consolas, "Liberation Mono", monospace; color: var(--fg); }
+.ri-sub, .ri-num { color: var(--muted); opacity: 1; }
+.ri-list li { border-top-color: var(--line); }
+.ri-link { color: var(--fg); font-family: ui-monospace, "SF Mono", "Cascadia Mono", "JetBrains Mono", Menlo, Consolas, "Liberation Mono", monospace; text-decoration-color: var(--line2); }
+.lg0 i, .rm-node.t0 circle { background: var(--t0); fill: var(--t0); } .lg1 i, .rm-node.t1 circle { background: var(--t1); fill: var(--t1); }
+.lg2 i, .rm-node.t2 circle { background: var(--t2); fill: var(--t2); } .lg3 i, .rm-node.t3 circle { background: var(--t3); fill: var(--t3); }
+.rm-line { stroke: var(--muted); }
+.rm-node circle { stroke: var(--surface); }
+.rm-node text { fill: var(--fg); stroke: var(--surface); font-family: ui-monospace, "SF Mono", "Cascadia Mono", "JetBrains Mono", Menlo, Consolas, "Liberation Mono", monospace; font-size: 12px; }
+.rm-edge.sel .rm-line { stroke: var(--fg); }
+.rm-node:focus-visible circle, .rm-node.sel circle { stroke: var(--fg); }
+
 @media (max-width: 720px) {
-  body { padding: 16px 10px 32px; font-size: 14px; }
-  .title, #pagetitle1 { font-size: 24px; }
-  .card { padding: 14px 12px 8px; border-radius: 14px; margin: 14px 0; }
-  td { padding: 6px 6px; font-size: 13px; }
-  td[rowspan] img { width: 36px; height: 36px; }
+  body { padding: 20px 16px 72px; font-size: 14px; }
+  .hr.rankc10center:nth-child(even) { visibility: hidden; }     /* <!-- every second hour label on a phone --> */
+  td { padding: 7px 6px; font-size: 13px; }
+  .bar { width: 64px; }
+  .card { margin-top: 44px; }
+  .facts { grid-template-columns: 1fr; }
+  td[rowspan] img { width: 30px; height: 30px; }
 }
 </style>
 </head>
@@ -232,9 +363,37 @@ td[rowspan] img {
 
 <h1 class="title" id="pagetitle1">#teatime @ Undernet stats by vox</h1>
 <p class="subtitle"><a href="../../themes/">&larr; all themes</a> &middot; colour scheme <b>amoled</b> &middot; sample page, invented people</p>
-<p class="subtitle"><span id="pagetitle2">Statistics generated on  Saturday 19 September 2026 - 21:05:11</span><br />
-<span id="pagetitle3">During this 2-day reporting period, a total of <b>6</b> different nicks were represented on #teatime.</span></p>
-<div class="card">
+<p class="subtitle"><span id="pagetitle2">Statistics generated on  Monday 21 September 2026 - 3:32:14</span><br />
+<span id="pagetitle3">During this 62-day reporting period, a total of <b>40</b> different nicks were represented on #teatime.</span></p>
+<nav class="pisg-nav" id="pisg-nav" aria-label="Sections"><details class="nav-menu"><summary><span class="nav-current" id="nav-current">Channel overview</span><span class="nav-toggle">Sections</span></summary><ul class="nav-list"><li><a href="#overview" title="Channel overview">Channel overview</a></li><li><a href="#most-active-times" title="Most active times">Most active times</a></li><li><a href="#most-active-nicks" title="Most active nicks">Most active nicks</a></li><li><a href="#relations" title="Who talks to whom">Who talks to whom</a></li><li><a href="#pairs" title="Closest pairs">Closest pairs</a></li><li><a href="#roles" title="Social roles">Social roles</a></li><li><a href="#personalities" title="Time personalities">Time personalities</a></li><li><a href="#concentration" title="Who carries the channel">Who carries the channel</a></li><li><a href="#signature" title="Signature words">Signature words</a></li><li><a href="#big-numbers" title="Big numbers">Big numbers</a></li><li><a href="#most-used-words" title="Most used words">Most used words</a></li><li><a href="#most-referenced-nicks" title="Most referenced nicks">Most referenced nicks</a></li><li><a href="#most-referenced-urls" title="Most referenced URLs">Most referenced URLs</a></li><li><a href="#other-interesting-numbers" title="Other interesting numbers">Other interesting numbers</a></li><li><a href="#latest-topics" title="Latest Topics">Latest Topics</a></li></ul></details><div class="nav-side"><a class="nav-brand" href="#pagetitle1">#teatime</a><ul class="nav-side-list"><li><a href="#overview" title="Channel overview">Channel overview</a></li><li><a href="#most-active-times" title="Most active times">Most active times</a></li><li><a href="#most-active-nicks" title="Most active nicks">Most active nicks</a></li><li><a href="#relations" title="Who talks to whom">Who talks to whom</a></li><li><a href="#pairs" title="Closest pairs">Closest pairs</a></li><li><a href="#roles" title="Social roles">Social roles</a></li><li><a href="#personalities" title="Time personalities">Time personalities</a></li><li><a href="#concentration" title="Who carries the channel">Who carries the channel</a></li><li><a href="#signature" title="Signature words">Signature words</a></li><li><a href="#big-numbers" title="Big numbers">Big numbers</a></li><li><a href="#most-used-words" title="Most used words">Most used words</a></li><li><a href="#most-referenced-nicks" title="Most referenced nicks">Most referenced nicks</a></li><li><a href="#most-referenced-urls" title="Most referenced URLs">Most referenced URLs</a></li><li><a href="#other-interesting-numbers" title="Other interesting numbers">Other interesting numbers</a></li><li><a href="#latest-topics" title="Latest Topics">Latest Topics</a></li></ul></div></nav>
+<div class="card" id="overview">
+   <br />
+   <table width="710" cellpadding="1" cellspacing="0" border="0">
+    <tr>
+     <td class="headlinebg">
+      <table width="100%" cellpadding="2" cellspacing="0" border="0">
+       <tr>
+        <td class="headtext">Channel overview</td>
+       </tr>
+      </table>
+     </td>
+    </tr>
+   </table>
+
+<p class="hero"><b>16,876</b> lines from <b>40</b> nicks over <b>62</b> days</p>
+<dl class="facts">
+<div class="fact"><dt>Words</dt><dd>132,824</dd></div>
+<div class="fact"><dt>Lines per day</dt><dd>272</dd></div>
+<div class="fact"><dt>Busiest hour</dt><dd>20:00-21:00<small>6.6% of all lines</small></dd></div>
+<div class="fact"><dt>Quietest hour</dt><dd>04:00-05:00<small>0.5% of all lines</small></dd></div>
+<div class="fact"><dt>Questions</dt><dd>1,203<small>7.1% of lines</small></dd></div>
+<div class="fact"><dt>Links shared</dt><dd>135<small>10 different</small></dd></div>
+<div class="fact"><dt>Top talker</dt><dd>vox<small>16.7% of lines</small></dd></div>
+<div class="fact"><dt>Joins</dt><dd>1,051</dd></div>
+<div class="fact"><dt>Kicks</dt><dd>19</dd></div>
+</dl>
+</div>
+<div class="card" id="most-active-times">
    <br />
    <table width="710" cellpadding="1" cellspacing="0" border="0">
     <tr>
@@ -249,79 +408,79 @@ td[rowspan] img {
    </table>
 
 <table border="0"><tr>
-<td align="center" valign="bottom" class="asmall">5.8%<br /><img id="blue-v" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
-" width="15" height="21" alt="19" title="19"/></td>
-<td align="center" valign="bottom" class="asmall">0.3%<br /><img id="blue-v" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
-" width="15" height="1" alt="1" title="1"/></td>
-<td align="center" valign="bottom" class="asmall">0.9%<br /><img id="blue-v" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
-" width="15" height="3" alt="3" title="3"/></td>
-<td align="center" valign="bottom" class="asmall">15.5%<br /><img id="blue-v" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
-" width="15" height="56" alt="51" title="51"/></td>
-<td align="center" valign="bottom" class="asmall">2.4%<br /><img id="blue-v" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
-" width="15" height="8" alt="8" title="8"/></td>
-<td align="center" valign="bottom" class="asmall">2.7%<br /><img id="blue-v" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
-" width="15" height="10" alt="9" title="9"/></td>
-<td align="center" valign="bottom" class="asmall">0.6%<br /><img id="green-v" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
-" width="15" height="2" alt="2" title="2"/></td>
-<td align="center" valign="bottom" class="asmall">0.3%<br /><img id="green-v" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
-" width="15" height="1" alt="1" title="1"/></td>
-<td align="center" valign="bottom" class="asmall">0.9%<br /><img id="green-v" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
-" width="15" height="3" alt="3" title="3"/></td>
-<td align="center" valign="bottom" class="asmall">1.8%<br /><img id="green-v" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
-" width="15" height="6" alt="6" title="6"/></td>
-<td align="center" valign="bottom" class="asmall">1.8%<br /><img id="green-v" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
-" width="15" height="6" alt="6" title="6"/></td>
-<td align="center" valign="bottom" class="asmall">0.6%<br /><img id="green-v" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
-" width="15" height="2" alt="2" title="2"/></td>
-<td align="center" valign="bottom" class="asmall">2.7%<br /><img id="yellow-v" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
-" width="15" height="10" alt="9" title="9"/></td>
-<td align="center" valign="bottom" class="asmall">3.4%<br /><img id="yellow-v" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
-" width="15" height="12" alt="11" title="11"/></td>
-<td align="center" valign="bottom" class="asmall">0.9%<br /><img id="yellow-v" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
-" width="15" height="3" alt="3" title="3"/></td>
-<td align="center" valign="bottom" class="asmall">4.6%<br /><img id="yellow-v" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
-" width="15" height="16" alt="15" title="15"/></td>
-<td align="center" valign="bottom" class="asmall">27.4%<br /><img id="yellow-v" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
-" width="15" height="100" alt="90" title="90"/></td>
-<td align="center" valign="bottom" class="asmall">10.7%<br /><img id="yellow-v" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
-" width="15" height="38" alt="35" title="35"/></td>
-<td align="center" valign="bottom" class="asmall">1.5%<br /><img id="red-v" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
-" width="15" height="5" alt="5" title="5"/></td>
-<td align="center" valign="bottom" class="asmall">6.7%<br /><img id="red-v" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
-" width="15" height="24" alt="22" title="22"/></td>
-<td align="center" valign="bottom" class="asmall">1.5%<br /><img id="red-v" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
-" width="15" height="5" alt="5" title="5"/></td>
-<td align="center" valign="bottom" class="asmall">0.9%<br /><img id="red-v" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
-" width="15" height="3" alt="3" title="3"/></td>
-<td align="center" valign="bottom" class="asmall">1.2%<br /><img id="red-v" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
-" width="15" height="4" alt="4" title="4"/></td>
-<td align="center" valign="bottom" class="asmall">4.6%<br /><img id="red-v" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
-" width="15" height="16" alt="15" title="15"/></td>
+<td align="center" valign="bottom" class="asmall"><span class="v">3.8%</span><br /><img id="blue-v" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" width="15" height="64" alt="734" title="734"/></td>
+<td align="center" valign="bottom" class="asmall"><span class="v">3.3%</span><br /><img id="blue-v" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" width="15" height="55" alt="636" title="636"/></td>
+<td align="center" valign="bottom" class="asmall"><span class="v">2.1%</span><br /><img id="blue-v" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" width="15" height="35" alt="404" title="404"/></td>
+<td align="center" valign="bottom" class="asmall"><span class="v">1.4%</span><br /><img id="blue-v" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" width="15" height="23" alt="273" title="273"/></td>
+<td align="center" valign="bottom" class="asmall"><span class="v">0.5%</span><br /><img id="blue-v" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" width="15" height="7" alt="90" title="90"/></td>
+<td align="center" valign="bottom" class="asmall"><span class="v">1.2%</span><br /><img id="blue-v" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" width="15" height="19" alt="227" title="227"/></td>
+<td align="center" valign="bottom" class="asmall"><span class="v">1.1%</span><br /><img id="green-v" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" width="15" height="17" alt="206" title="206"/></td>
+<td align="center" valign="bottom" class="asmall"><span class="v">2.1%</span><br /><img id="green-v" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" width="15" height="35" alt="407" title="407"/></td>
+<td align="center" valign="bottom" class="asmall"><span class="v">3.3%</span><br /><img id="green-v" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" width="15" height="55" alt="634" title="634"/></td>
+<td align="center" valign="bottom" class="asmall"><span class="v">4.6%</span><br /><img id="green-v" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" width="15" height="77" alt="884" title="884"/></td>
+<td align="center" valign="bottom" class="asmall"><span class="v">4.6%</span><br /><img id="green-v" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" width="15" height="76" alt="877" title="877"/></td>
+<td align="center" valign="bottom" class="asmall"><span class="v">4.6%</span><br /><img id="green-v" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" width="15" height="77" alt="888" title="888"/></td>
+<td align="center" valign="bottom" class="asmall"><span class="v">5.4%</span><br /><img id="yellow-v" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" width="15" height="89" alt="1030" title="1030"/></td>
+<td align="center" valign="bottom" class="asmall"><span class="v">6.0%</span><br /><img id="yellow-v" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" width="15" height="99" alt="1143" title="1143"/></td>
+<td align="center" valign="bottom" class="asmall"><span class="v">5.2%</span><br /><img id="yellow-v" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" width="15" height="87" alt="1000" title="1000"/></td>
+<td align="center" valign="bottom" class="asmall"><span class="v">5.3%</span><br /><img id="yellow-v" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" width="15" height="89" alt="1022" title="1022"/></td>
+<td align="center" valign="bottom" class="asmall"><span class="v">6.4%</span><br /><img id="yellow-v" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" width="15" height="106" alt="1220" title="1220"/></td>
+<td align="center" valign="bottom" class="asmall"><span class="v">4.8%</span><br /><img id="yellow-v" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" width="15" height="80" alt="917" title="917"/></td>
+<td align="center" valign="bottom" class="asmall"><span class="v">5.8%</span><br /><img id="red-v" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" width="15" height="96" alt="1107" title="1107"/></td>
+<td align="center" valign="bottom" class="asmall"><span class="v">4.6%</span><br /><img id="red-v" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" width="15" height="76" alt="879" title="879"/></td>
+<td align="center" valign="bottom" class="asmall"><span class="v pk">6.6%</span><br /><img id="red-v" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" width="15" height="110" alt="1260" title="1260"/></td>
+<td align="center" valign="bottom" class="asmall"><span class="v">5.6%</span><br /><img id="red-v" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" width="15" height="93" alt="1066" title="1066"/></td>
+<td align="center" valign="bottom" class="asmall"><span class="v">6.1%</span><br /><img id="red-v" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" width="15" height="101" alt="1163" title="1163"/></td>
+<td align="center" valign="bottom" class="asmall"><span class="v">5.6%</span><br /><img id="red-v" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" width="15" height="93" alt="1073" title="1073"/></td>
 </tr><tr>
-<td class="rankc10center" align="center">0</td>
-<td class="rankc10center" align="center">1</td>
-<td class="rankc10center" align="center">2</td>
-<td class="rankc10center" align="center">3</td>
-<td class="rankc10center" align="center">4</td>
-<td class="rankc10center" align="center">5</td>
-<td class="rankc10center" align="center">6</td>
-<td class="rankc10center" align="center">7</td>
-<td class="rankc10center" align="center">8</td>
-<td class="rankc10center" align="center">9</td>
-<td class="rankc10center" align="center">10</td>
-<td class="rankc10center" align="center">11</td>
-<td class="rankc10center" align="center">12</td>
-<td class="rankc10center" align="center">13</td>
-<td class="rankc10center" align="center">14</td>
-<td class="rankc10center" align="center">15</td>
-<td class="hirankc10center" align="center">16</td>
-<td class="rankc10center" align="center">17</td>
-<td class="rankc10center" align="center">18</td>
-<td class="rankc10center" align="center">19</td>
-<td class="rankc10center" align="center">20</td>
-<td class="rankc10center" align="center">21</td>
-<td class="rankc10center" align="center">22</td>
-<td class="rankc10center" align="center">23</td>
+<td class="rankc10center hr" align="center">0</td>
+<td class="rankc10center hr" align="center">1</td>
+<td class="rankc10center hr" align="center">2</td>
+<td class="rankc10center hr" align="center">3</td>
+<td class="rankc10center hr" align="center">4</td>
+<td class="rankc10center hr" align="center">5</td>
+<td class="rankc10center hr" align="center">6</td>
+<td class="rankc10center hr" align="center">7</td>
+<td class="rankc10center hr" align="center">8</td>
+<td class="rankc10center hr" align="center">9</td>
+<td class="rankc10center hr" align="center">10</td>
+<td class="rankc10center hr" align="center">11</td>
+<td class="rankc10center hr" align="center">12</td>
+<td class="rankc10center hr" align="center">13</td>
+<td class="rankc10center hr" align="center">14</td>
+<td class="rankc10center hr" align="center">15</td>
+<td class="rankc10center hr" align="center">16</td>
+<td class="rankc10center hr" align="center">17</td>
+<td class="rankc10center hr" align="center">18</td>
+<td class="rankc10center hr" align="center">19</td>
+<td class="hirankc10center hr" align="center">20</td>
+<td class="rankc10center hr" align="center">21</td>
+<td class="rankc10center hr" align="center">22</td>
+<td class="rankc10center hr" align="center">23</td>
 </tr></table>
 <table align="center" border="0" width="520"><tr>
 <td align="center" class="asmall"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
@@ -334,7 +493,7 @@ td[rowspan] img {
 " id="red-h" width="40" height="15" align="middle" alt="18-23" /> = 18-23</td>
 </tr></table>
 </div>
-<div class="card">
+<div class="card" id="most-active-nicks">
    <br />
    <table width="710" cellpadding="1" cellspacing="0" border="0">
     <tr>
@@ -352,34 +511,330 @@ td[rowspan] img {
 
 </tr>
 <tr><td class="hirankc" align="left">1</td>
-<td style="background-color: #bdbdda"><span>vox</span></td><td style="background-color: #bdbdda">63</td><td style="background-color: #bdbdda"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
-" id="blue-h" border="0" width="1" height="15" alt="3" title="3" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
-" id="yellow-h" border="0" width="34" height="15" alt="55" title="55" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
-" id="red-h" border="0" width="3" height="15" alt="5" title="5" /></td><td style="background-color: #bdbdda">today</td><td style="background-color: #bdbdda">"the kettle is on, as always"</td>
+<td style="background-color: #babadc"><span>vox</span></td><td style="background-color: #babadc">2813</td><td style="background-color: #babadc"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="blue-h" border="0" width="2" height="15" alt="148" title="148" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="green-h" border="0" width="3" height="15" alt="281" title="281" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="yellow-h" border="0" width="17" height="15" alt="1261" title="1261" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="red-h" border="0" width="15" height="15" alt="1123" title="1123" /></td><td style="background-color: #babadc" class="lastseen">today</td><td style="background-color: #babadc" class="quote">"back, the pasta survived, the hob did not"</td>
 </tr>
 <tr><td class="rankc" align="left">2</td>
-<td style="background-color: #c0c0d7"><span>humbug</span></td><td style="background-color: #c0c0d7">20</td><td style="background-color: #c0c0d7"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
-" id="yellow-h" border="0" width="40" height="15" alt="20" title="20" /></td><td style="background-color: #c0c0d7">today</td><td style="background-color: #c0c0d7">"Ahoy! \o"</td>
+<td style="background-color: #bbbbdb"><span>kettle</span></td><td style="background-color: #bbbbdb">2043</td><td style="background-color: #bbbbdb"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="blue-h" border="0" width="1" height="15" alt="52" title="52" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="green-h" border="0" width="15" height="15" alt="814" title="814" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="yellow-h" border="0" width="20" height="15" alt="1071" title="1071" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="red-h" border="0" width="2" height="15" alt="106" title="106" /></td><td style="background-color: #bbbbdb" class="lastseen">today</td><td style="background-color: #bbbbdb" class="quote">"there is a spider in the bath and we have agreed to share it"</td>
 </tr>
 <tr><td class="rankc" align="left">3</td>
-<td style="background-color: #c3c3d4"><span>Iris</span></td><td style="background-color: #c3c3d4">19</td><td style="background-color: #c3c3d4"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
-" id="yellow-h" border="0" width="40" height="15" alt="19" title="19" /></td><td style="background-color: #c3c3d4">today</td><td style="background-color: #c3c3d4">"vox: I was a poor student when I bought this chair"</td>
+<td style="background-color: #bcbcda"><span>humbug</span></td><td style="background-color: #bcbcda">1777</td><td style="background-color: #bcbcda"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="blue-h" border="0" width="14" height="15" alt="634" title="634" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="green-h" border="0" width="1" height="15" alt="66" title="66" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="yellow-h" border="0" width="1" height="15" alt="45" title="45" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="red-h" border="0" width="23" height="15" alt="1032" title="1032" /></td><td style="background-color: #bcbcda" class="lastseen">today</td><td style="background-color: #bcbcda" class="quote">"the power went out for an hour and I rediscovered candles"</td>
 </tr>
 <tr><td class="rankc" align="left">4</td>
-<td style="background-color: #c6c6d1"><span>Fortuna</span></td><td style="background-color: #c6c6d1">4</td><td style="background-color: #c6c6d1"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
-" id="yellow-h" border="0" width="40" height="15" alt="4" title="4" /></td><td style="background-color: #c6c6d1">today</td><td style="background-color: #c6c6d1">"vox: go to bed, the logs will still be here"</td>
+<td style="background-color: #bcbcda"><span>Iris</span></td><td style="background-color: #bcbcda">1658</td><td style="background-color: #bcbcda"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="green-h" border="0" width="2" height="15" alt="100" title="100" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="yellow-h" border="0" width="20" height="15" alt="846" title="846" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="red-h" border="0" width="16" height="15" alt="704" title="704" /></td><td style="background-color: #bcbcda" class="lastseen">today</td><td style="background-color: #bcbcda" class="quote">"the neighbour is mowing the lawn at seven again"</td>
 </tr>
 <tr><td class="rankc" align="left">5</td>
-<td style="background-color: #c9c9ce"><span>kelpie</span></td><td style="background-color: #c9c9ce">3</td><td style="background-color: #c9c9ce"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
-" id="red-h" border="0" width="40" height="15" alt="3" title="3" /></td><td style="background-color: #c9c9ce">today</td><td style="background-color: #c9c9ce">"I was testing some sh*t on my mIRC ;p"</td>
+<td style="background-color: #bdbdd9"><span>PoeticGuy</span></td><td style="background-color: #bdbdd9">1058</td><td style="background-color: #bdbdd9"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="blue-h" border="0" width="15" height="15" alt="400" title="400" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="green-h" border="0" width="2" height="15" alt="66" title="66" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="yellow-h" border="0" width="2" height="15" alt="68" title="68" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="red-h" border="0" width="19" height="15" alt="524" title="524" /></td><td style="background-color: #bdbdd9" class="lastseen">today</td><td style="background-color: #bdbdd9" class="quote">"humbug: the heating came on by itself and I have no idea why"</td>
 </tr>
 <tr><td class="rankc" align="left">6</td>
-<td style="background-color: #cccccc"><span>PoeticGuy</span></td><td style="background-color: #cccccc">2</td><td style="background-color: #cccccc"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
-" id="yellow-h" border="0" width="40" height="15" alt="2" title="2" /></td><td style="background-color: #cccccc">today</td><td style="background-color: #cccccc">"Hi"</td>
+<td style="background-color: #bebed8"><span>Fortuna</span></td><td style="background-color: #bebed8">896</td><td style="background-color: #bebed8"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="blue-h" border="0" width="2" height="15" alt="45" title="45" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="green-h" border="0" width="3" height="15" alt="78" title="78" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="yellow-h" border="0" width="4" height="15" alt="94" title="94" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="red-h" border="0" width="30" height="15" alt="679" title="679" /></td><td style="background-color: #bebed8" class="lastseen">today</td><td style="background-color: #bebed8" class="quote">"look at this: <a href="https://example.org/recipes/lemon-drizzle" target="_blank" title="Open in new window: https://example.org/recipes/lemon-drizzle">https://example.org/recipes/lemon-drizzle</a>"</td>
+</tr>
+<tr><td class="rankc" align="left">7</td>
+<td style="background-color: #bfbfd8"><span>kelpie</span></td><td style="background-color: #bfbfd8">716</td><td style="background-color: #bfbfd8"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="blue-h" border="0" width="19" height="15" alt="355" title="355" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="green-h" border="0" width="2" height="15" alt="42" title="42" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="yellow-h" border="0" width="1" height="15" alt="33" title="33" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="red-h" border="0" width="15" height="15" alt="286" title="286" /></td><td style="background-color: #bfbfd8" class="lastseen">yesterday</td><td style="background-color: #bfbfd8" class="quote">"nobody tells you how many socks a washing machine eats"</td>
+</tr>
+<tr><td class="rankc" align="left">8</td>
+<td style="background-color: #bfbfd7"><span>BigMug44</span></td><td style="background-color: #bfbfd7">709</td><td style="background-color: #bfbfd7"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="green-h" border="0" width="34" height="15" alt="616" title="616" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="yellow-h" border="0" width="2" height="15" alt="53" title="53" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="red-h" border="0" width="2" height="15" alt="37" title="37" /></td><td style="background-color: #bfbfd7" class="lastseen">today</td><td style="background-color: #bfbfd7" class="quote">"it is far too hot for tea and I am having tea anyway"</td>
+</tr>
+<tr><td class="rankc" align="left">9</td>
+<td style="background-color: #c0c0d6"><span>Ledger</span></td><td style="background-color: #c0c0d6">606</td><td style="background-color: #c0c0d6"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="green-h" border="0" width="3" height="15" alt="56" title="56" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="yellow-h" border="0" width="31" height="15" alt="478" title="478" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="red-h" border="0" width="3" height="15" alt="60" title="60" /></td><td style="background-color: #c0c0d6" class="lastseen">today</td><td style="background-color: #c0c0d6" class="quote">"vox: nobody tells you how many socks a washing machine eats"</td>
+</tr>
+<tr><td class="rankc" align="left">10</td>
+<td style="background-color: #c1c1d6"><span>Pekoe</span></td><td style="background-color: #c1c1d6">580</td><td style="background-color: #c1c1d6"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="green-h" border="0" width="3" height="15" alt="48" title="48" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="yellow-h" border="0" width="18" height="15" alt="267" title="267" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="red-h" border="0" width="17" height="15" alt="258" title="258" /></td><td style="background-color: #c1c1d6" class="lastseen">today</td><td style="background-color: #c1c1d6" class="quote">"somebody on the radio said it will snow in October, I refuse"</td>
+</tr>
+<tr><td class="rankc" align="left">11</td>
+<td style="background-color: #c1c1d5"><span>RamblerBobVa</span></td><td style="background-color: #c1c1d5">569</td><td style="background-color: #c1c1d5"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="green-h" border="0" width="19" height="15" alt="276" title="276" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="yellow-h" border="0" width="17" height="15" alt="256" title="256" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="red-h" border="0" width="2" height="15" alt="31" title="31" /></td><td style="background-color: #c1c1d5" class="lastseen">today</td><td style="background-color: #c1c1d5" class="quote">"good night all, sleep well"</td>
+</tr>
+<tr><td class="rankc" align="left">12</td>
+<td style="background-color: #c2c2d4"><span>zestyanteater</span></td><td style="background-color: #c2c2d4">541</td><td style="background-color: #c2c2d4"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="blue-h" border="0" width="1" height="15" alt="25" title="25" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="green-h" border="0" width="5" height="15" alt="77" title="77" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="yellow-h" border="0" width="29" height="15" alt="394" title="394" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="red-h" border="0" width="3" height="15" alt="45" title="45" /></td><td style="background-color: #c2c2d4" class="lastseen">yesterday</td><td style="background-color: #c2c2d4" class="quote">"honestly the best thing about autumn is the jumpers"</td>
+</tr>
+<tr><td class="rankc" align="left">13</td>
+<td style="background-color: #c3c3d4"><span>crumpet</span></td><td style="background-color: #c3c3d4">510</td><td style="background-color: #c3c3d4"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="green-h" border="0" width="32" height="15" alt="419" title="419" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="yellow-h" border="0" width="2" height="15" alt="34" title="34" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="red-h" border="0" width="3" height="15" alt="47" title="47" /></td><td style="background-color: #c3c3d4" class="lastseen">today</td><td style="background-color: #c3c3d4" class="quote">"has the rain stopped where you are?"</td>
+</tr>
+<tr><td class="rankc" align="left">14</td>
+<td style="background-color: #c4c4d3"><span>bramble</span></td><td style="background-color: #c4c4d3">344</td><td style="background-color: #c4c4d3"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="blue-h" border="0" width="11" height="15" alt="103" title="103" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="green-h" border="0" width="12" height="15" alt="106" title="106" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="yellow-h" border="0" width="1" height="15" alt="9" title="9" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="red-h" border="0" width="14" height="15" alt="126" title="126" /></td><td style="background-color: #c4c4d3" class="lastseen">today</td><td style="background-color: #c4c4d3" class="quote">"thorns, I missed the bus again :("</td>
+</tr>
+<tr><td class="rankc" align="left">15</td>
+<td style="background-color: #c4c4d2"><span>sconewolf</span></td><td style="background-color: #c4c4d2">305</td><td style="background-color: #c4c4d2"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="blue-h" border="0" width="9" height="15" alt="75" title="75" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="green-h" border="0" width="2" height="15" alt="20" title="20" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="red-h" border="0" width="27" height="15" alt="207" title="207" /></td><td style="background-color: #c4c4d2" class="lastseen">today</td><td style="background-color: #c4c4d2" class="quote">"the library had a sale and I came home with nine books, awoo"</td>
+</tr>
+<tr><td class="rankc" align="left">16</td>
+<td style="background-color: #c5c5d2"><span>marmalade</span></td><td style="background-color: #c5c5d2">277</td><td style="background-color: #c5c5d2"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="blue-h" border="0" width="2" height="15" alt="18" title="18" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="yellow-h" border="0" width="5" height="15" alt="36" title="36" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="red-h" border="0" width="31" height="15" alt="217" title="217" /></td><td style="background-color: #c5c5d2" class="lastseen">today</td><td style="background-color: #c5c5d2" class="quote">"there is a hedgehog living under the shed, I have named him Ge..."</td>
+</tr>
+<tr><td class="rankc" align="left">17</td>
+<td style="background-color: #c6c6d1"><span>Oolong</span></td><td style="background-color: #c6c6d1">249</td><td style="background-color: #c6c6d1"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="blue-h" border="0" width="3" height="15" alt="22" title="22" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="yellow-h" border="0" width="35" height="15" alt="220" title="220" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="red-h" border="0" width="1" height="15" alt="7" title="7" /></td><td style="background-color: #c6c6d1" class="lastseen">yesterday</td><td style="background-color: #c6c6d1" class="quote">"what is everyone reading at the moment?, oxidised"</td>
+</tr>
+<tr><td class="rankc" align="left">18</td>
+<td style="background-color: #c6c6d0"><span>Darjeeling</span></td><td style="background-color: #c6c6d0">147</td><td style="background-color: #c6c6d0"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="green-h" border="0" width="38" height="15" alt="141" title="141" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="yellow-h" border="0" width="1" height="15" alt="5" title="5" /></td><td style="background-color: #c6c6d0" class="lastseen">yesterday</td><td style="background-color: #c6c6d0" class="quote">"made soup out of whatever was in the fridge and it was somehow..."</td>
+</tr>
+<tr><td class="rankc" align="left">19</td>
+<td style="background-color: #c7c7d0"><span>biscuit</span></td><td style="background-color: #c7c7d0">141</td><td style="background-color: #c7c7d0"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="green-h" border="0" width="7" height="15" alt="28" title="28" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="yellow-h" border="0" width="28" height="15" alt="100" title="100" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="red-h" border="0" width="3" height="15" alt="13" title="13" /></td><td style="background-color: #c7c7d0" class="lastseen">today</td><td style="background-color: #c7c7d0" class="quote">"Ledger: I need a nap and it is only half ten"</td>
+</tr>
+<tr><td class="rankc" align="left">20</td>
+<td style="background-color: #c8c8cf"><span>Tansy</span></td><td style="background-color: #c8c8cf">132</td><td style="background-color: #c8c8cf"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="green-h" border="0" width="16" height="15" alt="56" title="56" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="yellow-h" border="0" width="21" height="15" alt="72" title="72" /></td><td style="background-color: #c8c8cf" class="lastseen">2 days ago</td><td style="background-color: #c8c8cf" class="quote">"zestyanteater: I burnt the toast, which is a skill at this point"</td>
+</tr>
+<tr><td class="rankc" align="left">21</td>
+<td style="background-color: #c9c9ce"><span>Nettle</span></td><td style="background-color: #c9c9ce">102</td><td style="background-color: #c9c9ce"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="blue-h" border="0" width="23" height="15" alt="61" title="61" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="yellow-h" border="0" width="3" height="15" alt="9" title="9" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="red-h" border="0" width="12" height="15" alt="32" title="32" /></td><td style="background-color: #c9c9ce" class="lastseen">2 days ago</td><td style="background-color: #c9c9ce" class="quote">"look at this: <a href="https://example.org/garden/slug-advice" target="_blank" title="Open in new window: https://example.org/garden/slug-advice">https://example.org/garden/slug-advice</a>"</td>
+</tr>
+<tr><td class="rankc" align="left">22</td>
+<td style="background-color: #c9c9ce"><span>jammy</span></td><td style="background-color: #c9c9ce">83</td><td style="background-color: #c9c9ce"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="blue-h" border="0" width="1" height="15" alt="4" title="4" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="green-h" border="0" width="5" height="15" alt="11" title="11" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="yellow-h" border="0" width="4" height="15" alt="10" title="10" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="red-h" border="0" width="27" height="15" alt="58" title="58" /></td><td style="background-color: #c9c9ce" class="lastseen">5 days ago</td><td style="background-color: #c9c9ce" class="quote">"the channel is quiet tonight, everyone must be asleep"</td>
+</tr>
+<tr><td class="rankc" align="left">23</td>
+<td style="background-color: #cacacd"><span>Hobnob</span></td><td style="background-color: #cacacd">75</td><td style="background-color: #cacacd"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="green-h" border="0" width="6" height="15" alt="12" title="12" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="yellow-h" border="0" width="27" height="15" alt="52" title="52" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="red-h" border="0" width="5" height="15" alt="11" title="11" /></td><td style="background-color: #cacacd" class="lastseen">yesterday</td><td style="background-color: #cacacd" class="quote">"the new bakery on the corner does a cardamom bun that is frank..."</td>
+</tr>
+<tr><td class="rankc" align="left">24</td>
+<td style="background-color: #cbcbcc"><span>Clementine</span></td><td style="background-color: #cbcbcc">75</td><td style="background-color: #cbcbcc"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="blue-h" border="0" width="4" height="15" alt="8" title="8" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="green-h" border="0" width="5" height="15" alt="11" title="11" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="yellow-h" border="0" width="28" height="15" alt="53" title="53" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="red-h" border="0" width="1" height="15" alt="3" title="3" /></td><td style="background-color: #cbcbcc" class="lastseen">2 days ago</td><td style="background-color: #cbcbcc" class="quote">"has anyone tried the smoky one, the lapsang?"</td>
+</tr>
+<tr><td class="rankc" align="left">25</td>
+<td style="background-color: #cccccc"><span>Custard</span></td><td style="background-color: #cccccc">62</td><td style="background-color: #cccccc"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="green-h" border="0" width="3" height="15" alt="5" title="5" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="yellow-h" border="0" width="12" height="15" alt="20" title="20" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=
+" id="red-h" border="0" width="23" height="15" alt="37" title="37" /></td><td style="background-color: #cccccc" class="lastseen">3 days ago</td><td style="background-color: #cccccc" class="quote">"thanks, you are all great :)"</td>
 </tr>
 </table><br />
+<br /><b><i>These didn't make it to the top:</i></b><table><tr>
+<td class="rankc10"><span>Barley (60)</span></td>
+<td class="rankc10"><span>quill (54)</span></td>
+<td class="rankc10"><span>Rooibos (52)</span></td>
+<td class="rankc10"><span>Juniper (51)</span></td>
+<td class="rankc10"><span>ottercake (50)</span></td>
+</tr><tr>
+<td class="rankc10"><span>Figgy (31)</span></td>
+<td class="rankc10"><span>Sorrel (27)</span></td>
+<td class="rankc10"><span>teasmade (20)</span></td>
+<td class="rankc10"><span>Muffin (18)</span></td>
+<td class="rankc10"><span>Wren (16)</span></td>
+</tr><tr>
+<td class="rankc10"><span>Parsnip (13)</span></td>
+<td class="rankc10"><span>lemoncurd (8)</span></td>
+<td class="rankc10"><span>Saffron (4)</span></td>
+<td class="rankc10"><span>Tuppence (3)</span></td>
+<td class="rankc10"><span>dunkworth (1)</span></td>
+</tr></table>
 </div>
-<div class="card">
+<div class="card" id="relations">
+   <br />
+   <table width="710" cellpadding="1" cellspacing="0" border="0">
+    <tr>
+     <td class="headlinebg">
+      <table width="100%" cellpadding="2" cellspacing="0" border="0">
+       <tr>
+        <td class="headtext">Who talks to whom</td>
+       </tr>
+      </table>
+     </td>
+    </tr>
+   </table>
+
+<p class="intro">The most active people, joined by a line when they talk to each other: a line that starts with the other person's nick, a mention, or a quick reply. Thicker lines mean more talk. Bots are left out. Click a nick or a line for details.</p>
+<div class="relmap" id="relmap"><div class="relmap-canvas"><svg id="relmap-svg" role="img" aria-label="Who talks to whom" viewBox="0 0 960 620" preserveAspectRatio="xMidYMid meet"></svg></div><div class="relmap-side"><div class="relmap-legend"><span class="lg lg0"><i></i>Night (0-5h)</span><span class="lg lg1"><i></i>Morning (6-11h)</span><span class="lg lg2"><i></i>Afternoon (12-17h)</span><span class="lg lg3"><i></i>Evening (18-23h)</span></div><div class="relmap-info" id="relmap-info" aria-live="polite">Click a nick or a line to see details.</div></div></div>
+<noscript><p class="intro">The interactive map needs JavaScript. The tables below show the same information.</p></noscript>
+<script type="application/json" id="relmap-data">{"edges":[{"a":3,"ab":[106,0,287],"b":0,"ba":[109,0,282],"w":1214},{"a":1,"ab":[85,0,216],"b":0,"ba":[104,28,227],"w":1038},{"a":4,"ab":[68,0,160],"b":2,"ba":[101,0,169],"w":836},{"a":3,"ab":[54,20,131],"b":1,"ba":[73,0,146],"w":678},{"a":5,"ab":[42,0,130],"b":0,"ba":[73,0,134],"w":609},{"a":2,"ab":[55,0,107],"b":6,"ba":[38,0,89],"w":475},{"a":5,"ab":[44,0,105],"b":3,"ba":[48,0,93],"w":474},{"a":7,"ab":[28,16,77],"b":1,"ba":[60,0,68],"w":425},{"a":2,"ab":[28,0,94],"b":0,"ba":[31,0,89],"w":360},{"a":2,"ab":[58,0,52],"b":14,"ba":[18,0,53],"w":333},{"a":4,"ab":[31,0,66],"b":6,"ba":[34,0,64],"w":325},{"a":15,"ab":[15,0,59],"b":0,"ba":[50,0,57],"w":311},{"a":5,"ab":[19,0,83],"b":2,"ba":[30,0,77],"w":307},{"a":8,"ab":[13,0,63],"b":0,"ba":[44,0,57],"w":291},{"a":8,"ab":[15,9,44],"b":1,"ba":[44,0,49],"w":279},{"a":7,"ab":[36,0,61],"b":12,"ba":[15,0,60],"w":274},{"a":7,"ab":[36,0,51],"b":10,"ba":[15,0,60],"w":264},{"a":0,"ab":[37,0,50],"b":11,"ba":[15,0,53],"w":259},{"a":5,"ab":[22,20,56],"b":1,"ba":[20,0,56],"w":258},{"a":13,"ab":[15,0,64],"b":2,"ba":[32,0,51],"w":256},{"a":10,"ab":[16,2,48],"b":1,"ba":[32,0,62],"w":256},{"a":3,"ab":[42,0,37],"b":15,"ba":[18,0,37],"w":254},{"a":3,"ab":[17,0,75],"b":2,"ba":[23,0,57],"w":252},{"a":9,"ab":[14,0,52],"b":0,"ba":[38,0,39],"w":247},{"a":4,"ab":[18,0,54],"b":0,"ba":[21,0,68],"w":239},{"a":8,"ab":[21,0,44],"b":11,"ba":[27,0,45],"w":233},{"a":12,"ab":[15,1,55],"b":1,"ba":[25,0,53],"w":229},{"a":1,"ab":[27,0,45],"b":11,"ba":[13,7,43],"w":215},{"a":3,"ab":[23,0,46],"b":9,"ba":[14,0,50],"w":207},{"a":3,"ab":[33,0,34],"b":11,"ba":[10,0,28],"w":191},{"a":8,"ab":[25,0,27],"b":9,"ba":[18,0,34],"w":190},{"a":10,"ab":[15,0,30],"b":0,"ba":[23,0,37],"w":181},{"a":10,"ab":[25,0,29],"b":19,"ba":[14,0,26],"w":172},{"a":10,"ab":[21,0,27],"b":12,"ba":[15,0,28],"w":163},{"a":3,"ab":[16,0,41],"b":4,"ba":[11,0,41],"w":163},{"a":4,"ab":[21,0,29],"b":14,"ba":[13,0,31],"w":162},{"a":3,"ab":[22,0,31],"b":8,"ba":[11,0,29],"w":159},{"a":4,"ab":[25,0,28],"b":13,"ba":[11,0,22],"w":158},{"a":13,"ab":[8,4,22],"b":1,"ba":[28,0,20],"w":154},{"a":21,"ab":[6,0,15],"b":0,"ba":[35,0,16],"w":154},{"a":9,"ab":[14,5,19],"b":1,"ba":[18,0,25],"w":145},{"a":17,"ab":[6,1,20],"b":1,"ba":[28,0,21],"w":144},{"a":5,"ab":[15,0,25],"b":4,"ba":[13,0,33],"w":142},{"a":3,"ab":[19,0,31],"b":10,"ba":[7,0,32],"w":141},{"a":8,"ab":[25,0,16],"b":18,"ba":[10,0,19],"w":140},{"a":7,"ab":[5,0,38],"b":0,"ba":[19,0,28],"w":138},{"a":6,"ab":[12,0,33],"b":14,"ba":[11,0,31],"w":133},{"a":20,"ab":[6,0,20],"b":2,"ba":[23,0,22],"w":129},{"a":16,"ab":[7,0,24],"b":0,"ba":[22,0,15],"w":126},{"a":24,"ab":[5,0,12],"b":0,"ba":[29,0,12],"w":126},{"a":5,"ab":[20,0,18],"b":15,"ba":[7,0,21],"w":120},{"a":13,"ab":[3,0,26],"b":6,"ba":[19,0,26],"w":118},{"a":9,"ab":[10,0,16],"b":4,"ba":[16,0,21],"w":115},{"a":2,"ab":[24,0,19],"b":26,"ba":[3,0,14],"w":114},{"a":9,"ab":[2,0,28],"b":2,"ba":[14,0,36],"w":112},{"a":8,"ab":[12,0,26],"b":16,"ba":[10,0,19],"w":111},{"a":14,"ab":[4,0,17],"b":0,"ba":[17,0,29],"w":109},{"a":20,"ab":[3,0,18],"b":4,"ba":[22,0,12],"w":105},{"a":4,"ab":[5,12,19],"b":1,"ba":[13,0,18],"w":103},{"a":9,"ab":[8,0,19],"b":11,"ba":[13,0,20],"w":102},{"a":12,"ab":[17,0,11],"b":11,"ba":[7,0,13],"w":96},{"a":12,"ab":[6,0,22],"b":0,"ba":[11,0,22],"w":95},{"a":4,"ab":[17,0,13],"b":29,"ba":[6,0,9],"w":91},{"a":13,"ab":[13,0,12],"b":14,"ba":[7,0,16],"w":88},{"a":7,"ab":[9,0,19],"b":13,"ba":[7,0,20],"w":87},{"a":18,"ab":[2,0,13],"b":0,"ba":[19,0,10],"w":86},{"a":23,"ab":[2,0,7],"b":0,"ba":[21,0,9],"w":85},{"a":5,"ab":[12,0,17],"b":14,"ba":[4,0,19],"w":84},{"a":27,"ab":[3,0,11],"b":12,"ba":[18,0,10],"w":84},{"a":3,"ab":[16,0,13],"b":21,"ba":[3,0,14],"w":84},{"a":17,"ab":[8,0,14],"b":12,"ba":[8,0,20],"w":82},{"a":7,"ab":[12,0,11],"b":17,"ba":[6,0,15],"w":80},{"a":7,"ab":[8,0,20],"b":3,"ba":[6,0,17],"w":79},{"a":5,"ab":[8,0,25],"b":6,"ba":[1,0,26],"w":78},{"a":17,"ab":[11,0,14],"b":10,"ba":[7,0,10],"w":78},{"a":20,"ab":[6,0,8],"b":6,"ba":[14,0,10],"w":78},{"a":23,"ab":[3,0,13],"b":10,"ba":[15,0,11],"w":78},{"a":5,"ab":[5,0,21],"b":9,"ba":[7,0,19],"w":76},{"a":2,"ab":[5,15,18],"b":1,"ba":[3,0,18],"w":75},{"a":22,"ab":[1,0,6],"b":0,"ba":[20,0,4],"w":73},{"a":19,"ab":[0,0,11],"b":0,"ba":[16,0,11],"w":70},{"a":3,"ab":[7,0,9],"b":6,"ba":[9,0,12],"w":69},{"a":19,"ab":[2,0,15],"b":1,"ba":[13,0,9],"w":69},{"a":4,"ab":[8,0,17],"b":15,"ba":[4,0,15],"w":68},{"a":6,"ab":[6,0,19],"b":0,"ba":[5,0,16],"w":68},{"a":16,"ab":[1,2,18],"b":1,"ba":[9,0,17],"w":67},{"a":7,"ab":[12,0,7],"b":27,"ba":[6,0,6],"w":67},{"a":12,"ab":[6,0,13],"b":2,"ba":[7,0,15],"w":67},{"a":28,"ab":[2,0,10],"b":0,"ba":[13,0,7],"w":62},{"a":16,"ab":[6,0,12],"b":11,"ba":[6,0,13],"w":61},{"a":9,"ab":[9,0,7],"b":14,"ba":[6,0,8],"w":60},{"a":2,"ab":[9,0,14],"b":15,"ba":[1,0,15],"w":59},{"a":2,"ab":[13,0,5],"b":29,"ba":[2,0,8],"w":58},{"a":7,"ab":[12,0,4],"b":11,"ba":[4,0,6],"w":58},{"a":16,"ab":[5,0,12],"b":9,"ba":[6,0,13],"w":58},{"a":3,"ab":[12,0,6],"b":28,"ba":[3,0,6],"w":57},{"a":19,"ab":[5,0,11],"b":12,"ba":[7,0,9],"w":56},{"a":8,"ab":[12,0,4],"b":19,"ba":[3,0,7],"w":56},{"a":7,"ab":[2,0,10],"b":5,"ba":[10,0,10],"w":56},{"a":28,"ab":[2,2,5],"b":1,"ba":[12,0,7],"w":56},{"a":18,"ab":[3,0,13],"b":1,"ba":[6,0,15],"w":55},{"a":5,"ab":[13,0,7],"b":21,"ba":[1,0,5],"w":54},{"a":7,"ab":[10,0,8],"b":19,"ba":[3,0,6],"w":53},{"a":4,"ab":[7,0,7],"b":10,"ba":[4,0,12],"w":52},{"a":3,"ab":[8,0,8],"b":14,"ba":[3,0,10],"w":51},{"a":4,"ab":[7,0,5],"b":21,"ba":[7,0,4],"w":51},{"a":4,"ab":[13,0,5],"b":26,"ba":[1,0,4],"w":51},{"a":6,"ab":[3,6,15],"b":1,"ba":[4,0,9],"w":51},{"a":25,"ab":[1,0,5],"b":8,"ba":[11,0,9],"w":50},{"a":22,"ab":[3,0,4],"b":1,"ba":[11,0,3],"w":49},{"a":3,"ab":[10,0,9],"b":18,"ba":[1,0,6],"w":48},{"a":9,"ab":[5,0,5],"b":10,"ba":[6,0,10],"w":48},{"a":6,"ab":[4,0,8],"b":11,"ba":[6,0,8],"w":46},{"a":22,"ab":[1,0,7],"b":3,"ba":[10,0,6],"w":46},{"a":13,"ab":[2,0,8],"b":12,"ba":[9,0,5],"w":46},{"a":25,"ab":[0,2,10],"b":1,"ba":[8,0,9],"w":45},{"a":4,"ab":[3,0,10],"b":11,"ba":[6,0,8],"w":45},{"a":3,"ab":[6,0,12],"b":12,"ba":[3,0,5],"w":44},{"a":8,"ab":[6,0,9],"b":4,"ba":[3,0,8],"w":44},{"a":24,"ab":[1,0,5],"b":2,"ba":[10,0,6],"w":44},{"a":27,"ab":[2,1,9],"b":1,"ba":[7,0,6],"w":43},{"a":22,"ab":[4,0,6],"b":11,"ba":[5,0,9],"w":42},{"a":22,"ab":[3,0,5],"b":9,"ba":[7,0,7],"w":42},{"a":8,"ab":[4,0,15],"b":2,"ba":[1,0,11],"w":41},{"a":2,"ab":[3,0,8],"b":11,"ba":[5,0,9],"w":41},{"a":5,"ab":[5,0,6],"b":10,"ba":[5,0,5],"w":41},{"a":16,"ab":[9,0,3],"b":27,"ba":[2,0,4],"w":40},{"a":13,"ab":[8,0,5],"b":29,"ba":[2,0,4],"w":39},{"a":25,"ab":[5,0,6],"b":24,"ba":[4,0,6],"w":39},{"a":8,"ab":[4,0,8],"b":10,"ba":[3,0,9],"w":38},{"a":20,"ab":[5,0,5],"b":13,"ba":[5,0,3],"w":38},{"a":19,"ab":[3,0,5],"b":11,"ba":[6,0,5],"w":37},{"a":9,"ab":[5,0,10],"b":15,"ba":[1,0,9],"w":37},{"a":10,"ab":[0,0,7],"b":11,"ba":[7,0,8],"w":36},{"a":16,"ab":[4,0,6],"b":18,"ba":[4,0,6],"w":36},{"a":10,"ab":[5,0,10],"b":13,"ba":[1,0,7],"w":35},{"a":6,"ab":[5,0,4],"b":29,"ba":[3,0,6],"w":34},{"a":13,"ab":[0,0,9],"b":0,"ba":[4,0,13],"w":34},{"a":24,"ab":[2,0,4],"b":3,"ba":[7,0,3],"w":34},{"a":9,"ab":[4,0,8],"b":6,"ba":[3,0,5],"w":34},{"a":20,"ab":[4,0,4],"b":14,"ba":[5,0,3],"w":34},{"a":5,"ab":[0,0,15],"b":8,"ba":[1,0,15],"w":33},{"a":23,"ab":[1,0,6],"b":8,"ba":[7,0,3],"w":33},{"a":23,"ab":[4,0,5],"b":1,"ba":[5,0,1],"w":33},{"a":22,"ab":[2,0,2],"b":4,"ba":[7,0,4],"w":33},{"a":23,"ab":[1,0,3],"b":18,"ba":[7,0,4],"w":31},{"a":29,"ab":[4,0,2],"b":14,"ba":[5,0,2],"w":31},{"a":6,"ab":[6,0,3],"b":26,"ba":[1,0,6],"w":30},{"a":25,"ab":[0,0,3],"b":0,"ba":[7,0,6],"w":30},{"a":23,"ab":[0,0,6],"b":11,"ba":[6,0,6],"w":30}],"i18n":{"rel_active":"Most active in the","rel_between":"[:a] and [:b]","rel_direct":"addressed directly","rel_lines":"lines","rel_mentions":"mentions","rel_nolinks":"No links to show","rel_partners":"Talks most with","rel_pick":"Click a nick or a line to see details.","rel_replies":"quick replies","rel_strength":"Strength","rel_time0":"Night (0-5h)","rel_time1":"Morning (6-11h)","rel_time2":"Afternoon (12-17h)","rel_time3":"Evening (18-23h)","rel_toward":"[:a] to [:b]","rel_words":"words"},"nodes":[{"hours":[148,281,1261,1123],"id":"vox","lines":2813,"partners":[["Iris",1214],["kettle",1038],["Fortuna",609],["humbug",360],["marmalade",311]],"words":22665},{"hours":[52,814,1071,106],"id":"kettle","lines":2043,"partners":[["vox",1038],["Iris",678],["BigMug44",425],["Ledger",279],["Fortuna",258]],"words":15551},{"hours":[634,66,45,1032],"id":"humbug","lines":1777,"partners":[["PoeticGuy",836],["kelpie",475],["vox",360],["sconewolf",333],["Fortuna",307]],"words":13055},{"hours":[8,100,846,704],"id":"Iris","lines":1658,"partners":[["vox",1214],["kettle",678],["Fortuna",474],["marmalade",254],["humbug",252]],"words":11146},{"hours":[400,66,68,524],"id":"PoeticGuy","lines":1058,"partners":[["humbug",836],["kelpie",325],["vox",239],["Iris",163],["sconewolf",162]],"words":10740},{"hours":[45,78,94,679],"id":"Fortuna","lines":896,"partners":[["vox",609],["Iris",474],["humbug",307],["kettle",258],["PoeticGuy",142]],"words":7078},{"hours":[355,42,33,286],"id":"kelpie","lines":716,"partners":[["humbug",475],["PoeticGuy",325],["sconewolf",133],["bramble",118],["Fortuna",78]],"words":5442},{"hours":[3,616,53,37],"id":"BigMug44","lines":709,"partners":[["kettle",425],["crumpet",274],["RamblerBobVa",264],["vox",138],["bramble",87]],"words":5477},{"hours":[12,56,478,60],"id":"Ledger","lines":606,"partners":[["vox",291],["kettle",279],["zestyanteater",233],["Pekoe",190],["Iris",159]],"words":4662},{"hours":[7,48,267,258],"id":"Pekoe","lines":580,"partners":[["vox",247],["Iris",207],["Ledger",190],["kettle",145],["PoeticGuy",115]],"words":4479},{"hours":[6,276,256,31],"id":"RamblerBobVa","lines":569,"partners":[["BigMug44",264],["kettle",256],["vox",181],["Tansy",172],["crumpet",163]],"words":6172},{"hours":[25,77,394,45],"id":"zestyanteater","lines":541,"partners":[["vox",259],["Ledger",233],["kettle",215],["Iris",191],["Pekoe",102]],"words":4004},{"hours":[10,419,34,47],"id":"crumpet","lines":510,"partners":[["BigMug44",274],["kettle",229],["RamblerBobVa",163],["zestyanteater",96],["vox",95]],"words":3965},{"hours":[103,106,9,126],"id":"bramble","lines":344,"partners":[["humbug",256],["PoeticGuy",158],["kettle",154],["kelpie",118],["sconewolf",88]],"words":2580},{"hours":[75,20,3,207],"id":"sconewolf","lines":305,"partners":[["humbug",333],["PoeticGuy",162],["kelpie",133],["vox",109],["bramble",88]],"words":2202},{"hours":[18,6,36,217],"id":"marmalade","lines":277,"partners":[["vox",311],["Iris",254],["Fortuna",120],["PoeticGuy",68],["humbug",59]],"words":1969},{"hours":[22,0,220,7],"id":"Oolong","lines":249,"partners":[["vox",126],["Ledger",111],["kettle",67],["zestyanteater",61],["Pekoe",58]],"words":1903},{"hours":[0,141,5,1],"id":"Darjeeling","lines":147,"partners":[["kettle",144],["crumpet",82],["BigMug44",80],["RamblerBobVa",78],["bramble",19]],"words":1288},{"hours":[0,28,100,13],"id":"biscuit","lines":141,"partners":[["Ledger",140],["vox",86],["kettle",55],["Iris",48],["Oolong",36]],"words":991},{"hours":[1,56,72,3],"id":"Tansy","lines":132,"partners":[["RamblerBobVa",172],["vox",70],["kettle",69],["crumpet",56],["Ledger",56]],"words":1065},{"hours":[61,0,9,32],"id":"Nettle","lines":102,"partners":[["humbug",129],["PoeticGuy",105],["kelpie",78],["bramble",38],["sconewolf",34]],"words":786},{"hours":[4,11,10,58],"id":"jammy","lines":83,"partners":[["vox",154],["Iris",84],["Fortuna",54],["PoeticGuy",51],["humbug",28]],"words":618},{"hours":[8,11,53,3],"id":"Clementine","lines":75,"partners":[["vox",73],["kettle",49],["Iris",46],["zestyanteater",42],["Pekoe",42]],"words":589},{"hours":[0,12,52,11],"id":"Hobnob","lines":75,"partners":[["vox",85],["RamblerBobVa",78],["Ledger",33],["kettle",33],["biscuit",31]],"words":608},{"hours":[0,5,20,37],"id":"Custard","lines":62,"partners":[["vox",126],["humbug",44],["Barley",39],["Iris",34],["Fortuna",28]],"words":436},{"hours":[1,0,55,4],"id":"Barley","lines":60,"partners":[["Ledger",50],["kettle",45],["Custard",39],["vox",30],["Oolong",28]],"words":477},{"hours":[34,6,0,14],"id":"quill","lines":54,"partners":[["humbug",114],["PoeticGuy",51],["kelpie",30],["bramble",21],["vox",16]],"words":586},{"hours":[10,41,0,1],"id":"Rooibos","lines":52,"partners":[["crumpet",84],["BigMug44",67],["kettle",43],["Oolong",40],["kelpie",15]],"words":352},{"hours":[4,3,6,38],"id":"Juniper","lines":51,"partners":[["vox",62],["Iris",57],["kettle",56],["kelpie",24],["humbug",21]],"words":422},{"hours":[21,9,2,18],"id":"ottercake","lines":50,"partners":[["PoeticGuy",91],["humbug",58],["bramble",39],["kelpie",34],["sconewolf",31]],"words":402}]}</script>
+</div>
+<div class="card" id="pairs">
+   <br />
+   <table width="710" cellpadding="1" cellspacing="0" border="0">
+    <tr>
+     <td class="headlinebg">
+      <table width="100%" cellpadding="2" cellspacing="0" border="0">
+       <tr>
+        <td class="headtext">Closest pairs</td>
+       </tr>
+      </table>
+     </td>
+    </tr>
+   </table>
+
+<table border="0" width="714"><tr><td>&nbsp;</td><td class="tdtop"><b>Pair</b></td><td class="tdtop"><b>Strength</b></td><td class="tdtop"><b>How they talk</b></td></tr>
+<tr><td class="hirankc" align="left">1</td><td class="hicell"><b>Iris</b> &harr; <b>vox</b></td><td class="hicell"><div class="bar"><span style="width:100%"></span></div> 1,214</td><td class="hicell small">Iris to vox: 106 direct, 0 mentions; back: 109 direct, 0 mentions; 569 quick replies</td></tr>
+<tr><td class="rankc" align="left">2</td><td class="hicell"><b>kettle</b> &harr; <b>vox</b></td><td class="hicell"><div class="bar"><span style="width:85%"></span></div> 1,038</td><td class="hicell small">kettle to vox: 85 direct, 0 mentions; back: 104 direct, 28 mentions; 443 quick replies</td></tr>
+<tr><td class="rankc" align="left">3</td><td class="hicell"><b>PoeticGuy</b> &harr; <b>humbug</b></td><td class="hicell"><div class="bar"><span style="width:68%"></span></div> 836</td><td class="hicell small">PoeticGuy to humbug: 68 direct, 0 mentions; back: 101 direct, 0 mentions; 329 quick replies</td></tr>
+<tr><td class="rankc" align="left">4</td><td class="hicell"><b>Iris</b> &harr; <b>kettle</b></td><td class="hicell"><div class="bar"><span style="width:55%"></span></div> 678</td><td class="hicell small">Iris to kettle: 54 direct, 20 mentions; back: 73 direct, 0 mentions; 277 quick replies</td></tr>
+<tr><td class="rankc" align="left">5</td><td class="hicell"><b>Fortuna</b> &harr; <b>vox</b></td><td class="hicell"><div class="bar"><span style="width:50%"></span></div> 609</td><td class="hicell small">Fortuna to vox: 42 direct, 0 mentions; back: 73 direct, 0 mentions; 264 quick replies</td></tr>
+<tr><td class="rankc" align="left">6</td><td class="hicell"><b>humbug</b> &harr; <b>kelpie</b></td><td class="hicell"><div class="bar"><span style="width:39%"></span></div> 475</td><td class="hicell small">humbug to kelpie: 55 direct, 0 mentions; back: 38 direct, 0 mentions; 196 quick replies</td></tr>
+<tr><td class="rankc" align="left">7</td><td class="hicell"><b>Fortuna</b> &harr; <b>Iris</b></td><td class="hicell"><div class="bar"><span style="width:39%"></span></div> 474</td><td class="hicell small">Fortuna to Iris: 44 direct, 0 mentions; back: 48 direct, 0 mentions; 198 quick replies</td></tr>
+<tr><td class="rankc" align="left">8</td><td class="hicell"><b>BigMug44</b> &harr; <b>kettle</b></td><td class="hicell"><div class="bar"><span style="width:35%"></span></div> 425</td><td class="hicell small">BigMug44 to kettle: 28 direct, 16 mentions; back: 60 direct, 0 mentions; 145 quick replies</td></tr>
+<tr><td class="rankc" align="left">9</td><td class="hicell"><b>humbug</b> &harr; <b>vox</b></td><td class="hicell"><div class="bar"><span style="width:29%"></span></div> 360</td><td class="hicell small">humbug to vox: 28 direct, 0 mentions; back: 31 direct, 0 mentions; 183 quick replies</td></tr>
+<tr><td class="rankc" align="left">10</td><td class="hicell"><b>humbug</b> &harr; <b>sconewolf</b></td><td class="hicell"><div class="bar"><span style="width:27%"></span></div> 333</td><td class="hicell small">humbug to sconewolf: 58 direct, 0 mentions; back: 18 direct, 0 mentions; 105 quick replies</td></tr>
+</table>
+</div>
+<div class="card" id="roles">
+   <br />
+   <table width="710" cellpadding="1" cellspacing="0" border="0">
+    <tr>
+     <td class="headlinebg">
+      <table width="100%" cellpadding="2" cellspacing="0" border="0">
+       <tr>
+        <td class="headtext">Social roles</td>
+       </tr>
+      </table>
+     </td>
+    </tr>
+   </table>
+
+<div class="cardgrid">
+<div class="minicard"><span class="mc-title">Most talked to</span><span class="mc-name">vox</span><span class="mc-desc">Others address or mention them the most</span><span class="mc-value">1,200 points</span></div>
+<div class="minicard"><span class="mc-title">Most outgoing</span><span class="mc-name">Clementine</span><span class="mc-desc">Aims the largest share of their lines at someone</span><span class="mc-value">39% of their lines</span></div>
+<div class="minicard"><span class="mc-title">Connector</span><span class="mc-name">vox</span><span class="mc-desc">Has close contact with the most people</span><span class="mc-value">34 close contacts</span></div>
+<div class="minicard"><span class="mc-title">Best listener</span><span class="mc-name">vox</span><span class="mc-desc">Most often answers right after someone else</span><span class="mc-value">1,265 quick replies</span></div>
+<div class="minicard"><span class="mc-title">Lone wolf</span><span class="mc-name">marmalade</span><span class="mc-desc">Talks a lot, with the fewest close contacts</span><span class="mc-value">277 lines, 19 close contacts</span></div>
+</div>
+</div>
+<div class="card" id="personalities">
+   <br />
+   <table width="710" cellpadding="1" cellspacing="0" border="0">
+    <tr>
+     <td class="headlinebg">
+      <table width="100%" cellpadding="2" cellspacing="0" border="0">
+       <tr>
+        <td class="headtext">Time personalities</td>
+       </tr>
+      </table>
+     </td>
+    </tr>
+   </table>
+
+<div class="cardgrid">
+<div class="minicard t0"><span class="mc-title">Night owl</span><span class="mc-desc">Chats between 0h and 5h</span><ol class="mc-list"><li><b>quill</b> <span>63%</span></li><li><b>Nettle</b> <span>60%</span></li><li><b>kelpie</b> <span>50%</span></li></ol></div>
+<div class="minicard t1"><span class="mc-title">Early bird</span><span class="mc-desc">Chats between 6h and 11h</span><ol class="mc-list"><li><b>Darjeeling</b> <span>96%</span></li><li><b>BigMug44</b> <span>87%</span></li><li><b>crumpet</b> <span>82%</span></li></ol></div>
+<div class="minicard t2"><span class="mc-title">Afternoon regular</span><span class="mc-desc">Chats between 12h and 17h</span><ol class="mc-list"><li><b>Barley</b> <span>92%</span></li><li><b>Oolong</b> <span>88%</span></li><li><b>Ledger</b> <span>79%</span></li></ol></div>
+<div class="minicard t3"><span class="mc-title">Evening regular</span><span class="mc-desc">Chats between 18h and 23h</span><ol class="mc-list"><li><b>marmalade</b> <span>78%</span></li><li><b>Fortuna</b> <span>76%</span></li><li><b>jammy</b> <span>70%</span></li></ol></div>
+</div>
+</div>
+<div class="card half" id="concentration">
+   <br />
+   <table width="710" cellpadding="1" cellspacing="0" border="0">
+    <tr>
+     <td class="headlinebg">
+      <table width="100%" cellpadding="2" cellspacing="0" border="0">
+       <tr>
+        <td class="headtext">Who carries the channel</td>
+       </tr>
+      </table>
+     </td>
+    </tr>
+   </table>
+
+<p class="intro">Half of all lines come from just the top 5.</p>
+<table border="0" width="714">
+<tr><td class="hicell" style="width:9em">Top 1</td><td class="hicell"><div class="bar"><span style="width:16.7%"></span></div></td><td class="hicell" style="width:5em">16.7%</td></tr>
+<tr><td class="hicell" style="width:9em">Top 3</td><td class="hicell"><div class="bar"><span style="width:39.3%"></span></div></td><td class="hicell" style="width:5em">39.3%</td></tr>
+<tr><td class="hicell" style="width:9em">Top 5</td><td class="hicell"><div class="bar"><span style="width:55.4%"></span></div></td><td class="hicell" style="width:5em">55.4%</td></tr>
+<tr><td class="hicell" style="width:9em">Top 10</td><td class="hicell"><div class="bar"><span style="width:76.2%"></span></div></td><td class="hicell" style="width:5em">76.2%</td></tr>
+<tr><td class="hicell" style="width:9em">Top 20</td><td class="hicell"><div class="bar"><span style="width:95.2%"></span></div></td><td class="hicell" style="width:5em">95.2%</td></tr>
+</table>
+</div>
+<div class="card half" id="signature">
+   <br />
+   <table width="710" cellpadding="1" cellspacing="0" border="0">
+    <tr>
+     <td class="headlinebg">
+      <table width="100%" cellpadding="2" cellspacing="0" border="0">
+       <tr>
+        <td class="headtext">Signature words</td>
+       </tr>
+      </table>
+     </td>
+    </tr>
+   </table>
+
+<p class="intro">The word each regular uses a lot and hardly anyone else does.</p>
+<table border="0" width="714"><tr><td>&nbsp;</td><td class="tdtop"><b>Nick</b></td><td class="tdtop"><b>Word</b></td><td class="tdtop"><b>Uses</b></td><td class="tdtop"><b>Share of all uses</b></td></tr>
+<tr><td class="hirankc" align="left">1</td><td class="hicell"><b>vox</b></td><td class="hicell sigword">anyway</td><td class="hicell">326</td><td class="hicell"><div class="bar"><span style="width:77%"></span></div> 77%</td></tr>
+<tr><td class="rankc" align="left">2</td><td class="hicell"><b>kettle</b></td><td class="hicell sigword">lovely</td><td class="hicell">211</td><td class="hicell"><div class="bar"><span style="width:53%"></span></div> 53%</td></tr>
+<tr><td class="rankc" align="left">3</td><td class="hicell"><b>humbug</b></td><td class="hicell sigword">missed</td><td class="hicell">72</td><td class="hicell"><div class="bar"><span style="width:77%"></span></div> 77%</td></tr>
+<tr><td class="rankc" align="left">4</td><td class="hicell"><b>Iris</b></td><td class="hicell sigword">garden</td><td class="hicell">210</td><td class="hicell"><div class="bar"><span style="width:63%"></span></div> 63%</td></tr>
+<tr><td class="rankc" align="left">5</td><td class="hicell"><b>PoeticGuy</b></td><td class="hicell sigword">verily</td><td class="hicell">122</td><td class="hicell"><div class="bar"><span style="width:100%"></span></div> 100%</td></tr>
+<tr><td class="rankc" align="left">6</td><td class="hicell"><b>Fortuna</b></td><td class="hicell sigword">omens</td><td class="hicell">95</td><td class="hicell"><div class="bar"><span style="width:100%"></span></div> 100%</td></tr>
+<tr><td class="rankc" align="left">7</td><td class="hicell"><b>kelpie</b></td><td class="hicell sigword">splash</td><td class="hicell">77</td><td class="hicell"><div class="bar"><span style="width:100%"></span></div> 100%</td></tr>
+<tr><td class="rankc" align="left">8</td><td class="hicell"><b>BigMug44</b></td><td class="hicell sigword">coffee</td><td class="hicell">93</td><td class="hicell"><div class="bar"><span style="width:55%"></span></div> 55%</td></tr>
+<tr><td class="rankc" align="left">9</td><td class="hicell"><b>Ledger</b></td><td class="hicell sigword">receipts</td><td class="hicell">66</td><td class="hicell"><div class="bar"><span style="width:100%"></span></div> 100%</td></tr>
+<tr><td class="rankc" align="left">10</td><td class="hicell"><b>Pekoe</b></td><td class="hicell sigword">steep</td><td class="hicell">59</td><td class="hicell"><div class="bar"><span style="width:100%"></span></div> 100%</td></tr>
+<tr><td class="rankc" align="left">11</td><td class="hicell"><b>RamblerBobVa</b></td><td class="hicell sigword">boots</td><td class="hicell">61</td><td class="hicell"><div class="bar"><span style="width:100%"></span></div> 100%</td></tr>
+<tr><td class="rankc" align="left">12</td><td class="hicell"><b>zestyanteater</b></td><td class="hicell sigword">zesty</td><td class="hicell">65</td><td class="hicell"><div class="bar"><span style="width:100%"></span></div> 100%</td></tr>
+<tr><td class="rankc" align="left">13</td><td class="hicell"><b>crumpet</b></td><td class="hicell sigword">toasty</td><td class="hicell">60</td><td class="hicell"><div class="bar"><span style="width:100%"></span></div> 100%</td></tr>
+<tr><td class="rankc" align="left">14</td><td class="hicell"><b>bramble</b></td><td class="hicell sigword">hedge</td><td class="hicell">42</td><td class="hicell"><div class="bar"><span style="width:100%"></span></div> 100%</td></tr>
+<tr><td class="rankc" align="left">15</td><td class="hicell"><b>sconewolf</b></td><td class="hicell sigword">raffle</td><td class="hicell">6</td><td class="hicell"><div class="bar"><span style="width:40%"></span></div> 40%</td></tr>
+</table>
+</div>
+<div class="card half" id="big-numbers">
    <br />
    <table width="710" cellpadding="1" cellspacing="0" border="0">
     <tr>
@@ -394,31 +849,40 @@ td[rowspan] img {
    </table>
 
 <table width="714">
-<tr><td class="hicell">Is <b>Iris</b> stupid or just asking too many questions?  5.3% lines contained a question!
-<br /><span class="small"><b>vox</b> didn't know that much either.  1.6% of his/her lines were questions.</span>
+<tr><td class="hicell">Is <b>Fortuna</b> stupid or just asking too many questions?  22.8% lines contained a question!
+<br /><span class="small"><b>Tansy</b> didn't know that much either.  22.7% of his/her lines were questions.</span>
 </td></tr>
-<tr><td class="hicell">The loudest one was <b>humbug</b>, who yelled 35.0% of the time!
-<br /><span class="small">Another <i>old yeller</i> was <b>vox</b>, who shouted 6.3% of the time!</span>
+<tr><td class="hicell">The loudest one was <b>marmalade</b>, who yelled 23.8% of the time!
+<br /><span class="small">Another <i>old yeller</i> was <b>sconewolf</b>, who shouted 19.7% of the time!</span>
 </td></tr>
-<tr><td class="hicell">Everybody had their shift-key under control.  :)</td></tr>
-<tr><td class="hicell">Nobody beat anyone up.  Everybody was friendly.</td></tr>
-<tr><td class="hicell"><b>vox</b> brings happiness to the world.  17.5% lines contained smiling faces.  :)
-<br /><span class="small"><b>Iris</b> isn't a sad person either, smiling 15.8% of the time.</span>
+<tr><td class="hicell">It seems that <b>BigMug44</b>'s shift-key is hanging:  7.1% of the time he/she wrote UPPERCASE.<br /><span class="small"><b>For example, like this:</b><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;BigMug44&gt; THE KETTLE IS BROKEN</span>
+<br /><span class="small"><b>sconewolf</b> just forgot to deactivate his/her Caps-Lock.  He/She wrote UPPERCASE 6.9% of the time.</span>
 </td></tr>
-<tr><td class="hicell">Nobody is sad in #teatime!  What a happy channel.  :-)</td></tr>
-<tr><td class="hicell"><b>vox</b> wrote the longest lines, averaging 32.2 letters per line.<br />
-<span class="small">#teatime average was 24.8 letters per line.</span></td></tr>
-<tr><td class="hicell"><b>humbug</b> wrote the shortest lines, averaging 8.1 characters per line.<br />
-<span class="small"><b>Iris</b> was tight-lipped, too, averaging 15.9 characters.</span></td></tr>
-<tr><td class="hicell"><b>vox</b> spoke a total of 421 words!
-<br /><span class="small">vox's faithful follower, <b>Iris</b>, didn't speak so much: 65 words.</span>
+<tr><td class="hicell"><b>sconewolf</b> is a very aggressive person.  He/She attacked others <b>7</b> times.<br /><span class="small"><b>For example, like this:</b><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* sconewolf smacks Fortuna with a wooden spoon</span>
+<br /><span class="small"><b>marmalade</b> can't control his/her aggressions, either.  He/She picked on others <b>4</b> times.</span>
 </td></tr>
-<tr><td class="hicell"><b>Fortuna</b> wrote an average of 9.00 words per line.
-<br /><span class="small">Channel average was 5.22 words per line.</span>
+<tr><td class="hicell">Poor <b>humbug</b>, nobody likes him/her.  He/She was attacked <b>3</b> times.<br /><span class="small"><b>For example, like this:</b><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* sconewolf smacks humbug with a wooden spoon</span>
+<br /><span class="small"><b>Fortuna</b> seems to be unliked too.  He/She got beaten <b>2</b> times.</span>
+</td></tr>
+<tr><td class="hicell"><b>Custard</b> brings happiness to the world.  17.7% lines contained smiling faces.  :)
+<br /><span class="small"><b>biscuit</b> isn't a sad person either, smiling 14.2% of the time.</span>
+</td></tr>
+<tr><td class="hicell"><b>bramble</b> seems to be sad at the moment:  12.5% lines contained sad faces.  :(
+<br /><span class="small"><b>humbug</b> is also a sad person, crying 12.4% of the time.</span>
+</td></tr>
+<tr><td class="hicell"><b>quill</b> wrote the longest lines, averaging 56.0 letters per line.<br />
+<span class="small">#teatime average was 40.6 letters per line.</span></td></tr>
+<tr><td class="hicell"><b>Iris</b> wrote the shortest lines, averaging 35.4 characters per line.<br />
+<span class="small"><b>Custard</b> was tight-lipped, too, averaging 35.5 characters.</span></td></tr>
+<tr><td class="hicell"><b>vox</b> spoke a total of 22665 words!
+<br /><span class="small">vox's faithful follower, <b>kettle</b>, didn't speak so much: 15551 words.</span>
+</td></tr>
+<tr><td class="hicell"><b>quill</b> wrote an average of 10.85 words per line.
+<br /><span class="small">Channel average was 7.87 words per line.</span>
 </td></tr>
 </table>
 </div>
-<div class="card">
+<div class="card half" id="most-used-words">
    <br />
    <table width="710" cellpadding="1" cellspacing="0" border="0">
     <tr>
@@ -437,13 +901,58 @@ td[rowspan] img {
 <td class="tdtop"><b>Number of Uses</b></td>
 <td class="tdtop"><b>Last Used by</b></td></tr>
 <tr><td class="hirankc">1</td>
-<td class="hicell">kettle</td>
-<td class="hicell">4</td>
-<td class="hicell">Iris</td>
+<td class="hicell">right</td>
+<td class="hicell">1026</td>
+<td class="hicell">humbug</td>
+</tr>
+<tr><td class="rankc">2</td>
+<td class="hicell">about</td>
+<td class="hicell">951</td>
+<td class="hicell">humbug</td>
+</tr>
+<tr><td class="rankc">3</td>
+<td class="hicell">again</td>
+<td class="hicell">724</td>
+<td class="hicell">humbug</td>
+</tr>
+<tr><td class="rankc">4</td>
+<td class="hicell">there</td>
+<td class="hicell">587</td>
+<td class="hicell">PoeticGuy</td>
+</tr>
+<tr><td class="rankc">5</td>
+<td class="hicell">anyone</td>
+<td class="hicell">540</td>
+<td class="hicell">humbug</td>
+</tr>
+<tr><td class="rankc">6</td>
+<td class="hicell">everyone</td>
+<td class="hicell">494</td>
+<td class="hicell">humbug</td>
+</tr>
+<tr><td class="rankc">7</td>
+<td class="hicell">finally</td>
+<td class="hicell">483</td>
+<td class="hicell">humbug</td>
+</tr>
+<tr><td class="rankc">8</td>
+<td class="hicell">night</td>
+<td class="hicell">473</td>
+<td class="hicell">humbug</td>
+</tr>
+<tr><td class="rankc">9</td>
+<td class="hicell">think</td>
+<td class="hicell">439</td>
+<td class="hicell">humbug</td>
+</tr>
+<tr><td class="rankc">10</td>
+<td class="hicell">point</td>
+<td class="hicell">429</td>
+<td class="hicell">humbug</td>
 </tr>
 </table>
 </div>
-<div class="card">
+<div class="card half" id="most-referenced-nicks">
    <br />
    <table width="710" cellpadding="1" cellspacing="0" border="0">
     <tr>
@@ -462,13 +971,78 @@ td[rowspan] img {
 <td class="tdtop"><b>Number of Uses</b></td>
 <td class="tdtop"><b>Last Used by</b></td></tr>
 <tr><td class="hirankc">1</td>
-<td class="hicell">vox</td>
-<td class="hicell">15</td>
+<td class="hicell">kettle</td>
+<td class="hicell">536</td>
 <td class="hicell">Fortuna</td>
+</tr>
+<tr><td class="rankc">2</td>
+<td class="hicell">vox</td>
+<td class="hicell">361</td>
+<td class="hicell">Iris</td>
+</tr>
+<tr><td class="rankc">3</td>
+<td class="hicell">Iris</td>
+<td class="hicell">331</td>
+<td class="hicell">kettle</td>
+</tr>
+<tr><td class="rankc">4</td>
+<td class="hicell">PoeticGuy</td>
+<td class="hicell">221</td>
+<td class="hicell">humbug</td>
+</tr>
+<tr><td class="rankc">5</td>
+<td class="hicell">humbug</td>
+<td class="hicell">171</td>
+<td class="hicell">PoeticGuy</td>
 </tr>
 </table>
 </div>
-<div class="card">
+<div class="card half" id="most-referenced-urls">
+   <br />
+   <table width="710" cellpadding="1" cellspacing="0" border="0">
+    <tr>
+     <td class="headlinebg">
+      <table width="100%" cellpadding="2" cellspacing="0" border="0">
+       <tr>
+        <td class="headtext">Most referenced URLs</td>
+       </tr>
+      </table>
+     </td>
+    </tr>
+   </table>
+
+<table border="0" width="714"><tr>
+<td>&nbsp;</td><td class="tdtop"><b>URL</b></td>
+<td class="tdtop"><b>Number of Uses</b></td>
+<td class="tdtop"><b>Last Used by</b></td></tr>
+<tr><td class="hirankc">1</td>
+<td class="hicell"><a href="https://example.org/garden/slug-advice">https://example.org/garden/slug-advice</a></td>
+<td class="hicell">24</td>
+<td class="hicell">Fortuna</td>
+</tr>
+<tr><td class="rankc">2</td>
+<td class="hicell"><a href="https://example.net/tea/first-flush-guide">https://example.net/tea/first-flush-guide</a></td>
+<td class="hicell">16</td>
+<td class="hicell">Fortuna</td>
+</tr>
+<tr><td class="rankc">3</td>
+<td class="hicell"><a href="https://example.org/recipes/lemon-drizzle">https://example.org/recipes/lemon-drizzle</a></td>
+<td class="hicell">16</td>
+<td class="hicell">Fortuna</td>
+</tr>
+<tr><td class="rankc">4</td>
+<td class="hicell"><a href="https://example.org/books/the-lighthouse-keepers">https://example.org/books/the-lighthouse-keepers</a></td>
+<td class="hicell">16</td>
+<td class="hicell">Fortuna</td>
+</tr>
+<tr><td class="rankc">5</td>
+<td class="hicell"><a href="https://example.com/video/moss-documentary">https://example.com/video/moss-documentary</a></td>
+<td class="hicell">14</td>
+<td class="hicell">RamblerBobVa</td>
+</tr>
+</table>
+</div>
+<div class="card half" id="other-interesting-numbers">
    <br />
    <table width="710" cellpadding="1" cellspacing="0" border="0">
     <tr>
@@ -483,28 +1057,31 @@ td[rowspan] img {
    </table>
 
 <table width="714">
-<tr><td class="hicell"><b>bLAzY</b> wasn't very popular, getting kicked 1 times!<br /><span class="small"><b>For example, like this:</b><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*** bLAzY was kicked by Ledger (We do not need more bots in here.)</span>
-<br /><span class="small"><b>BigMug44</b> seemed to be hated too:  1 kicks were received.</span>
+<tr><td class="hicell"><b>Iris</b> wasn't very popular, getting kicked 4 times!<br /><span class="small"><b>For example, like this:</b><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*** Iris was kicked by vox (no spoilers please)</span>
+<br /><span class="small"><b>Fortuna</b> seemed to be hated too:  2 kicks were received.</span>
 </td></tr>
-<tr><td class="hicell"><b>X</b> is either insane or just a fair op, kicking a total of 2 people!
-<br /><span class="small">X's faithful follower, <b>Ledger</b>, kicked about 1 people.</span>
+<tr><td class="hicell"><b>vox</b> is either insane or just a fair op, kicking a total of 11 people!
+<br /><span class="small">vox's faithful follower, <b>kettle</b>, kicked about 6 people.</span>
 </td></tr>
-<tr><td class="hicell"><b>X</b> donated 2 ops in the channel...
-<br /><span class="small"><b>Ledger</b> was also very polite: 1 ops from him/her.</span>
+<tr><td class="hicell"><b>Ledger</b> donated 9 ops in the channel...
+<br /><span class="small"><b>vox</b> was also very polite: 3 ops from him/her.</span>
 </td></tr>
-<tr><td class="hicell"><b>Ledger</b> is the channel sheriff with 1 deops.
-<br /><span class="small"><b>vox</b> deoped 1 users.</span>
+<tr><td class="hicell"><b>vox</b> is the channel sheriff with 7 deops.
+<br /><span class="small"><b>Ledger</b> deoped 5 users.</span>
 </td></tr>
-<tr><td class="hicell"><b>humbug</b> always lets us know what he/she's doing: 1 actions!<br /><span class="small"><b>For example, like this:</b><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* humbug smax Ledger</span>
+<tr><td class="hicell"><b>kettle</b> always lets us know what he/she's doing: 246 actions!<br /><span class="small"><b>For example, like this:</b><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* kettle makes a fresh pot</span>
+<br /><span class="small">Also, <b>kelpie</b> tells us what's up with 92 actions.</span>
 </td></tr>
-<tr><td class="hicell"><b>vox</b> talks to him/herself a lot.  He/She wrote over 5 lines in a row 1 times!
+<tr><td class="hicell"><b>vox</b> talks to him/herself a lot.  He/She wrote over 5 lines in a row 75 times!
+<br /><span class="small">Another lonely one was <b>humbug</b>, who managed to hit 43 times.</span>
 </td></tr>
-<tr><td class="hicell"><b>RamblerBobVa</b> couldn't decide whether to stay or go.  7 joins during this reporting period!</td></tr>
-<tr><td class="hicell"><b>vox</b> has quite a potty mouth.  0.2% words were foul language.
+<tr><td class="hicell"><b>vox</b> couldn't decide whether to stay or go.  125 joins during this reporting period!</td></tr>
+<tr><td class="hicell"><b>humbug</b> has quite a potty mouth.  0.5% words were foul language.
+<br /><span class="small"><b>BigMug44</b> also makes sailors blush, 0.4% of the time.</span>
 </td></tr>
 </table>
 </div>
-<div class="card">
+<div class="card half" id="latest-topics">
    <br />
    <table width="710" cellpadding="1" cellspacing="0" border="0">
     <tr>
@@ -519,16 +1096,395 @@ td[rowspan] img {
    </table>
 
 <table width="714">
-<tr><td class="hicell">A topic was never set on this channel.</td></tr>
+<tr><td class="hicell"><i>Welcome to #teatime | put the kettle on | book club on Sunday: The Lighthouse Keepers</i></td>
+<td class="hicell"><b>yesterday at 00:52 by Ledger</b></td></tr>
+<tr><td class="hicell"><i>#teatime | harvest swap on Saturday, bring courgettes, everyone has too many</i></td>
+<td class="hicell"><b>3 days ago at 16:50 by vox</b></td></tr>
+<tr><td class="hicell"><i>#teatime | Gerald the hedgehog is doing fine, thanks for asking</i></td>
+<td class="hicell"><b>18 days ago at 13:39 by Ledger</b></td></tr>
+<tr><td align="center" colspan="2" class="asmall">The topic was set 8 times.</td></tr>
 </table>
 </div>
-<div id="totallines">Total number of lines: 328.</div>
+<script>
+/* Relation map: who talks to whom.
+ *
+ * pisg writes the data as JSON in <script id="relmap-data"> and this script draws it as
+ * an SVG into <svg id="relmap-svg">, with details in <div id="relmap-info">.
+ * No libraries. The layout is a small force simulation with a fixed starting point, so
+ * the same data always gives the same picture.
+ *
+ * data = { nodes: [{id, lines, words, hours:[4], partners:[[nick, strength]...]}],
+ *          edges: [{a, b, w, ab:[direct, mentions, replies], ba:[...]}],   // a, b = node index
+ *          i18n:  { text key: text } }
+ */
+(function () {
+  "use strict";
+
+  var dataEl = document.getElementById("relmap-data");
+  var svg = document.getElementById("relmap-svg");
+  var info = document.getElementById("relmap-info");
+  if (!dataEl || !svg || !info) return;
+
+  var data;
+  try { data = JSON.parse(dataEl.textContent); } catch (e) { return; }
+  var nodes = data.nodes || [], edges = data.edges || [], T = data.i18n || {};
+  if (nodes.length < 2 || !edges.length) return;
+
+  var NS = "http://www.w3.org/2000/svg";
+  var W = 960, H = 620, PAD = 40;
+
+  function fmt(s, vars) {
+    return String(s || "").replace(/\[:(\w+)\]/g, function (m, k) { return vars && vars[k] !== undefined ? vars[k] : m; });
+  }
+  function num(n) { return Number(n || 0).toLocaleString(); }
+  function el(name, attrs, text) {
+    var e = document.createElementNS(NS, name);
+    for (var k in attrs) if (Object.prototype.hasOwnProperty.call(attrs, k)) e.setAttribute(k, attrs[k]);
+    if (text !== undefined) e.textContent = text;
+    return e;
+  }
+  function html(tag, cls, text) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text !== undefined) e.textContent = text;
+    return e;
+  }
+
+  // ---- sizes and colours -------------------------------------------------------------
+  var maxLines = 1, maxW = 1;
+  nodes.forEach(function (n) { if (n.lines > maxLines) maxLines = n.lines; });
+  edges.forEach(function (e) { if (e.w > maxW) maxW = e.w; });
+  nodes.forEach(function (n) {
+    n.r = 7 + 20 * Math.sqrt(n.lines / maxLines);
+    var best = 0;
+    for (var i = 1; i < 4; i++) if ((n.hours[i] || 0) > (n.hours[best] || 0)) best = i;
+    n.t = best;                                   // 0 night, 1 morning, 2 afternoon, 3 evening
+  });
+
+  // ---- layout (Fruchterman-Reingold, fixed start, so it is repeatable) -----------------
+  function layout() {
+    var n = nodes.length, i, j, k;
+    var pos = nodes.map(function (nd, idx) {
+      var a = (2 * Math.PI * idx) / n;
+      return { x: W / 2 + 0.36 * W * Math.cos(a), y: H / 2 + 0.36 * H * Math.sin(a), dx: 0, dy: 0 };
+    });
+    var area = (W - 2 * PAD) * (H - 2 * PAD);
+    var kk = 0.75 * Math.sqrt(area / n);
+    var steps = 320;
+    for (var s = 0; s < steps; s++) {
+      var temp = (W / 9) * (1 - s / steps) + 0.5;
+      for (i = 0; i < n; i++) { pos[i].dx = 0; pos[i].dy = 0; }
+      for (i = 0; i < n; i++) {                   // everyone pushes everyone away
+        for (j = i + 1; j < n; j++) {
+          var dx = pos[i].x - pos[j].x, dy = pos[i].y - pos[j].y;
+          var d = Math.sqrt(dx * dx + dy * dy) || 0.01;
+          var minGap = nodes[i].r + nodes[j].r + 14;
+          var f = (kk * kk) / d + (d < minGap ? (minGap - d) * 2 : 0);
+          pos[i].dx += (dx / d) * f; pos[i].dy += (dy / d) * f;
+          pos[j].dx -= (dx / d) * f; pos[j].dy -= (dy / d) * f;
+        }
+      }
+      for (k = 0; k < edges.length; k++) {        // linked people pull together, harder when they talk more
+        var e = edges[k], a = pos[e.a], b = pos[e.b];
+        var ex = a.x - b.x, ey = a.y - b.y;
+        var ed = Math.sqrt(ex * ex + ey * ey) || 0.01;
+        var pull = ((ed * ed) / kk) * (0.15 + 0.85 * Math.sqrt(e.w / maxW));
+        a.dx -= (ex / ed) * pull; a.dy -= (ey / ed) * pull;
+        b.dx += (ex / ed) * pull; b.dy += (ey / ed) * pull;
+      }
+      for (i = 0; i < n; i++) {                   // a little gravity keeps loners on the page
+        pos[i].dx -= (pos[i].x - W / 2) * 0.05; pos[i].dy -= (pos[i].y - H / 2) * 0.05;
+        var len = Math.sqrt(pos[i].dx * pos[i].dx + pos[i].dy * pos[i].dy) || 0.01;
+        var move = Math.min(len, temp);
+        pos[i].x += (pos[i].dx / len) * move; pos[i].y += (pos[i].dy / len) * move;
+      }
+    }
+    // Not to scale, on purpose. Fitting the drawing to its farthest nodes squeezes the busy middle
+    // into a blob, so keep only each node's direction from the centre and re-space them by rank:
+    // the nearest goes near the middle, the farthest to the edge, evenly in between.
+    var cx = median(pos.map(function (q) { return q.x; })), cy = median(pos.map(function (q) { return q.y; }));
+    var sx = Math.max(median(pos.map(function (q) { return Math.abs(q.x - cx); })), 1);
+    var sy = Math.max(median(pos.map(function (q) { return Math.abs(q.y - cy); })), 1);
+    var polar = pos.map(function (q, idx) {
+      var nx = (q.x - cx) / sx, ny = (q.y - cy) / sy;
+      return { i: idx, a: Math.atan2(ny, nx), d: Math.sqrt(nx * nx + ny * ny) };
+    });
+    polar.sort(function (p, q) { return p.d - q.d || p.i - q.i; });
+    var RX = W / 2 - PAD - 34, RY = H / 2 - PAD - 26;
+    polar.forEach(function (p, rank) {
+      var t = Math.pow((rank + 0.6) / (n + 0.2), 0.62);           // <1 keeps more room near the middle
+      nodes[p.i].x = W / 2 + Math.cos(p.a) * RX * t;
+      nodes[p.i].y = H / 2 + Math.sin(p.a) * RY * t;
+    });
+    // stretch the result to fill the picture, so no band of it stays empty
+    var x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
+    nodes.forEach(function (nd) { x0 = Math.min(x0, nd.x); x1 = Math.max(x1, nd.x); y0 = Math.min(y0, nd.y); y1 = Math.max(y1, nd.y); });
+    nodes.forEach(function (nd) {
+      nd.x = (PAD + 30) + ((nd.x - x0) / ((x1 - x0) || 1)) * (W - 2 * (PAD + 30));
+      nd.y = (PAD + 8) + ((nd.y - y0) / ((y1 - y0) || 1)) * (H - 2 * PAD - 44);
+    });
+    separate();
+  }
+
+  function median(a) { return pct(a, 0.5); }
+  function pct(a, p) {
+    var b = a.slice().sort(function (x, y) { return x - y; });
+    return b[Math.min(b.length - 1, Math.floor(p * b.length))];
+  }
+  // Push apart circles that still overlap, keeping every node (and room for its label) in the picture.
+  function separate() {
+    var n = nodes.length;
+    for (var pass = 0; pass < 200; pass++) {
+      var moved = false;
+      for (var i = 0; i < n; i++) {
+        for (var j = i + 1; j < n; j++) {
+          var dx = nodes[i].x - nodes[j].x, dy = nodes[i].y - nodes[j].y;
+          var d = Math.sqrt(dx * dx + dy * dy);
+          var gap = nodes[i].r + nodes[j].r + 10;
+          if (d < gap) {
+            if (d < 0.01) { dx = 1; dy = 0; d = 1; }
+            var push = (gap - d) / 2 + 0.05;
+            nodes[i].x += (dx / d) * push; nodes[i].y += (dy / d) * push;
+            nodes[j].x -= (dx / d) * push; nodes[j].y -= (dy / d) * push;
+            moved = true;
+          }
+        }
+      }
+      for (i = 0; i < n; i++) {
+        nodes[i].x = Math.max(nodes[i].r + 8, Math.min(W - nodes[i].r - 8, nodes[i].x));
+        nodes[i].y = Math.max(nodes[i].r + 8, Math.min(H - nodes[i].r - 22, nodes[i].y));
+      }
+      if (!moved) break;
+    }
+  }
+  layout();
+
+  // Labels: busiest nodes first, each tried below, above, right, then left of its circle, and kept
+  // only where it touches no other label and no circle. The rest show on hover or when selected.
+  function placeLabels() {
+    var boxes = [], order = nodes.map(function (_, i) { return i; })
+      .sort(function (a, b) { return nodes[b].lines - nodes[a].lines; });
+    function hits(b) {
+      for (var k = 0; k < boxes.length; k++) {
+        var o = boxes[k];
+        if (b.x < o.x + o.w && b.x + b.w > o.x && b.y < o.y + o.h && b.y + b.h > o.y) return true;
+      }
+      for (k = 0; k < nodes.length; k++) {
+        var c = nodes[k];
+        if (c.x + c.r + 3 > b.x && c.x - c.r - 3 < b.x + b.w && c.y + c.r + 3 > b.y && c.y - c.r - 3 < b.y + b.h) return true;
+      }
+      return false;
+    }
+    order.forEach(function (i) {
+      var n = nodes[i], w = shorten(n.id).length * 6.7 + 4, h = 14;
+      var tries = [
+        { a: "middle", x: n.x, y: n.y + n.r + 12, bx: n.x - w / 2, by: n.y + n.r + 1 },
+        { a: "middle", x: n.x, y: n.y - n.r - 4, bx: n.x - w / 2, by: n.y - n.r - 15 },
+        { a: "start", x: n.x + n.r + 4, y: n.y + 4, bx: n.x + n.r + 3, by: n.y - 7 },
+        { a: "end", x: n.x - n.r - 4, y: n.y + 4, bx: n.x - n.r - w - 3, by: n.y - 7 }
+      ];
+      n.label = null;
+      for (var t = 0; t < tries.length; t++) {
+        var b = { x: tries[t].bx, y: tries[t].by, w: w, h: h };
+        if (b.x < 2 || b.x + b.w > W - 2 || b.y < 2 || b.y + b.h > H - 2) continue;
+        if (!hits(b)) { n.label = tries[t]; boxes.push(b); break; }
+      }
+      if (!n.label) n.label = { a: "middle", x: n.x, y: n.y + n.r + 12, hidden: true };
+    });
+  }
+  function shorten(s) { return s.length > 15 ? s.slice(0, 14) + "\u2026" : s; }
+  placeLabels();
+
+  // ---- drawing --------------------------------------------------------------------------
+  var edgeLayer = el("g", { "class": "rm-edges" }), nodeLayer = el("g", { "class": "rm-nodes" });
+  svg.appendChild(edgeLayer);
+  svg.appendChild(nodeLayer);
+
+  var nodeEls = [], edgeEls = [], neighbours = nodes.map(function () { return {}; });
+
+  edges.forEach(function (e, idx) {
+    var a = nodes[e.a], b = nodes[e.b];
+    neighbours[e.a][e.b] = idx; neighbours[e.b][e.a] = idx;
+    var width = 1 + 6 * Math.sqrt(e.w / maxW);
+    var g = el("g", { "class": "rm-edge" });
+    g.appendChild(el("line", { "class": "rm-hit", x1: a.x, y1: a.y, x2: b.x, y2: b.y, "stroke-width": Math.max(14, width + 8) }));
+    g.appendChild(el("line", { "class": "rm-line", x1: a.x, y1: a.y, x2: b.x, y2: b.y, "stroke-width": width.toFixed(2) }));
+    g.appendChild(el("title", {}, fmt(T.rel_between, { a: a.id, b: b.id }) + " - " + T.rel_strength + " " + num(e.w)));
+    g.addEventListener("click", function (ev) { ev.stopPropagation(); selectEdge(idx); });
+    edgeLayer.appendChild(g);
+    edgeEls.push(g);
+  });
+
+
+  nodes.forEach(function (n, idx) {
+    var g = el("g", { "class": "rm-node t" + n.t, tabindex: "0", role: "button",
+                      "aria-label": n.id + ", " + num(n.lines) + " " + T.rel_lines });
+    g.appendChild(el("circle", { cx: n.x, cy: n.y, r: n.r.toFixed(1) }));
+    g.appendChild(el("text", { x: n.label.x.toFixed(1), y: n.label.y.toFixed(1), "text-anchor": n.label.a,
+                               "class": n.label.hidden ? "rm-lbl off" : "rm-lbl" }, shorten(n.id)));
+    g.appendChild(el("title", {}, n.id + " - " + num(n.lines) + " " + T.rel_lines));
+    g.addEventListener("click", function (ev) { ev.stopPropagation(); selectNode(idx); });
+    g.addEventListener("keydown", function (ev) {
+      if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); selectNode(idx); }
+    });
+    g.addEventListener("mouseenter", function () { focusNode(idx); });
+    g.addEventListener("mouseleave", function () { if (selected === null) clearFocus(); else focusSelection(); });
+    nodeLayer.appendChild(g);
+    nodeEls.push(g);
+  });
+
+  // ---- highlighting ------------------------------------------------------------------------
+  var selected = null;                             // {type: "node"|"edge", i}
+
+  function setClasses(nodeSet, edgeSet, selNode, selEdge) {
+    var dim = !!(nodeSet || edgeSet);
+    svg.classList.toggle("dim", dim);
+    nodeEls.forEach(function (g, i) {
+      g.classList.toggle("hl", !!(nodeSet && nodeSet[i]));
+      g.classList.toggle("sel", selNode === i);
+    });
+    edgeEls.forEach(function (g, i) {
+      g.classList.toggle("hl", !!(edgeSet && edgeSet[i]));
+      g.classList.toggle("sel", selEdge === i);
+    });
+  }
+  function focusNode(i) {
+    var ns = {}, es = {};
+    ns[i] = true;
+    for (var j in neighbours[i]) { ns[j] = true; es[neighbours[i][j]] = true; }
+    setClasses(ns, es, selected && selected.type === "node" ? selected.i : null, null);
+  }
+  function clearFocus() { setClasses(null, null, null, null); }
+  function focusSelection() {
+    if (!selected) return clearFocus();
+    if (selected.type === "node") focusNode(selected.i);
+    else {
+      var e = edges[selected.i], ns = {}, es = {};
+      ns[e.a] = true; ns[e.b] = true; es[selected.i] = true;
+      setClasses(ns, es, null, selected.i);
+    }
+  }
+
+  // ---- details panel --------------------------------------------------------------------------
+  var BUCKETS = ["rel_time0", "rel_time1", "rel_time2", "rel_time3"];
+
+  function reset() {
+    selected = null;
+    clearFocus();
+    info.textContent = T.rel_pick || "";
+  }
+
+  function line(label, parts) { var p = html("p", "ri-row"); p.appendChild(html("b", "", label + " ")); p.appendChild(document.createTextNode(parts)); return p; }
+
+  function selectNode(i) {
+    selected = { type: "node", i: i };
+    focusSelection();
+    var n = nodes[i];
+    info.textContent = "";
+    info.appendChild(html("h4", "ri-title", n.id));
+    info.appendChild(html("p", "ri-meta", num(n.lines) + " " + T.rel_lines + " · " + num(n.words) + " " + T.rel_words));
+    info.appendChild(html("p", "ri-meta", T.rel_active + " " + (T[BUCKETS[n.t]] || "")));
+    if (n.partners && n.partners.length) {
+      info.appendChild(html("h5", "ri-sub", T.rel_partners));
+      var ul = html("ul", "ri-list");
+      n.partners.forEach(function (p) {
+        var li = html("li", ""), idx = -1;
+        nodes.forEach(function (o, k) { if (o.id === p[0]) idx = k; });
+        if (idx >= 0) {
+          var b = html("button", "ri-link", p[0]);
+          b.type = "button";
+          b.addEventListener("click", function () { selectNode(idx); });
+          li.appendChild(b);
+        } else li.appendChild(document.createTextNode(p[0]));
+        li.appendChild(html("span", "ri-num", num(p[1])));
+        ul.appendChild(li);
+      });
+      info.appendChild(ul);
+    }
+  }
+
+  function selectEdge(i) {
+    selected = { type: "edge", i: i };
+    focusSelection();
+    var e = edges[i], a = nodes[e.a].id, b = nodes[e.b].id;
+    info.textContent = "";
+    info.appendChild(html("h4", "ri-title", fmt(T.rel_between, { a: a, b: b })));
+    info.appendChild(html("p", "ri-meta", T.rel_strength + ": " + num(e.w)));
+    function dir(from, to, v) {
+      return line(fmt(T.rel_toward, { a: from, b: to }) + ":",
+                  num(v[0]) + " " + T.rel_direct + ", " + num(v[1]) + " " + T.rel_mentions);
+    }
+    info.appendChild(dir(a, b, e.ab));
+    info.appendChild(dir(b, a, e.ba));
+    info.appendChild(line(T.rel_replies + ":", num(e.ab[2] + e.ba[2])));
+  }
+
+  svg.addEventListener("click", reset);
+  document.addEventListener("keydown", function (ev) { if (ev.key === "Escape" && selected) reset(); });
+  info.textContent = T.rel_pick || "";
+})();
+
+</script>
+<script>
+/* Section bar: shows which section you are reading, and closes the section list after a choice.
+ * pisg writes <nav id="pisg-nav"><details>...</details></nav>. Without this script the list still
+ * opens and every link still works; this only adds the "you are here" label. */
+(function () {
+  "use strict";
+  var nav = document.getElementById("pisg-nav");
+  if (!nav) return;
+  var menu = nav.querySelector("details");
+  var current = document.getElementById("nav-current");
+  // Both lists (the dropdown and the menu down the left) carry the same links: one target per section.
+  var links = Array.prototype.slice.call(nav.querySelectorAll(".nav-list a"));
+  var all = Array.prototype.slice.call(nav.querySelectorAll(".nav-list a, .nav-side-list a"));
+  var targets = links.map(function (a) { return document.getElementById(a.getAttribute("href").slice(1)); });
+  var active = -1, ticking = false;
+
+  function setActive(i) {
+    if (i === active) return;
+    active = i;
+    all.forEach(function (a) {
+      var on = links[i] && a.getAttribute("href") === links[i].getAttribute("href");
+      a.classList.toggle("active", !!on);
+      if (on) a.setAttribute("aria-current", "true"); else a.removeAttribute("aria-current");
+    });
+    if (current && links[i]) current.textContent = links[i].textContent;
+  }
+
+  function update() {
+    ticking = false;
+    var side = window.getComputedStyle(nav).position === "fixed";           // the menu down the left takes no height
+    var line = (side ? 0 : nav.offsetHeight) + 24, i, hit = 0;              // just under the sticky bar
+    for (i = 0; i < targets.length; i++) {
+      if (targets[i] && targets[i].getBoundingClientRect().top <= line) hit = i;
+    }
+    setActive(hit);
+  }
+  function onScroll() { if (!ticking) { ticking = true; (window.requestAnimationFrame || setTimeout)(update); } }
+
+  function close() { if (menu && menu.open) menu.open = false; }
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", onScroll);
+  links.forEach(function (a, i) { a.addEventListener("click", function () { setActive(i); close(); }); });
+  Array.prototype.forEach.call(nav.querySelectorAll(".nav-side-list a"), function (a) {
+    a.addEventListener("click", function () { setActive(links.map(function (l) { return l.getAttribute("href"); }).indexOf(a.getAttribute("href"))); });
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && menu && menu.open) { menu.open = false; menu.querySelector("summary").focus(); }
+  });
+  document.addEventListener("click", function (e) { if (menu && menu.open && !nav.contains(e.target)) close(); });
+  update();
+})();
+
+</script>
+<div id="totallines">Total number of lines: 19140.</div>
 <div id="footer" class="small">
 	<div id="stats_gen">Stats generated by <a href="https://pisg.github.io/" title="Go to the pisg homepage" class="background">pisg</a> v1.0a</div>
-	<div id="stats_text">Stats generated in 00 hours 00 minutes and 00 seconds</div>
+	<div id="stats_text">Stats generated in 00 hours 00 minutes and 01 seconds</div>
 </div>
 
-<!-- NFiles = "0"; Format = "eggdrop"; Lang = "EN"; LangFile = "lang.txt"; Charset = "iso-8859-1"; LogCharset = ""; LogCharsetFallback = ""; LogPrefix = "canada.log."; LogSuffix = ""; NickTracking = "0"; TimeOffset = "+0" -->
+<!-- NFiles = "0"; Format = "eggdrop"; Lang = "EN"; LangFile = "lang.txt"; Charset = "utf-8"; LogCharset = ""; LogCharsetFallback = ""; LogPrefix = "teatime.log."; LogSuffix = ""; NickTracking = "0"; TimeOffset = "+0" -->
 </div>
 </body>
 </html>
