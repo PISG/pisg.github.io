@@ -381,7 +381,7 @@ PAGE = u'''<!DOCTYPE html>
 <title>Documentation — pisg</title>
 <meta name="description" content="The pisg manual: how to install it, how to write pisg.cfg, what every one of its @@NOPTS@@ options does, the optional tools, and a complete example configuration.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%230d1117'/><rect x='18' y='52' width='14' height='30' fill='%2358a6ff'/><rect x='38' y='34' width='14' height='48' fill='%233fd18b'/><rect x='58' y='44' width='14' height='38' fill='%23e5b567'/><rect x='78' y='24' width='14' height='58' fill='%23bc8cff'/></svg>">
-<link rel="stylesheet" href="../assets/site.css">
+<link rel="stylesheet" href="../assets/site.css?v=ae94b127">
 </head>
 <body class="has-sidebar">
 <a class="skip" href="#main">Skip to content</a>
@@ -446,7 +446,7 @@ PAGE = u'''<!DOCTYPE html>
 </div>
 
 <button id="top-btn" title="Back to top" aria-label="Back to top">↑</button>
-<script src="../assets/site.js"></script>
+<script src="../assets/site.js?v=ae94b127"></script>
 </body>
 </html>
 '''

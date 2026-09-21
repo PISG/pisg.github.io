@@ -129,6 +129,25 @@ one before re-running. Each prints an audit at the end: if it does not say
 `leftover source nicks: none`, a real nick made it through and the map at the top of that script needs
 another entry.
 
+## Cache: stamp the assets before pushing
+
+GitHub Pages serves `assets/*` with `Cache-Control: max-age=600`. Push a change and a visitor who
+loaded the site within the last ten minutes gets **new HTML with the CSS and JavaScript they already
+had** — which, when the layout has changed, looks broken rather than merely stale. That happened once
+on `/new/themes/`: the new sidebar markup with the previous stylesheet.
+
+`tools/version-assets.py` prevents it. Every `<link>` and `<script>` carries `?v=<hash of the
+assets>`, so an asset change is a new URL and the two can never come apart. The hash moves only when
+something in `assets/` moves.
+
+```sh
+python3 tools/make-docs.py         # if the documentation changed
+python3 tools/version-assets.py    # always, last, before committing
+```
+
+It also rewrites the template inside `tools/make-docs.py`, so run it **after** the generators, never
+before.
+
 ## Looking at it locally
 
 ```sh
