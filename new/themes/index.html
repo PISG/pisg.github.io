@@ -7,306 +7,281 @@
 <meta name="theme-color" content="#0b0e13">
 <link rel="canonical" href="https://pisg.github.io/themes/">
 <title>Themes — pisg</title>
-<meta name="description" content="The colour schemes pisg ships, how to write your own, and a theme creator that builds one for you: pick the colours, watch a real stats page change, download the CSS.">
+<meta name="description" content="Every pisg colour scheme — the four modern ones and the eight classics, converted — and a theme creator: pick the colours in the sidebar, watch a real stats page change at full width, download the CSS.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%230d1117'/><rect x='18' y='52' width='14' height='30' fill='%2358a6ff'/><rect x='38' y='34' width='14' height='48' fill='%233fd18b'/><rect x='58' y='44' width='14' height='38' fill='%23e5b567'/><rect x='78' y='24' width='14' height='58' fill='%23bc8cff'/></svg>">
 <link rel="stylesheet" href="../assets/site.css">
 </head>
-<body id="top">
+<body class="has-sidebar themes-page">
 <a class="skip" href="#main">Skip to content</a>
 
-<header class="top">
-  <div class="wrap">
-    <a class="brand" href="../" aria-label="pisg — home">
-      <span><span class="dollar">$</span>&nbsp;pisg</span>
-      <span class="ver">1.0a</span>
-    </a>
-    <button class="menu-btn" id="menu-btn" aria-expanded="false" aria-controls="navlinks"><span aria-hidden="true">&#9776;</span><span class="sr-only">Menu</span></button>
-    <nav class="links" id="navlinks" aria-label="Main">
-      <a href="../">Home</a>
-      <a href="../docs/">Documentation</a>
-      <a href="../changelog/">Changelog</a>
-      <a href="./" aria-current="page">Themes</a>
-      <span class="sep" aria-hidden="true"></span>
-      <a class="ext" href="../demo/">Live example &#8599;</a>
-      <a class="x-reg" href="https://github.com/PISG/pisg">GitHub &#8599;</a>
-    </nav>
-  </div>
-</header>
+<div class="layout" id="maker">
 
+<!-- =====================================================================
+     SIDEBAR — the whole theme editor lives here, so the page itself is
+     free to be as wide as the window allows.
+     ===================================================================== -->
+<nav class="sidebar" id="sidebar" aria-label="Theme editor">
+  <a class="logo" href="../">
+    <span class="dollar">$</span>
+    <span><b>pisg</b><small>1.0a &middot; THEMES</small></span>
+  </a>
+
+  <!-- ---------- the themes ---------- -->
+  <div class="sb-sec">
+    <h5>Modern <small>1.0a</small></h5>
+    <div id="thm-modern" class="thm-list"></div>
+
+    <h5>Classic <small>converted</small></h5>
+    <div id="thm-classic" class="thm-list"></div>
+  </div>
+
+  <!-- ---------- your theme ---------- -->
+  <div class="sb-sec">
+    <h5>Your theme</h5>
+    <div class="mk-strip" id="mk-strip" aria-hidden="true"></div>
+    <div class="mk-filename">
+      <span class="mk-dir">layout/</span>
+      <input type="text" id="mk-name" value="mytheme" maxlength="32" spellcheck="false"
+             autocomplete="off" aria-label="Theme name">
+      <span class="mk-ext">.css</span>
+    </div>
+    <div class="mk-seg" id="mk-mode" role="group" aria-label="Base">
+      <button type="button" data-v="dark" class="on">Dark</button>
+      <button type="button" data-v="light">Light</button>
+    </div>
+    <div class="mk-actions">
+      <button class="btn small" type="button" id="mk-shuffle"><span aria-hidden="true">&#9850;</span> Shuffle</button>
+      <button class="btn small" type="button" id="mk-reset">Reset</button>
+    </div>
+    <div class="mk-actions">
+      <a class="btn small primary" id="mk-download" download="mytheme.css" href="#">Download .css</a>
+    </div>
+  </div>
+
+  <!-- ---------- the sixteen colours ---------- -->
+  <div class="sb-sec">
+    <h5>Page <small>surfaces and rules</small></h5>
+    <div class="mk-colors" id="mk-group-page"></div>
+
+    <h5>Text &amp; accent</h5>
+    <div class="mk-colors" id="mk-group-text"></div>
+
+    <h5>Time of day <small>the bars</small></h5>
+    <div class="mk-colors" id="mk-group-time"></div>
+
+    <h5>Gender <small>with <code>sex=</code></small></h5>
+    <div class="mk-colors" id="mk-group-sex"></div>
+  </div>
+
+  <!-- ---------- readability ---------- -->
+  <div class="sb-sec">
+    <h5>Readability</h5>
+    <ul class="mk-contrast" id="mk-contrast"></ul>
+  </div>
+
+  <div class="sb-sec sb-foot">
+    <a href="../">Home</a> &middot; <a href="../docs/#ColorScheme">Docs</a> &middot;
+    <a href="../demo/">Example</a> &middot;
+    <a href="https://github.com/PISG/pisg">GitHub &#8599;</a>
+  </div>
+</nav>
+
+<!-- =====================================================================
+     MAIN — the preview, at whatever width the window has
+     ===================================================================== -->
+<div class="main wide"><div class="wrap">
 <main id="main" tabindex="-1">
 
-<div style="border-bottom:1px solid var(--border);background:var(--bg2);padding:46px 0 40px">
-  <div class="wrap">
-    <p class="kicker">Themes</p>
-    <h2>One line of config changes how the whole page looks.</h2>
-    <p class="lede"><code>&lt;set ColorScheme="modern"&gt;</code> is the entire change. Four modern
-    schemes ship with 1.0a, the eight classic ones are untouched &mdash; and if none of them is right,
-    the creator further down this page will build yours in a couple of minutes.</p>
-    <div class="cta-row">
-      <a class="btn" href="#shipped">What ships</a>
-      <a class="btn" href="#own">Write your own</a>
-      <a class="btn primary" href="#creator">Theme creator <span class="arrow" aria-hidden="true">&rarr;</span></a>
-    </div>
+<button class="side-btn" id="side-btn" aria-expanded="false" aria-controls="sidebar">&#9776; Themes &amp; colours</button>
+
+<div class="mk-topbar">
+  <div class="mk-topbar-text">
+    <h1>Theme creator</h1>
+    <p>Pick a theme or a colour on the left. The preview is a complete page pisg generated &mdash;
+    all nineteen sections of a busy channel, from the overview to the relation map &mdash; restyled as
+    you work. The file you download is the <code>modern</code> stylesheet with your palette in it.</p>
+  </div>
+  <div class="badges">
+    <span class="badge hot">4 modern</span>
+    <span class="badge">8 classic, converted</span>
+    <span class="badge gold">16 colours</span>
   </div>
 </div>
 
-<!-- ===================== SHIPPED ===================== -->
+<div class="mk-frame">
+  <div class="mk-frame-bar">
+    <span class="mk-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="mk-frame-title" id="mk-frame-title">#nightshift &mdash; mytheme</span>
+    <span class="mk-seg mk-seg-sm" id="mk-width" role="group" aria-label="Preview width">
+      <button type="button" data-v="wide" class="on">Desktop</button>
+      <button type="button" data-v="narrow">Phone</button>
+    </span>
+    <a class="btn small" id="mk-open" href="../demo/nightshift.html" target="_blank" rel="noopener">Open &#8599;</a>
+  </div>
+  <div class="mk-frame-body" id="mk-frame-body">
+    <iframe id="mk-iframe" src="../demo/nightshift.html" title="Live preview of a full pisg statistics page with your theme"></iframe>
+  </div>
+</div>
+
+<div class="mk-out">
+  <div class="mk-out-bar">
+    <span class="mk-out-name" id="mk-filename">mytheme.css</span>
+    <button class="btn small" type="button" id="mk-copy">Copy CSS</button>
+    <button class="btn small" type="button" id="mk-share">Copy link</button>
+    <a class="btn small primary" href="#" id="mk-download-2" download="mytheme.css">Download</a>
+  </div>
+  <pre id="mk-css" class="mk-css">/* the stylesheet appears here */</pre>
+  <p class="mk-note">Save it as <code id="mk-path">layout/mytheme.css</code>, put
+  <code id="mk-set">&lt;set ColorScheme="mytheme"&gt;</code> in <code>pisg.cfg</code>, run pisg.
+  Nothing is uploaded and nothing is stored &mdash; the file is built in your browser, and
+  <em>Copy link</em> puts the palette in the address bar so you can send it to somebody.</p>
+</div>
+
+<noscript>
+  <div class="note warn" style="margin-top:20px">The creator needs JavaScript. Without it, copy
+  <code>layout/modern.css</code> and edit the sixteen variables at the top by hand &mdash; that is
+  all the creator does anyway.</div>
+</noscript>
+
+<!-- ================= SHIPPED ================= -->
 <section id="shipped">
-  <div class="wrap">
-    <header>
-      <p class="kicker">What ships</p>
-      <h2>Four new, eight classic.</h2>
-      <p class="lede">Every preview is the short sample page pisg generates for that scheme &mdash; six
-      nicks over two days, so what you are looking at is the theme, not the data.</p>
-    </header>
+  <h2><span class="hash">#</span>What ships</h2>
+  <p class="sec-intro">Four schemes came with 1.0a and eight have been in the box since the
+  SourceForge days. <code>&lt;set ColorScheme="modern"&gt;</code> in <code>pisg.cfg</code> is the
+  whole change. The sample pages are real pisg output &mdash; six nicks over two days, so what you
+  are looking at is the theme, not the data.</p>
 
-    <div class="grid g4">
-      <a class="card themecard" href="../demo/themes/modern.html">
-        <div class="sw" aria-hidden="true">
-          <span style="background:#f5f6f8"></span><span style="background:#2563eb"></span><span style="background:#34d399"></span><span style="background:#fbbf24"></span><span style="background:#f87171"></span>
-        </div>
-        <div class="meta">
-          <h3>modern</h3>
-          <p>Clean cards on paper, blue accent. Follows the reader's light/dark setting.</p>
-          <span class="more">Preview &rarr;</span>
-        </div>
-      </a>
-      <a class="card themecard" href="../demo/themes/midnight.html">
-        <div class="sw" aria-hidden="true">
-          <span style="background:#131722"></span><span style="background:#7aa2ff"></span><span style="background:#2fbf8f"></span><span style="background:#e5b13a"></span><span style="background:#ef6b6b"></span>
-        </div>
-        <div class="meta">
-          <h3>midnight</h3>
-          <p>Deep blue-black, easy on the eyes, colour kept for the data.</p>
-          <span class="more">Preview &rarr;</span>
-        </div>
-      </a>
-      <a class="card themecard" href="../demo/themes/amoled.html">
-        <div class="sw" aria-hidden="true">
-          <span style="background:#000"></span><span style="background:#b18cff"></span><span style="background:#2fbf8f"></span><span style="background:#e5b13a"></span><span style="background:#ef6b6b"></span>
-        </div>
-        <div class="meta">
-          <h3>amoled</h3>
-          <p>True black for OLED screens, and for people who simply like it that way.</p>
-          <span class="more">Preview &rarr;</span>
-        </div>
-      </a>
-      <a class="card themecard" href="../demo/themes/terminal.html">
-        <div class="sw" aria-hidden="true">
-          <span style="background:#050805"></span><span style="background:#3dff7a"></span><span style="background:#f0e040"></span><span style="background:#2f9bff"></span><span style="background:#ff5f5f"></span>
-        </div>
-        <div class="meta">
-          <h3>terminal</h3>
-          <p>Monospace and phosphor green, for the people who never left the console.</p>
-          <span class="more">Preview &rarr;</span>
-        </div>
-      </a>
-    </div>
-
-    <div class="grid g2" style="margin-top:16px">
-      <a class="card themecard" href="../demo/themes/default.html">
-        <div class="sw" aria-hidden="true">
-          <span style="background:#fff"></span><span style="background:#bbbbdb"></span><span style="background:#ccc"></span><span style="background:#000080"></span><span style="background:#ff0000"></span>
-        </div>
-        <div class="meta">
-          <h3>default</h3>
-          <p>The page pisg has written since 2001, unchanged. Still the default, so an old setup that
-          upgrades to 1.0a looks the way it always did.</p>
-          <span class="more">Preview &rarr;</span>
-        </div>
-      </a>
-      <div class="card">
-        <span class="ico">&#9636; classic schemes</span>
-        <h3>Seven more in the box</h3>
-        <p style="margin-bottom:12px">Shipped since the SourceForge days and still fine:</p>
-        <div class="chips">
-          <span class="chip">darkgalaxy</span><span class="chip">darkred</span>
-          <span class="chip">justgrey</span><span class="chip">ocean</span>
-          <span class="chip">orange_grey</span><span class="chip">pisg</span>
-          <span class="chip">softgreen</span>
-        </div>
-        <p style="margin-top:12px">Set any of them the same way:
-        <code>&lt;set ColorScheme="ocean"&gt;</code>.</p>
+  <div class="grid g4">
+    <a class="card themecard" href="../demo/themes/modern.html">
+      <div class="sw" aria-hidden="true">
+        <span style="background:#f5f6f8"></span><span style="background:#2563eb"></span><span style="background:#34d399"></span><span style="background:#fbbf24"></span><span style="background:#f87171"></span>
       </div>
-    </div>
+      <div class="meta">
+        <h3>modern</h3>
+        <p>Clean cards on paper, blue accent. Follows the reader's light/dark setting.</p>
+        <span class="more">Sample page &rarr;</span>
+      </div>
+    </a>
+    <a class="card themecard" href="../demo/themes/midnight.html">
+      <div class="sw" aria-hidden="true">
+        <span style="background:#0e1116"></span><span style="background:#7aa2ff"></span><span style="background:#2fbf8f"></span><span style="background:#e5b13a"></span><span style="background:#ef6b6b"></span>
+      </div>
+      <div class="meta">
+        <h3>midnight</h3>
+        <p>Deep blue-black, easy on the eyes, colour kept for the data.</p>
+        <span class="more">Sample page &rarr;</span>
+      </div>
+    </a>
+    <a class="card themecard" href="../demo/themes/amoled.html">
+      <div class="sw" aria-hidden="true">
+        <span style="background:#000"></span><span style="background:#b18cff"></span><span style="background:#2fbf8f"></span><span style="background:#e5b13a"></span><span style="background:#ef6b6b"></span>
+      </div>
+      <div class="meta">
+        <h3>amoled</h3>
+        <p>True black for OLED screens, and for people who simply like it that way.</p>
+        <span class="more">Sample page &rarr;</span>
+      </div>
+    </a>
+    <a class="card themecard" href="../demo/themes/terminal.html">
+      <div class="sw" aria-hidden="true">
+        <span style="background:#050805"></span><span style="background:#3dff7a"></span><span style="background:#f0e040"></span><span style="background:#2f9bff"></span><span style="background:#ff5f5f"></span>
+      </div>
+      <div class="meta">
+        <h3>terminal</h3>
+        <p>Monospace and phosphor green, for the people who never left the console.</p>
+        <span class="more">Sample page &rarr;</span>
+      </div>
+    </a>
+  </div>
+
+  <h3 class="sub" style="margin-top:34px">The eight classics, brought forward</h3>
+  <p class="sec-intro">The old schemes still work exactly as they always did &mdash;
+  <code>&lt;set ColorScheme="ocean"&gt;</code> and you get the page you remember. They have also been
+  <strong>converted to the 1.0a palette</strong>, so you can have the classic colours with the new
+  layout and the new sections: pick one in the sidebar and download it. The conversion keeps each
+  theme's own link colour, headline colour and its four bar colours &mdash; read straight out of the
+  sprite each file carries &mdash; and lifts anything that would not have read on the new layout.</p>
+  <div class="chips">
+    <span class="chip">default</span><span class="chip">pisg</span>
+    <span class="chip">darkgalaxy</span><span class="chip">darkred</span>
+    <span class="chip">justgrey</span><span class="chip">ocean</span>
+    <span class="chip">orange_grey</span><span class="chip">softgreen</span>
   </div>
 </section>
 
-<!-- ===================== YOUR OWN ===================== -->
+<!-- ================= YOUR OWN ================= -->
 <section id="own">
-  <div class="wrap">
-    <header>
-      <p class="kicker">Write your own</p>
-      <h2>A theme is one CSS file. That is the whole mechanism.</h2>
-      <p class="lede">pisg writes plain HTML with stable class names and drops your stylesheet into the
-      page. There is no template language, no build step and nothing to learn beyond CSS.</p>
-    </header>
+  <h2><span class="hash">#</span>Write your own, by hand</h2>
+  <p class="sec-intro">A theme is one CSS file. pisg writes plain HTML with stable class names and
+  drops your stylesheet into the page &mdash; no template language, no build step, nothing to learn
+  beyond CSS. The creator above is a convenience, not a requirement.</p>
 
-    <div class="console">
-      <div class="bar"><i></i><i></i><i></i><span>making a theme by hand</span></div>
+  <div class="console">
+    <div class="bar"><i></i><i></i><i></i><span>making a theme by hand</span></div>
 
-      <div class="crow">
-        <span class="cnum">1</span>
-        <div>
-          <div class="cmdline"><span class="cmd">cp</span> <span class="arg">layout/modern.css layout/mytheme.css</span></div>
-          <span class="cnote">Start from whichever shipped theme is closest. The four modern ones are
-          built from a single palette at the top of the file, so in most cases the sixteen
-          <code>--variables</code> are the only lines you need to touch.</span>
-        </div>
-        <button class="copybtn" type="button">Copy</button>
+    <div class="crow">
+      <span class="cnum">1</span>
+      <div>
+        <div class="cmdline"><span class="cmd">cp</span> <span class="arg">layout/modern.css layout/mytheme.css</span></div>
+        <span class="cnote">Start from whichever theme is closest. The modern ones are built from a
+        single palette at the top of the file, so in most cases the sixteen
+        <code>--variables</code> are the only lines you need to touch.</span>
       </div>
-
-      <div class="crow">
-        <span class="cnum">2</span>
-        <div>
-          <div class="cmdline"><span class="cmd">&lt;set</span> <span class="arg">ColorScheme="mytheme"</span><span class="cmd">&gt;</span></div>
-          <span class="cnote">Put that in <code>pisg.cfg</code> and run pisg. The name is the file name
-          in <code>layout/</code> without <code>.css</code>. Give a path or a URL instead and pisg links
-          to it rather than embedding it; <code>"none"</code> writes the body only, for pasting into a
-          page of your own. See <a href="../docs/#ColorScheme">ColorScheme</a> and
-          <a href="../docs/#CssDir">CssDir</a>.</span>
-        </div>
-        <button class="copybtn" type="button">Copy</button>
-      </div>
-
-      <div class="crow">
-        <span class="cnum">3</span>
-        <div>
-          <div class="cmdline"><span class="cmd">python3</span> <span class="arg">layout/build-themes.py</span></div>
-          <span class="cnote">Optional. The modern schemes are generated from one stylesheet with a
-          palette per theme, so adding yours to that script keeps every theme in step when the
-          stylesheet changes. Edit the palette table at the top, run it, and your CSS file is written
-          with the others.</span>
-        </div>
-        <button class="copybtn" type="button">Copy</button>
-      </div>
+      <button class="copybtn" type="button">Copy</button>
     </div>
 
-    <div class="note" style="margin-top:22px"><strong>The sixteen variables.</strong> Everything else in
-    the file is layout. <code>--bg</code>, <code>--fg</code>, <code>--muted</code>, <code>--card</code>,
-    <code>--row</code>, <code>--row-alt</code>, <code>--line</code>, <code>--accent</code>,
-    <code>--head</code>, the four time-of-day colours <code>--blue</code> (night), <code>--green</code>
-    (morning), <code>--yellow</code> (afternoon), <code>--red</code> (evening), then
-    <code>--male</code>, <code>--female</code> and <code>--shadow</code>.</div>
+    <div class="crow">
+      <span class="cnum">2</span>
+      <div>
+        <div class="cmdline"><span class="cmd">&lt;set</span> <span class="arg">ColorScheme="mytheme"</span><span class="cmd">&gt;</span></div>
+        <span class="cnote">Put that in <code>pisg.cfg</code> and run pisg. The name is the file name
+        in <code>layout/</code> without <code>.css</code>. Give a path or a URL instead and pisg links
+        to it rather than embedding it; <code>"none"</code> writes the body only, for pasting into a
+        page of your own. See <a href="../docs/#ColorScheme">ColorScheme</a> and
+        <a href="../docs/#CssDir">CssDir</a>.</span>
+      </div>
+      <button class="copybtn" type="button">Copy</button>
+    </div>
 
-    <div class="note warn">Keep the four time-of-day colours distinguishable from each other: they are
-    the bars in <em>most active times</em>, <em>daily activity</em> and the relation map, and they are
-    the one place where colour carries meaning rather than decoration. The creator below shows the
-    contrast figures as you go.</div>
+    <div class="crow">
+      <span class="cnum">3</span>
+      <div>
+        <div class="cmdline"><span class="cmd">python3</span> <span class="arg">layout/build-themes.py</span></div>
+        <span class="cnote">Optional. The modern schemes are generated from one stylesheet with a
+        palette per theme, so adding yours to that script keeps every theme in step when the
+        stylesheet changes.</span>
+      </div>
+      <button class="copybtn" type="button">Copy</button>
+    </div>
   </div>
+
+  <div class="note"><strong>The sixteen variables.</strong> Everything else in the file is layout.
+  <code>--bg</code>, <code>--fg</code>, <code>--muted</code>, <code>--card</code>, <code>--row</code>,
+  <code>--row-alt</code>, <code>--line</code>, <code>--accent</code>, <code>--head</code>, the four
+  time-of-day colours <code>--blue</code> (night), <code>--green</code> (morning),
+  <code>--yellow</code> (afternoon), <code>--red</code> (evening), then <code>--male</code>,
+  <code>--female</code> and <code>--shadow</code>.</div>
+
+  <div class="note warn">Keep the four time-of-day colours distinguishable from each other: they are
+  the bars in <em>most active times</em>, <em>daily activity</em> and the relation map, and the one
+  place where colour carries meaning rather than decoration. The sidebar checks that as you go.</div>
 </section>
 
-<!-- ===================== CREATOR ===================== -->
-<section id="creator">
-  <div class="wrap">
-    <header>
-      <p class="kicker">Theme creator</p>
-      <h2>Pick the colours. Watch a real page change. Take the file.</h2>
-      <p class="lede">The preview on the right is an actual page pisg generated, restyled live as you
-      move the controls. What you download is the modern stylesheet with your palette in it &mdash;
-      the same file <code>build-themes.py</code> would write.</p>
-    </header>
-
-    <div class="maker" id="maker">
-      <!-- ---------- controls ---------- -->
-      <div class="maker-controls">
-        <div class="mk-row">
-          <label class="mk-field">
-            <span>Theme name</span>
-            <input type="text" id="mk-name" value="mytheme" maxlength="32" spellcheck="false" autocomplete="off">
-          </label>
-          <label class="mk-field">
-            <span>Base</span>
-            <select id="mk-mode">
-              <option value="dark">dark</option>
-              <option value="light">light</option>
-            </select>
-          </label>
-        </div>
-
-        <div class="mk-row">
-          <label class="mk-field">
-            <span>Start from</span>
-            <select id="mk-preset">
-              <option value="midnight">midnight</option>
-              <option value="modern">modern</option>
-              <option value="amoled">amoled</option>
-              <option value="terminal">terminal</option>
-            </select>
-          </label>
-          <div class="mk-field">
-            <span>&nbsp;</span>
-            <div class="mk-btns">
-              <button class="btn small" type="button" id="mk-shuffle">Shuffle</button>
-              <button class="btn small" type="button" id="mk-reset">Reset</button>
-            </div>
-          </div>
-        </div>
-
-        <h3 class="mk-head">Page</h3>
-        <div class="mk-grid" id="mk-group-page"></div>
-
-        <h3 class="mk-head">Text &amp; accent</h3>
-        <div class="mk-grid" id="mk-group-text"></div>
-
-        <h3 class="mk-head">Time of day <small>the bars, and the relation map</small></h3>
-        <div class="mk-grid" id="mk-group-time"></div>
-
-        <h3 class="mk-head">Gender colours <small>only used when you set <code>sex=</code></small></h3>
-        <div class="mk-grid" id="mk-group-sex"></div>
-
-        <h3 class="mk-head">Contrast</h3>
-        <ul class="mk-contrast" id="mk-contrast"></ul>
-      </div>
-
-      <!-- ---------- preview ---------- -->
-      <div class="maker-preview">
-        <div class="mk-frame">
-          <div class="mk-frame-bar">
-            <i></i><i></i><i></i>
-            <span id="mk-frame-title">stats page &mdash; live preview</span>
-            <a class="btn small" id="mk-open" href="../demo/themes/modern.html" target="_blank" rel="noopener">Open full page &#8599;</a>
-          </div>
-          <iframe id="mk-iframe" src="../demo/themes/modern.html" title="Live preview of a pisg statistics page with your theme" loading="lazy"></iframe>
-        </div>
-
-        <div class="mk-out">
-          <div class="mk-out-bar">
-            <span id="mk-filename">mytheme.css</span>
-            <button class="btn small" type="button" id="mk-copy">Copy CSS</button>
-            <a class="btn small primary" id="mk-download" download="mytheme.css" href="#">Download</a>
-            <button class="btn small" type="button" id="mk-share">Copy link</button>
-          </div>
-          <pre id="mk-css" class="mk-css">/* the stylesheet appears here */</pre>
-          <p class="mk-note">Save it as <code id="mk-path">layout/mytheme.css</code>, then put
-          <code id="mk-set">&lt;set ColorScheme="mytheme"&gt;</code> in <code>pisg.cfg</code> and run
-          pisg. Nothing is uploaded anywhere &mdash; the file is built in your browser, and the
-          <em>Copy link</em> button just puts the palette in the address bar so you can send it to
-          somebody.</p>
-        </div>
-      </div>
-    </div>
-
-    <noscript>
-      <div class="note warn" style="margin-top:20px">The creator needs JavaScript. Without it, copy
-      <code>layout/modern.css</code> and edit the sixteen variables at the top by hand &mdash; that is
-      all the creator does anyway.</div>
-    </noscript>
-  </div>
-</section>
-
-</main>
-
-<footer class="site">
-  <div class="wrap">
-    <div class="foot-bottom" style="border-top:0;padding-top:0">
-      <span class="foot-mark"><span style="color:var(--accent)">$</span> pisg 1.0a &mdash; GPL-2.0-or-later</span>
-      <span><a href="../">Home</a> &middot; <a href="../privacy/">Privacy</a> &middot;
-      <a href="../cookies/">Cookies</a> &middot; <a href="../terms/">Terms</a></span>
-    </div>
-  </div>
+<footer>
+  <p><a href="../">pisg</a> &middot; <a href="../docs/">Documentation</a> &middot;
+  <a href="../changelog/">Changelog</a> &middot; <a href="../demo/">Live example</a> &middot;
+  <a href="https://github.com/PISG/pisg">GitHub</a></p>
+  <p style="margin-top:8px"><a href="../privacy/">Privacy</a> &middot;
+  <a href="../cookies/">Cookies</a> &middot; <a href="../terms/">Terms</a></p>
+  <p style="margin-top:8px">pisg 1.0a is free software under the GPL, version 2 or later. Started in
+  2001 by Morten &ldquo;mbrix&rdquo; Brix Pedersen.</p>
 </footer>
 
+</main>
+</div></div>
+</div>
+
+<button id="top-btn" title="Back to top" aria-label="Back to top">&uarr;</button>
 <script src="../assets/site.js"></script>
 <script src="../assets/theme-maker.js"></script>
 </body>

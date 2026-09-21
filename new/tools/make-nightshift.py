@@ -193,7 +193,7 @@ h = h.replace('#nightshift @ Undernet stats by ' + MAINT_OLD,
 h = h.replace(
   '<nav class="pisg-nav"',
   '<p class="subtitle" style="max-width:74ch;margin:0 auto 6px">'
-  '<em>Example page for <a href="../index.html">pisg.github.io</a> &mdash; the output of pisg 1.0 '
+  '<em>Example page for <a href="../">pisg.github.io</a> &mdash; the output of pisg 1.0a '
   'at the scale of a channel that never sleeps. The channel, the people and everything they say here '
   'are invented; the numbers and the layout are a real pisg run.</em></p>\n'
   '<nav class="pisg-nav"', 1)

@@ -13,7 +13,7 @@ Live site (current): <https://pisg.github.io/> · Source of pisg: <https://githu
 | --- | --- | --- |
 | `/` | `index.html` | Landing page: what pisg is, quick start, what's new in 1.0, themes, log formats, optional tools, FAQ, credits |
 | `/docs/` | `docs/index.html` | The manual: setup guide, all 108 options, the optional tools and a complete example `pisg.cfg` |
-| `/themes/` | `themes/index.html` | The colour schemes, how to write one by hand, and the theme creator |
+| `/themes/` | `themes/index.html` | Every colour scheme, how to write one by hand, and the theme creator. Full-width, with the twelve themes in the sidebar |
 | `/changelog/` | `changelog/index.html` | Release notes, newest first. 1.0a in full, then 0.80-preview2, 0.80-preview, 0.73 |
 | `/privacy/` | `privacy/index.html` | Privacy policy — and the checklist for people who publish statistics about real channels |
 | `/cookies/` | `cookies/index.html` | Cookie policy: there are none, and why that means no consent banner |
@@ -26,22 +26,63 @@ Live site (current): <https://pisg.github.io/> · Source of pisg: <https://githu
 | `/demo/nightshift.html` | | Example stats page — a very busy channel, every 1.0a section |
 | `/demo/basement.html` | | Example stats page — a quiet channel, with user pictures on |
 | `/demo/themes/…` | | The short sample page in each colour scheme, for the theme gallery |
-| &mdash; | `tools/*.py` | The scripts that generate `docs/` and everything in `demo/` (not part of the published site) |
+| &mdash; | `tools/*.py` | The scripts that generate `docs/`, the classic palettes and everything in `demo/` (not part of the published site) |
 
 ## The theme creator
 
-`/themes/#creator` builds a pisg colour scheme in the browser. It fetches the stylesheet of the
-shipped `modern` theme out of `demo/themes/modern.html`, swaps the sixteen palette variables for the
-ones you pick, injects the result into the preview frame — a real generated stats page — and offers
-the finished file as a download. It also reports contrast: four WCAG ratios, plus the hue gap between
-the closest pair of time-of-day colours (a contrast ratio is the wrong test there; blue and red can be
-obviously different and still score 1.1:1).
+`/themes/` builds a pisg colour scheme in the browser. It fetches the `modern` stylesheet out of
+`demo/nightshift.html`, swaps the sixteen palette variables for the ones you pick, injects the result
+into the preview frame and offers the finished file as a download.
+
+The preview is **the full busy-channel example**, not the six-nick sample: all nineteen sections, the
+relation map, the section menu, the tables with user pictures. That is the point of the page — you
+are judging a theme against everything pisg can put on a page. Taking the template from the same file
+also means the downloaded CSS carries the rules for the sections 1.0a added, which the older sample
+pages in `demo/themes/` do not have.
+
+**The whole editor lives in the sidebar** — the twelve themes (four modern, eight classics), the
+file name, light/dark, the sixteen colours and the readability read-out. The main column holds only
+the preview, the generated file and the reference sections, and it is unconstrained
+(`body.themes-page` widens the sidebar to 328 px; `.main.wide` drops the 900 px cap that the other
+sidebar page, `/docs/`, keeps). The preview frame is `100vh` minus the chrome, so the example stats
+page is as large as the window allows. This is the only page on the site that is wider than 1080 px.
+
+The interface deliberately has **no native form controls**: presets are cards with their own swatch
+strips, light/dark and the preview width are segmented switches, and the file name is a text field
+between a fixed `layout/` and `.css`. Browser dropdowns cannot be styled to match a dark site, so
+there are none. (`assets/site.css` does carry a proper `select` style with its own arrow, for the day
+one is unavoidable.)
+
+It also reports readability: four WCAG contrast ratios, plus the hue gap between the two closest
+time-of-day colours. A contrast ratio is the wrong test there — blue and red can be obviously
+different and still score 1.1:1 — so that line measures hue separation instead, in degrees.
 
 Nothing is uploaded and nothing is stored: the palette lives in the URL hash, so a theme can be
 bookmarked or sent to somebody. That keeps the promise the cookie policy makes.
 
+### The eight classics, converted
+
+`tools/make-classic-palettes.py` reads the old hand-written stylesheets out of the pisg distribution
+(`layout/default.css`, `ocean.css`, …) and turns each one into a 1.0a palette:
+
+- `body`, `.hicell`, `.tdtop`, `.rankc` and `.headtext` become the surfaces, rules and heading colour;
+- each theme's **own bar colours** are decoded out of the four-colour PNG sprite embedded in its CSS
+  (they all turn out to share `#3366ff` / `#66cc33` / `#cccc33` / `#cc3333` — the classic bars);
+- a colour that would not have read on the new layout keeps its hue and is moved in lightness until
+  it does, because the hue is what makes a theme recognisable.
+
+It writes the `CLASSIC` block inside `assets/theme-maker.js`:
+
+```sh
+python3 tools/make-classic-palettes.py           # print it
+python3 tools/make-classic-palettes.py --write   # replace the block in theme-maker.js
+```
+
+Edit `SRC` at the top if the pisg checkout is somewhere else. Do not edit the block by hand — it is
+regenerated.
+
 If `build-themes.py` in the pisg repository ever changes the palette variables, update `FIELDS` and
-`PRESETS` at the top of `assets/theme-maker.js` to match.
+`MODERN` at the top of `assets/theme-maker.js` to match.
 
 ## URLs have no `.html`
 

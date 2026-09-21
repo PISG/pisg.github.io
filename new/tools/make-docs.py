@@ -89,7 +89,7 @@ guide2 = re.sub(
   '<p>The four modern schemes are generated from one palette by '
   '<code>layout/build-themes.py</code>, so to change them all at once &mdash; or add a fifth in the '
   'same style &mdash; edit the palette in that script and run it, rather than editing the CSS files '
-  'one by one. There is also a <a href="../themes/#creator">theme creator</a> on this site that '
+  'one by one. There is also a <a href="../themes/">theme creator</a> on this site that '
   'builds the file for you.</p>\n'
   '<p>If you have made a stylesheet others could use, open a pull request on '
   '<a href="https://github.com/PISG/pisg">GitHub</a> so it can ship with the next version.</p>',

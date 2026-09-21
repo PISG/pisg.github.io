@@ -187,7 +187,7 @@ h = h.replace('#Canada', '#basement').replace('#canada', '#basement')
 h = h.replace(
   '<nav class="pisg-nav"',
   '<p class="subtitle" style="max-width:74ch;margin:0 auto 6px">'
-  '<em>Example page for <a href="../index.html">pisg.github.io</a> &mdash; a small channel, with user '
+  '<em>Example page for <a href="../">pisg.github.io</a> &mdash; a small channel, with user '
   'pictures switched on. The channel, the people and everything they say here are invented; the numbers '
   'and the layout are a real pisg run.</em></p>\n'
   '<nav class="pisg-nav"', 1)
