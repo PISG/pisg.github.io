@@ -15,7 +15,7 @@ no `localStorage`.
 | URL | File | What it is |
 | --- | --- | --- |
 | `/` | `index.html` | Landing page: what pisg is, quick start, what's new in 1.0, themes, log formats, optional tools, FAQ, credits |
-| `/docs/` | `docs/index.html` | The manual: setup guide, all 108 options, the optional tools and a complete example `pisg.cfg` |
+| `/docs/` | `docs/index.html` | The manual: setup guide, upgrading to 1.0a, all 106 options, the optional tools and a complete example `pisg.cfg`. Full-width, with the site's top bar |
 | `/themes/` | `themes/index.html` | Every colour scheme, how to write one by hand, and the theme creator. Full-width, with the twelve themes in the sidebar |
 | `/changelog/` | `changelog/index.html` | Release notes, newest first. 1.0a in full, then 0.80-preview2, 0.80-preview, 0.73 |
 | `/privacy/` | `privacy/index.html` | Privacy policy — and the checklist for people who publish statistics about real channels |
@@ -46,9 +46,9 @@ also means the downloaded CSS carries the rules for every section 1.0a writes.
 **The whole editor lives in the sidebar** — the twelve themes (four modern, eight classics), the
 file name, light/dark, the sixteen colours and the readability read-out. The main column holds only
 the preview, the generated file and the reference sections, and it is unconstrained
-(`body.themes-page` widens the sidebar to 328 px; `.main.wide` drops the 900 px cap that the other
-sidebar page, `/docs/`, keeps). The preview frame is `100vh` minus the chrome, so the example stats
-page is as large as the window allows. This is the only page on the site that is wider than 1080 px.
+(`body.themes-page` widens the sidebar to 328 px; `.main.wide` drops the 900 px cap on the content
+column). The preview frame is `100vh` minus the chrome, so the example stats page is as large as the
+window allows. It and `/docs/` are the two pages on the site that are wider than 1080 px.
 
 The interface deliberately has **no native form controls**: presets are cards with their own swatch
 strips, light/dark and the preview width are segmented switches, and the file name is a text field
@@ -172,7 +172,8 @@ bug in the page — on a web server, including GitHub Pages, it works.
 `docs/index.html` is **generated from the manual pisg ships** — `docs/pisg-doc.html` in the pisg
 repository, which `docs/xml2html.py` builds from `docs/pisg-doc.xml`. `tools/make-docs.py` reads that
 file, turns each `<section class="option">` into a card, marks the eleven options added in 1.0a with a
-badge, and adds the one chapter the shipped manual does not have: the optional tools in `scripts/`. It
+badge, and adds the two chapters the shipped manual does not have: **Upgrading to 1.0a** (from the
+release notes, `docs/RELEASE-NOTES-1.0.md`) and the optional tools in `scripts/`. It
 also brings across the complete example `pisg.cfg` with its copy and download buttons, and rewrites
 three passages for the site (the colour scheme list, the stylesheet advice, and where to get help).
 
@@ -184,8 +185,11 @@ cd ../pisg/docs && python3 xml2html.py pisg-doc.xml pisg-doc.html && cd -
 python3 tools/make-docs.py
 ```
 
-The page's shell — full-height sidebar, filter box with a match count, scroll-spy, back-to-top — follows
-the BlackTools documentation page, in this site's own colours.
+The page's shell is the site's own: the same top bar as every other page, the sidebar parked under it
+(filter box with a match count, scroll-spy that keeps the current entry in view), and a content column
+that uses the whole window. Prose keeps a reading measure of about 78 characters; option cards, code and
+the console take the width — at 1280 px and up each card puts the option's name, purpose and default
+beside its description. All of it is under `body.docs-page` in `assets/site.css`.
 
 ## Editing
 

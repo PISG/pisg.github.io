@@ -176,7 +176,15 @@
         if (t && !t.hidden && t.offsetTop <= y) cur = t.id;
       });
       navLinks.forEach(function (a) {
-        a.classList.toggle('active', a.getAttribute('href') === '#' + cur);
+        var on = a.getAttribute('href') === '#' + cur;
+        if (on && !a.classList.contains('active') && sidebar && sidebar.scrollHeight > sidebar.clientHeight) {
+          /* keep the entry being read visible in a sidebar that scrolls on its own */
+          var r = a.getBoundingClientRect(), s = sidebar.getBoundingClientRect();
+          if (r.top < s.top + 60 || r.bottom > s.bottom - 40) {
+            sidebar.scrollTop += r.top - s.top - sidebar.clientHeight / 3;
+          }
+        }
+        a.classList.toggle('active', on);
       });
       if (topBtn) topBtn.style.display = window.scrollY > 600 ? 'block' : 'none';
     };

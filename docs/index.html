@@ -7,22 +7,42 @@
 <meta name="theme-color" content="#0b0e13">
 <link rel="canonical" href="https://pisg.github.io/docs/">
 <title>Documentation — pisg</title>
-<meta name="description" content="The pisg manual: how to install it, how to write pisg.cfg, what every one of its 106 options does, the optional tools, and a complete example configuration.">
+<meta name="description" content="The pisg manual: how to install it, how to upgrade, how to write pisg.cfg, what every one of its 106 options does, the optional tools, and a complete example configuration.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%230d1117'/><rect x='18' y='52' width='14' height='30' fill='%2358a6ff'/><rect x='38' y='34' width='14' height='48' fill='%233fd18b'/><rect x='58' y='44' width='14' height='38' fill='%23e5b567'/><rect x='78' y='24' width='14' height='58' fill='%23bc8cff'/></svg>">
-<link rel="stylesheet" href="../assets/site.css?v=ae94b127">
+<link rel="stylesheet" href="../assets/site.css?v=74392f73">
 </head>
-<body class="has-sidebar">
+<body class="has-sidebar docs-page" id="top">
 <a class="skip" href="#main">Skip to content</a>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="../" aria-label="pisg — home">
+      <span><span class="dollar">$</span>&nbsp;pisg</span>
+      <span class="ver">1.0a</span>
+    </a>
+    <span class="crumb" aria-hidden="true">/ docs</span>
+    <button class="menu-btn" id="menu-btn" aria-expanded="false" aria-controls="navlinks"><span aria-hidden="true">&#9776;</span><span class="sr-only">Menu</span></button>
+    <nav class="links" id="navlinks" aria-label="Main">
+      <a href="../">Home</a>
+      <a href="../#install">Install</a>
+      <a href="./" aria-current="page">Documentation</a>
+      <a href="../themes/">Themes</a>
+      <a href="../changelog/">Changelog</a>
+      <span class="sep" aria-hidden="true"></span>
+      <a class="ext" href="../demo/">Live example &#8599;</a>
+      <a class="x-reg" href="https://github.com/PISG/pisg">GitHub &#8599;</a>
+    </nav>
+  </div>
+</header>
 
 <div class="layout">
 
 <!-- ===================== SIDEBAR ===================== -->
 <nav class="sidebar" id="sidebar" aria-label="Documentation">
-  <a class="logo" href="../">
-    <span class="dollar">$</span>
-    <span><b>pisg</b><small>1.0a &middot; DOCUMENTATION</small></span>
-  </a>
-  <input id="search" type="search" placeholder="Filter options… ( / )" autocomplete="off" spellcheck="false" aria-label="Filter options">
+  <div class="search-box">
+    <input id="search" type="search" placeholder="Filter options…" autocomplete="off" spellcheck="false" aria-label="Filter options">
+    <kbd aria-hidden="true">/</kbd>
+  </div>
   <p class="search-hint"><span id="search-count"></span>&nbsp;</p>
   <div class="nav" id="nav">
     <h5>Start here</h5>
@@ -37,6 +57,13 @@
     <a class="sub" href="#using-css">Changing the layout of your stats page</a>
     <a class="sub" href="#running-pisg">Running pisg</a>
     <a class="sub" href="#mailing-list-and-bugs">Obtaining help and reporting bugs</a>
+    <a href="#upgrading">Upgrading to 1.0a</a>
+    <a class="sub" href="#upgrade-before">Before you start</a>
+    <a class="sub" href="#upgrade-steps">Upgrade in four steps</a>
+    <a class="sub" href="#upgrade-sections">The new sections are on by default</a>
+    <a class="sub" href="#upgrade-scripts">Scripts and cron jobs: pisg now fails loudly</a>
+    <a class="sub" href="#upgrade-cache">If you use CacheDir</a>
+    <a class="sub" href="#upgrade-optional">Optional: the new look and the landing page</a>
     <h5>Option reference</h5>
     <a href="#reference">General options</a>
     <a href="#reference-stats">Statistics options</a>
@@ -51,38 +78,37 @@
     <a class="sub" href="#tool-znc">znc-setup.sh &mdash; let pisg read a ZNC log folder</a>
     <a href="#example-config">Example configuration</a>
     <a href="#copyright">Copyright and licence</a>
-    <h5>Elsewhere</h5>
-    <a class="out" href="../">Home</a>
-    <a class="out" href="../changelog/">Changelog</a>
-    <a class="out" href="../themes/">Themes &amp; creator</a>
-    <a class="out" href="../demo/">Live example</a>
-    <a class="out" href="https://github.com/PISG/pisg">GitHub ↗</a>
   </div>
 </nav>
 
 <!-- ===================== MAIN ===================== -->
-<div class="main"><div class="wrap">
+<div class="main">
 <main id="main" tabindex="-1">
 
 <button class="side-btn" id="side-btn" aria-expanded="false" aria-controls="sidebar">☰ Contents</button>
 
-<div class="hero doc">
-  <h1>pisg <span>documentation</span></h1>
-  <p class="tagline">How to set pisg up, how to write <code>pisg.cfg</code>, and what every option does.</p>
-  <div class="badges">
-    <span class="badge hot">1.0a</span>
-    <span class="badge">106 options</span>
-    <span class="badge">Perl 5</span>
-    <span class="badge gold">GPL-2.0-or-later</span>
-    <span class="badge">also ships as <code>docs/pisg-doc.html</code></span>
+<div class="doc-hero">
+  <p class="eyebrow"><span class="dot" aria-hidden="true"></span>Manual &middot; pisg 1.0a</p>
+  <h1><span class="dollar">$</span> man pisg</h1>
+  <p class="tagline">How to set pisg up, how to upgrade, how to write <code>pisg.cfg</code>, and what every
+  one of its 106 options does. Everything applies to 0.73 as well, except the options marked
+  <span class="since">1.0a</span>.</p>
+  <div class="doc-quick">
+    <a class="card" href="#setting-up-pisg"><span class="ico">new here</span><h3>Setting up pisg</h3>
+      <p>Logs, a channel block, your first page.</p></a>
+    <a class="card" href="#upgrading"><span class="ico">from 0.73 / 0.80</span><h3>Upgrading to 1.0a</h3>
+      <p>Four steps, and what changes on your page.</p></a>
+    <a class="card" href="#reference"><span class="ico">106 options</span><h3>Option reference</h3>
+      <p>Filter by name or purpose &mdash; press <kbd>/</kbd>.</p></a>
+    <a class="card" href="#example-config"><span class="ico">copy &amp; go</span><h3>Example config</h3>
+      <p>A complete <code>pisg.cfg</code> to start from.</p></a>
   </div>
-  <p class="sec-intro" style="margin-top:18px">Everything here applies to 0.73 as well, except the
-  options marked <span class="since">1.0a</span>. Use the filter in the sidebar, or press
-  <kbd>/</kbd>, to find an option by name or by what it does.</p>
 </div>
 
-<section id="what-is-pisg">
-<h2><span class="hash">#</span>What is pisg?</h2>
+<div class="doc-body">
+<section id="what-is-pisg" class="chapter">
+<p class="kicker"><span class="ch-num">01</span>Start here</p>
+<h2><a class="anchor" href="#what-is-pisg">What is pisg?</a></h2>
 
 <p>pisg is an IRC statistics generator. It takes IRC logfiles and turns
      them into nice looking stats.</p>
@@ -111,8 +137,9 @@
 </section>
 </section>
 
-<section id="setting-up-pisg">
-<h2><span class="hash">#</span>Setting up pisg</h2>
+<section id="setting-up-pisg" class="chapter">
+<p class="kicker"><span class="ch-num">02</span>Start here</p>
+<h2><a class="anchor" href="#setting-up-pisg">Setting up pisg</a></h2>
 
 <p>Most configuration happens through the <code>pisg.cfg</code>
    file, the file format is made to be easy to read, and easy to extend for
@@ -276,11 +303,134 @@
 </section>
 </section>
 
-<section id="reference">
-<h2><span class="hash">#</span>General options</h2>
+<section id="upgrading" class="chapter">
+<p class="kicker"><span class="ch-num">03</span>Start here</p>
+<h2><a class="anchor" href="#upgrading">Upgrading to 1.0a</a></h2>
+<p class="sec-intro">Coming from 0.73 or one of the 0.80 previews? Upgrading is a copy, not a
+migration: 1.0a reads the same <code>pisg.cfg</code>, the same logs and the same log formats. The one
+thing you will notice is that your stats page gets <strong>longer</strong> &mdash; seven new sections are on
+by default. Everything else is opt-in.</p>
+
+<div class="upg-grid">
+  <div class="upg-card"><b>Stays the same</b>
+    <ul><li>Your <code>pisg.cfg</code>, every option in it, and the files it includes</li>
+    <li>Log formats and parsers</li><li>The default colour scheme, and how the classic ones look</li>
+    <li>Requirements: just Perl</li></ul></div>
+  <div class="upg-card new"><b>Changes</b>
+    <ul><li>Seven new sections, on by default</li><li>A section menu (<code>ShowNavBar</code>)</li>
+    <li>Exit status <code>1</code> when a run fails</li>
+    <li>A page is replaced only once it is complete</li></ul></div>
+  <div class="upg-card opt-in"><b>Yours to switch on</b>
+    <ul><li>The modern themes (<code>ColorScheme</code>)</li><li>The landing page for several channels</li>
+    <li><code>BadUrls</code>, <code>HomeLink</code></li><li>The optional tools in <code>scripts/</code></li></ul></div>
+</div>
+
+<section id="upgrade-before"><h3>Before you start</h3>
+<p>Find out what you are running now, so you know which notes apply:</p>
+<pre>./pisg --version</pre>
+<p>Then put a copy of everything that is yours somewhere safe. A new release ships its own
+<code>pisg.cfg</code>, so unpacking one on top of your install would replace your configuration with the
+sample:</p>
+<ul>
+  <li><code>pisg.cfg</code>, and every file it pulls in with <code>&lt;include="..."&gt;</code> &mdash; a
+  <code>users.cfg</code>, an alias file;</li>
+  <li>any stylesheet you made or edited in <code>layout/</code>;</li>
+  <li>your changes to <code>lang.txt</code>, if you translated or reworded anything;</li>
+  <li>the crontab line or scheduled task that runs pisg (<code>crontab -l</code> shows it).</li>
+</ul>
+</section>
+
+<section id="upgrade-steps"><h3>Upgrade in four steps</h3>
+<p>Install the new version <em>next to</em> the old one instead of over it. Then going back is only a
+matter of pointing your cron job at the old folder again.</p>
+<div class="console">
+  <div class="bar"><i></i><i></i><i></i><span>upgrade 0.73 &rarr; 1.0a</span></div>
+  <div class="crow"><span class="cnum">1</span>
+    <div><div class="cmdline"><span class="cmd">git</span> <span class="arg">clone https://github.com/PISG/pisg.git ~/pisg-1.0a</span></div>
+    <span class="cnote">Or unpack the archive from the <a href="https://github.com/PISG/pisg/releases">releases page</a> into a new folder.</span></div>
+    <button class="copybtn" type="button">Copy</button></div>
+  <div class="crow"><span class="cnum">2</span>
+    <div><div class="cmdline"><span class="cmd">cp</span> <span class="arg">~/pisg/pisg.cfg ~/pisg/users.cfg ~/pisg-1.0a/</span></div>
+    <span class="cnote">Bring your configuration across, with every file it includes. Use the names yours actually has &mdash; <code>users.cfg</code> is only an example.</span></div>
+    <button class="copybtn" type="button">Copy</button></div>
+  <div class="crow"><span class="cnum">3</span>
+    <div><div class="cmdline"><span class="cmd">cd</span> <span class="arg">~/pisg-1.0a &amp;&amp; ./pisg</span></div>
+    <span class="cnote">Run it once by hand and read what it prints. A channel it cannot read is skipped with a reason, and the others are still made.</span></div>
+    <button class="copybtn" type="button">Copy</button></div>
+  <div class="crow"><span class="cnum">4</span>
+    <div><div class="cmdline"><span class="cmd">crontab</span> <span class="arg">-e</span></div>
+    <span class="cnote">Point the scheduled run at <code>~/pisg-1.0a/pisg</code>. Keep the old folder until you are happy with the new pages.</span></div>
+    <button class="copybtn" type="button">Copy</button></div>
+</div>
+<p>On Windows it is the same: a new folder, your <code>pisg.cfg</code> copied into it, and the scheduled
+task changed to run <code>perl pisg</code> from there.</p>
+</section>
+
+<section id="upgrade-sections"><h3>The new sections are on by default</h3>
+<p>Your next page will have an overview, a <em>who talks to whom</em> map, closest pairs, social roles,
+time personalities, <em>who carries the channel</em>, signature words and a section menu. In the classic
+colour schemes they are drawn in a plain style that fits the old look.</p>
+<p>To keep the page exactly as it was, switch them off in <code>pisg.cfg</code>:</p>
+<pre>&lt;set ShowOverview="0"&gt;
+&lt;set ShowRelations="0"&gt;
+&lt;set ShowTimePersonalities="0"&gt;
+&lt;set ShowConcentration="0"&gt;
+&lt;set ShowSignatureWords="0"&gt;
+&lt;set ShowNavBar="0"&gt;</pre>
+<p>Or keep some: each is described in the option reference &mdash;
+<a href="#ShowOverview">ShowOverview</a>, <a href="#ShowRelations">ShowRelations</a>, <a href="#ShowTimePersonalities">ShowTimePersonalities</a>, <a href="#ShowConcentration">ShowConcentration</a>, <a href="#ShowSignatureWords">ShowSignatureWords</a>, <a href="#ShowNavBar">ShowNavBar</a>.
+The relation map has two tuning options of its own, <a href="#RelationNicks">RelationNicks</a> and
+<a href="#RelationMinWeight">RelationMinWeight</a>, for channels where it is too crowded or too sparse.</p>
+</section>
+
+<section id="upgrade-scripts"><h3>Scripts and cron jobs: pisg now fails loudly</h3>
+<p>pisg 0.73 exited with status <code>0</code> even when it had failed. 1.0a exits with <code>1</code>
+&mdash; and it does so when one channel out of several was skipped, while still writing the pages for the
+others. If a wrapper script does <code>pisg &amp;&amp; upload</code>, that upload will now stop on
+a partial failure. Decide which you want:</p>
+<pre>./pisg --silent &amp;&amp; ./upload.sh     # upload only when every channel worked
+./pisg --silent;    ./upload.sh     # upload whatever was made</pre>
+<p>The good news that comes with it: pages are written to a temporary file and moved into place only when
+complete, so a failed run can no longer leave a half-written page on your site.</p>
+</section>
+
+<section id="upgrade-cache"><h3>If you use CacheDir</h3>
+<p>Empty the cache folder once after upgrading, so every log is parsed again by the new version. The cache
+holds the results of the old parser, and 1.0a gathers things 0.73 never collected &mdash; the relation map,
+for one. The <a href="#CacheDir">CacheDir</a> option already asks for this whenever the settings change;
+a new version is the same case.</p>
+</section>
+
+<section id="upgrade-optional"><h3>Optional: the new look and the landing page</h3>
+<p>None of this happens unless you ask for it.</p>
+<ul>
+  <li><strong>A modern theme</strong> &mdash; <code>&lt;set ColorScheme="modern"&gt;</code>, or
+  <code>midnight</code>, <code>amoled</code>, <code>terminal</code>. <code>modern</code> follows the
+  reader&rsquo;s light or dark setting. <a href="../themes/">Compare them, or build your own</a>.</li>
+  <li><strong>A landing page for several channels</strong> &mdash; copy <code>site/index.html</code> into
+  your output folder and run pisg once, so <code>channels.json</code> exists beside it
+  (<a href="#ChannelIndex">ChannelIndex</a>). Add <code>&lt;set HomeLink="index.html"&gt;</code> to put
+  an &ldquo;All channels&rdquo; button on every stats page. <a href="../demo/">See it live</a>.</li>
+  <li><strong>Cleaner link statistics</strong> &mdash; <a href="#BadUrls">BadUrls</a> keeps spam and
+  image-host links out of the URL tables.</li>
+  <li><strong>The <a href="#tools">optional tools</a></strong> &mdash; they need Python 3, or Tcl 8.6 and
+  an eggdrop. pisg itself still needs only Perl; <code>JSON::PP</code>, which
+  <code>ChannelIndex</code> uses, is part of core Perl.</li>
+</ul>
+<div class="note good">Something did not come across the way you expected? Ask in <code>#pisg</code> on
+Undernet or open an <a href="https://github.com/PISG/pisg/issues">issue</a>, and say which version you came
+from. The full list of changes is in the <a href="../changelog/">changelog</a>.</div>
+</section>
+
+</section>
+
+<section id="reference" class="chapter">
+<p class="kicker"><span class="ch-num">04</span>Option reference</p>
+<h2><a class="anchor" href="#reference">General options</a></h2>
 <div class="pill-row"><a class="pill" href="#Channel">Channel</a><a class="pill" href="#Format">Format</a><a class="pill" href="#Network">Network</a><a class="pill" href="#OutputFile">OutputFile</a><a class="pill" href="#OutputTag">OutputTag</a><a class="pill" href="#Logfile">Logfile</a><a class="pill" href="#LogDir">LogDir</a><a class="pill" href="#NFiles">NFiles</a><a class="pill" href="#Maintainer">Maintainer</a><a class="pill" href="#ColorScheme">ColorScheme</a><a class="pill" href="#AltColorScheme">AltColorScheme</a><a class="pill" href="#Lang">Lang</a><a class="pill" href="#PageHead">PageHead</a><a class="pill" href="#PageFoot">PageFoot</a><a class="pill" href="#LogPrefix">LogPrefix</a><a class="pill" href="#LogSuffix">LogSuffix</a><a class="pill" href="#Silent">Silent</a><a class="pill" href="#CacheDir">CacheDir</a><a class="pill" href="#ChannelIndex">ChannelIndex</a><a class="pill" href="#HomeLink">HomeLink</a><a class="pill" href="#ShowNavBar">ShowNavBar</a></div>
 <article class="opt" id="Channel" data-k="channel define channel name">
-<h3><a class="anchor" href="#Channel" aria-label="Link to Channel">Channel</a><span class="purpose">define channel name</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#Channel" aria-label="Link to Channel">Channel</a></h3><p class="purpose">define channel name</p><p class="meta"><b>Default</b> Unset</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;mIRC&quot;
@@ -289,10 +439,11 @@
 <p><code>Channel</code> is used in two contexts, globally when using
     &lt;set&gt; and when defining new channels. It sets the name of the
     channel.</p>
-<p class="meta"><b>Default:</b> Unset</p>
+</div>
 </article>
 <article class="opt" id="Format" data-k="format the logfile format">
-<h3><a class="anchor" href="#Format" aria-label="Link to Format">Format</a><span class="purpose">the logfile format</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#Format" aria-label="Link to Format">Format</a></h3><p class="purpose">the logfile format</p><p class="meta"><b>Default</b> Unset</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;eggdrop&quot;
@@ -306,10 +457,11 @@
     suffix .gz or .bz2, they will automatically be decompressed and read by
     pisg.
     See also <a href="#Maintainer">Maintainer</a>.</p>
-<p class="meta"><b>Default:</b> Unset</p>
+</div>
 </article>
 <article class="opt" id="Network" data-k="network the irc network of the channel">
-<h3><a class="anchor" href="#Network" aria-label="Link to Network">Network</a><span class="purpose">the IRC network of the channel</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#Network" aria-label="Link to Network">Network</a></h3><p class="purpose">the IRC network of the channel</p><p class="meta"><b>Default</b> SomeIRCNetwork</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;eggdrop&quot;
@@ -319,10 +471,11 @@
 &lt;set Network=&quot;Quakenet&quot;&gt;</pre>
 <p><code>Network</code> is used to set the network which the channel
     resides on, this name is displayed on the stats page.</p>
-<p class="meta"><b>Default:</b> SomeIRCNetwork</p>
+</div>
 </article>
 <article class="opt" id="OutputFile" data-k="outputfile name of the generated html page">
-<h3><a class="anchor" href="#OutputFile" aria-label="Link to OutputFile">OutputFile</a><span class="purpose">name of the generated HTML page</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#OutputFile" aria-label="Link to OutputFile">OutputFile</a></h3><p class="purpose">name of the generated HTML page</p><p class="meta"><b>Default</b> index.html</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;eggdrop&quot;
@@ -332,10 +485,11 @@
 &lt;set OutputFile=&quot;mychan.html&quot;&gt;</pre>
 <p><code>OutputFile</code> is used to define the name of the
     generated statistics page.</p>
-<p class="meta"><b>Default:</b> index.html</p>
+</div>
 </article>
 <article class="opt" id="OutputTag" data-k="outputtag tag to insert into outputfile">
-<h3><a class="anchor" href="#OutputTag" aria-label="Link to OutputTag">OutputTag</a><span class="purpose">tag to insert into OutputFile</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#OutputTag" aria-label="Link to OutputTag">OutputTag</a></h3><p class="purpose">tag to insert into OutputFile</p><p class="meta"><b>Default</b> unset</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  LogDir = &quot;logs/&quot;
  Format = &quot;eggdrop&quot;
@@ -357,10 +511,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
     pisg.conf snippet, this writes both the full statistics (mychan.html) and
     statistics for the last week (mychan-week.html) using the same pisg config
     file. (Assuming that there are separate logfiles for each day.)</p>
-<p class="meta"><b>Default:</b> unset</p>
+</div>
 </article>
 <article class="opt" id="Logfile" data-k="logfile name of logfile to parse">
-<h3><a class="anchor" href="#Logfile" aria-label="Link to Logfile">Logfile</a><span class="purpose">name of logfile to parse</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#Logfile" aria-label="Link to Logfile">Logfile</a></h3><p class="purpose">name of logfile to parse</p><p class="meta"><b>Default</b> unset</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile=&quot;/home/foo/eggdrop/logs/mylog.txt&quot;
  Format = &quot;eggdrop&quot;
@@ -373,10 +528,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
     times will parse multiple files in the order the statements appear.
     Wildcards (* ? []) will be expanded.
     See also <a href="#LogDir">LogDir</a> and <a href="#NFiles">NFiles</a>.</p>
-<p class="meta"><b>Default:</b> unset</p>
+</div>
 </article>
 <article class="opt" id="LogDir" data-k="logdir parse a directory full of logs">
-<h3><a class="anchor" href="#LogDir" aria-label="Link to LogDir">LogDir</a><span class="purpose">parse a directory full of logs</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#LogDir" aria-label="Link to LogDir">LogDir</a></h3><p class="purpose">parse a directory full of logs</p><p class="meta"><b>Default</b> unset</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  LogDir=&quot;/home/foo/eggdrop/logs/&quot;
  Format = &quot;eggdrop&quot;
@@ -390,10 +546,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
     directories in the order the statements appear.
     See also <a href="#NFiles">NFiles</a>, <a href="#LogPrefix">LogPrefix</a>, and
     <a href="#LogSuffix">LogSuffix</a>.</p>
-<p class="meta"><b>Default:</b> unset</p>
+</div>
 </article>
 <article class="opt" id="NFiles" data-k="nfiles parse only the last files in">
-<h3><a class="anchor" href="#NFiles" aria-label="Link to NFiles">NFiles</a><span class="purpose">parse only the last files in</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#NFiles" aria-label="Link to NFiles">NFiles</a></h3><p class="purpose">parse only the last files in</p><p class="meta"><b>Default</b> 0 (process all files)</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  LogDir=&quot;/home/foo/eggdrop/logs/&quot;
  NFiles=&quot;8&quot;
@@ -406,10 +563,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
     and <a href="#LogDir">LogDir</a> options. Useful to create statistics that
     cover the last week or month (assuming there are separate logfile per
     day/week/etc.).</p>
-<p class="meta"><b>Default:</b> 0 (process all files)</p>
+</div>
 </article>
 <article class="opt" id="Maintainer" data-k="maintainer name of the maintainer">
-<h3><a class="anchor" href="#Maintainer" aria-label="Link to Maintainer">Maintainer</a><span class="purpose">name of the maintainer</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#Maintainer" aria-label="Link to Maintainer">Maintainer</a></h3><p class="purpose">name of the maintainer</p><p class="meta"><b>Default</b> MAINTAINER</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;mIRC&quot;
@@ -424,10 +582,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
     This setting is also used by some log parsers where &quot;You&quot; is used
     instead of the nick in the log (e.g. &quot;You have been kicked&quot;).
     See also <a href="#Format">Format</a>, <a href="#NickTracking">NickTracking</a>.</p>
-<p class="meta"><b>Default:</b> MAINTAINER</p>
+</div>
 </article>
 <article class="opt" id="ColorScheme" data-k="colorscheme use a different color scheme for stats page">
-<h3><a class="anchor" href="#ColorScheme" aria-label="Link to ColorScheme">ColorScheme</a><span class="purpose">use a different color scheme for stats page</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#ColorScheme" aria-label="Link to ColorScheme">ColorScheme</a></h3><p class="purpose">use a different color scheme for stats page</p><p class="meta"><b>Default</b> default</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  ColorScheme = &quot;darkgalaxy&quot;
@@ -445,10 +604,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
     of the page; use this to include the statistics into a custom page. See
     also <a href="#CssDir">CssDir</a>, <a href="#AltColorScheme">AltColorScheme</a>,
     <a href="#HiCell">HiCell/HiCell2</a>.</p>
-<p class="meta"><b>Default:</b> default</p>
+</div>
 </article>
 <article class="opt" id="AltColorScheme" data-k="altcolorscheme alternate stylesheets for stats page">
-<h3><a class="anchor" href="#AltColorScheme" aria-label="Link to AltColorScheme">AltColorScheme</a><span class="purpose">alternate stylesheets for stats page</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#AltColorScheme" aria-label="Link to AltColorScheme">AltColorScheme</a></h3><p class="purpose">alternate stylesheets for stats page</p><p class="meta"><b>Default</b> default</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  ColorScheme = &quot;darkgalaxy&quot;
@@ -461,10 +621,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
     be used for the statistics page. Multiple files can be given (space
     separated.) Note that this is not supported by all browsers.
     See also <a href="#ColorScheme">ColorScheme</a> and <a href="#CssDir">CssDir</a>.</p>
-<p class="meta"><b>Default:</b> default</p>
+</div>
 </article>
 <article class="opt" id="Lang" data-k="lang define the language / translation to use">
-<h3><a class="anchor" href="#Lang" aria-label="Link to Lang">Lang</a><span class="purpose">define the language / translation to use</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#Lang" aria-label="Link to Lang">Lang</a></h3><p class="purpose">define the language / translation to use</p><p class="meta"><b>Default</b> EN (English)</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;mIRC&quot;
@@ -507,10 +668,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
     Output in several languages can be generated at the same time, separate the
     languages by comma. The tag %l in the output file name will be replaced by
     the language name. See also <a href="#LangFile">LangFile</a>.</p>
-<p class="meta"><b>Default:</b> EN (English)</p>
+</div>
 </article>
 <article class="opt" id="PageHead" data-k="pagehead define a file as page header">
-<h3><a class="anchor" href="#PageHead" aria-label="Link to PageHead">PageHead</a><span class="purpose">define a file as page header</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#PageHead" aria-label="Link to PageHead">PageHead</a></h3><p class="purpose">define a file as page header</p><p class="meta"><b>Default</b> none</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;mIRC&quot;
@@ -524,10 +686,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
     file can hold anything, it will be included raw in the stats page -
     so HTML should be preferred. The file will be included in the top of
     the page. This option is the opposite of <a href="#PageFoot">PageFoot</a>.</p>
-<p class="meta"><b>Default:</b> none</p>
+</div>
 </article>
 <article class="opt" id="PageFoot" data-k="pagefoot define a file as page footer">
-<h3><a class="anchor" href="#PageFoot" aria-label="Link to PageFoot">PageFoot</a><span class="purpose">define a file as page footer</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#PageFoot" aria-label="Link to PageFoot">PageFoot</a></h3><p class="purpose">define a file as page footer</p><p class="meta"><b>Default</b> none</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;mIRC&quot;
@@ -541,10 +704,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
     file can hold anything, it will be included raw in the stats page -
     so HTML should be preferred. The file will be included in the bottom of
     the page. This option is the opposite of <a href="#PageHead">PageHead</a>.</p>
-<p class="meta"><b>Default:</b> none</p>
+</div>
 </article>
 <article class="opt" id="LogPrefix" data-k="logprefix only parse logs logprefixed with a user defined string">
-<h3><a class="anchor" href="#LogPrefix" aria-label="Link to LogPrefix">LogPrefix</a><span class="purpose">only parse logs LogPrefixed with a user defined string</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#LogPrefix" aria-label="Link to LogPrefix">LogPrefix</a></h3><p class="purpose">only parse logs LogPrefixed with a user defined string</p><p class="meta"><b>Default</b> unset</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  LogDir=&quot;/home/foo/eggdrop/logs/&quot;
  Format = &quot;eggdrop&quot;
@@ -555,27 +719,30 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
 <p>When using the <a href="#LogDir">LogDir</a> option and you only want to use
     a slew of the files in it, you can have pisg choose only files which are
     prefixed with a special string.</p>
-<p class="meta"><b>Default:</b> unset</p>
+</div>
 </article>
 <article class="opt" id="LogSuffix" data-k="logsuffix regexp to sort logfiles by format month||day||year">
-<h3><a class="anchor" href="#LogSuffix" aria-label="Link to LogSuffix">LogSuffix</a><span class="purpose">Regexp to sort logfiles by format month||day||year</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#LogSuffix" aria-label="Link to LogSuffix">LogSuffix</a></h3><p class="purpose">Regexp to sort logfiles by format month||day||year</p><p class="meta"><b>Default</b> Unset</p></div>
+<div class="opt-body">
 <pre>&lt;set LogSuffix=&quot;\.\d\d([A-Za-z]+)\d\d\d\d||\.(\d\d)[A-Za-z]+\d\d\d\d||\.\d\d[A-Za-z]+(\d\d\d\d)&quot;&gt;</pre>
 <p><code>LogSuffix</code> is used to define the suffix of a logfile,
     it only works when <a href="#LogDir">LogDir</a> is defined. The example in
     the synopsis is for the eggdrop bots default format.</p>
-<p class="meta"><b>Default:</b> Unset</p>
+</div>
 </article>
 <article class="opt" id="Silent" data-k="silent make pisg silent, suppress messages">
-<h3><a class="anchor" href="#Silent" aria-label="Link to Silent">Silent</a><span class="purpose">make pisg silent, suppress messages</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#Silent" aria-label="Link to Silent">Silent</a></h3><p class="purpose">make pisg silent, suppress messages</p><p class="meta"><b>Default</b> 0 (disabled)</p></div>
+<div class="opt-body">
 <pre>&lt;set Silent=&quot;1&quot;&gt;</pre>
 <p>This option is useful mainly from command line when invoking pisg with
     <code>--silent 1</code>. But it can also used in the configuration
     file. It will suppress all standard output from pisg. Error messages
     will still be sent.</p>
-<p class="meta"><b>Default:</b> 0 (disabled)</p>
+</div>
 </article>
 <article class="opt" id="CacheDir" data-k="cachedir use a cache to speed up log parsing">
-<h3><a class="anchor" href="#CacheDir" aria-label="Link to CacheDir">CacheDir</a><span class="purpose">use a cache to speed up log parsing</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#CacheDir" aria-label="Link to CacheDir">CacheDir</a></h3><p class="purpose">use a cache to speed up log parsing</p><p class="meta"><b>Default</b> Unset</p></div>
+<div class="opt-body">
 <pre>&lt;set CacheDir=&quot;pisg_cache&quot;&gt;
 &lt;set CacheDir=&quot;/path/to/pisg_cache&quot;&gt;</pre>
 <p>Setting this option makes pisg dump the results of log parsing into cache
@@ -588,10 +755,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
     changed since the cache data uses the old config settings.
     <a href="#NickTracking">NickTracking</a> does not work especially well with the
     cache when using different <a href="#NFiles">NFiles</a> settings.</p>
-<p class="meta"><b>Default:</b> Unset</p>
+</div>
 </article>
 <article class="opt" id="ChannelIndex" data-k="channelindex name of the channel list file for a landing page">
-<h3><a class="anchor" href="#ChannelIndex" aria-label="Link to ChannelIndex">ChannelIndex</a><span class="purpose">name of the channel list file for a landing page</span> <span class="since">1.0a</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#ChannelIndex" aria-label="Link to ChannelIndex">ChannelIndex</a> <span class="since">1.0a</span></h3><p class="purpose">name of the channel list file for a landing page</p><p class="meta"><b>Default</b> channels.json</p></div>
+<div class="opt-body">
 <pre>&lt;set ChannelIndex=&quot;channels.json&quot;&gt;</pre>
 <p>Each time pisg writes a channel page, it also updates a small JSON file, next to
     that page, listing the channels found in the same directory: the channel name as
@@ -601,35 +769,39 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
     nothing has to scan or scrape the HTML pages. Each run only changes the entry of its
     own channel, and entries whose page no longer exists are removed. Set it to &quot;none&quot;
     to switch this off.</p>
-<p class="meta"><b>Default:</b> channels.json</p>
+</div>
 </article>
 <article class="opt" id="HomeLink" data-k="homelink adds a button at the top of every stats page that leads back to your landing page">
-<h3><a class="anchor" href="#HomeLink" aria-label="Link to HomeLink">HomeLink</a><span class="purpose">adds a button at the top of every stats page that leads back to your landing page</span> <span class="since">1.0a</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#HomeLink" aria-label="Link to HomeLink">HomeLink</a> <span class="since">1.0a</span></h3><p class="purpose">adds a button at the top of every stats page that leads back to your landing page</p><p class="meta"><b>Default</b> empty (no button)</p></div>
+<div class="opt-body">
 <pre>&lt;set HomeLink=&quot;index.html&quot;&gt;</pre>
 <p>Shows an &quot;All channels&quot; button above the title of each stats page (translated with the
     page language). Give the page it should lead to: a file name next to the stats page, such as
     <code>index.html</code> (the landing page in <code>site/</code>), or a full
     http(s) address. Leave it empty, or &quot;none&quot;, for no button. Only the newer colour schemes
     draw it as a button; a scheme set to &quot;none&quot; does not show it.</p>
-<p class="meta"><b>Default:</b> empty (no button)</p>
+</div>
 </article>
 <article class="opt" id="ShowNavBar" data-k="shownavbar enable/disable the section bar at the top of the page">
-<h3><a class="anchor" href="#ShowNavBar" aria-label="Link to ShowNavBar">ShowNavBar</a><span class="purpose">enable/disable the section bar at the top of the page</span> <span class="since">1.0a</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#ShowNavBar" aria-label="Link to ShowNavBar">ShowNavBar</a> <span class="since">1.0a</span></h3><p class="purpose">enable/disable the section bar at the top of the page</p><p class="meta"><b>Default</b> 1 (enabled)</p></div>
+<div class="opt-body">
 <pre>&lt;set ShowNavBar=&quot;1&quot;&gt;</pre>
 <p>Adds a slim bar at the top of the stats page that stays in view while scrolling. It shows which
     section is being read, and a &quot;Sections&quot; button opens a list of every section, laid out in columns so
     nothing has to be scrolled sideways, whatever the number of sections or the language. It also works
     without JavaScript. The bar is left out when <a href="#ColorScheme">ColorScheme</a> is &quot;none&quot;,
     since the page is then meant to be embedded in another one.</p>
-<p class="meta"><b>Default:</b> 1 (enabled)</p>
+</div>
 </article>
 </section>
 
-<section id="reference-stats">
-<h2><span class="hash">#</span>Statistics options</h2>
+<section id="reference-stats" class="chapter">
+<p class="kicker"><span class="ch-num">05</span>Option reference</p>
+<h2><a class="anchor" href="#reference-stats">Statistics options</a></h2>
 <div class="pill-row"><a class="pill" href="#DailyActivity">DailyActivity</a><a class="pill" href="#ShowActiveTimes">ShowActiveTimes</a><a class="pill" href="#ShowActiveNicks">ShowActiveNicks</a><a class="pill" href="#ShowBigNumbers">ShowBigNumbers</a><a class="pill" href="#ShowTopics">ShowTopics</a><a class="pill" href="#ShowLines">ShowLines</a><a class="pill" href="#ShowWpl">ShowWpl</a><a class="pill" href="#ShowCpl">ShowCpl</a><a class="pill" href="#ShowWords">ShowWords</a><a class="pill" href="#ShowLastSeen">ShowLastSeen</a><a class="pill" href="#ShowTime">ShowTime</a><a class="pill" href="#ShowLineTime">ShowLineTime</a><a class="pill" href="#ShowWordTime">ShowWordTime</a><a class="pill" href="#ShowRandQuote">ShowRandQuote</a><a class="pill" href="#ShowLegend">ShowLegend</a><a class="pill" href="#ShowKickLine">ShowKickLine</a><a class="pill" href="#ShowActionLine">ShowActionLine</a><a class="pill" href="#ShowShoutLine">ShowShoutLine</a><a class="pill" href="#ShowFoulDecimals">ShowFoulDecimals</a><a class="pill" href="#ShowFoulLine">ShowFoulLine</a><a class="pill" href="#ShowViolentLines">ShowViolentLines</a><a class="pill" href="#ShowMuw">ShowMuw</a><a class="pill" href="#ShowMrn">ShowMrn</a><a class="pill" href="#ShowMru">ShowMru</a><a class="pill" href="#ShowCharts">ShowCharts</a><a class="pill" href="#ShowOps">ShowOps</a><a class="pill" href="#ShowVoices">ShowVoices</a><a class="pill" href="#ShowHalfops">ShowHalfops</a><a class="pill" href="#ShowMostNicks">ShowMostNicks</a><a class="pill" href="#ShowActiveGenders">ShowActiveGenders</a><a class="pill" href="#ShowSmileys">ShowSmileys</a><a class="pill" href="#ShowKarma">ShowKarma</a><a class="pill" href="#ShowMostActiveByHour">ShowMostActiveByHour</a><a class="pill" href="#ShowOnlyTop">ShowOnlyTop</a><a class="pill" href="#ShowMostActiveByHourGraph">ShowMostActiveByHourGraph</a><a class="pill" href="#ShowOverview">ShowOverview</a><a class="pill" href="#ShowRelations">ShowRelations</a><a class="pill" href="#RelationNicks">RelationNicks</a><a class="pill" href="#RelationMinWeight">RelationMinWeight</a><a class="pill" href="#ShowTimePersonalities">ShowTimePersonalities</a><a class="pill" href="#ShowConcentration">ShowConcentration</a><a class="pill" href="#ShowSignatureWords">ShowSignatureWords</a><a class="pill" href="#IgnoreWords">IgnoreWords</a><a class="pill" href="#NoIgnoredQuotes">NoIgnoredQuotes</a><a class="pill" href="#FoulWords">FoulWords</a><a class="pill" href="#ViolentWords">ViolentWords</a><a class="pill" href="#BadUrls">BadUrls</a><a class="pill" href="#MinQuote">MinQuote</a><a class="pill" href="#MaxQuote">MaxQuote</a><a class="pill" href="#WordLength">WordLength</a><a class="pill" href="#QuoteWidth">QuoteWidth</a><a class="pill" href="#BigNumbersThreshold">BigNumbersThreshold</a><a class="pill" href="#ActiveNicks">ActiveNicks</a><a class="pill" href="#ActiveNicks2">ActiveNicks2</a><a class="pill" href="#ActiveNicksByHour">ActiveNicksByHour</a><a class="pill" href="#MostNicksHistory">MostNicksHistory</a><a class="pill" href="#MostNicksVerbose">MostNicksVerbose</a><a class="pill" href="#TopicHistory">TopicHistory</a><a class="pill" href="#UrlHistory">UrlHistory</a><a class="pill" href="#ChartsHistory">ChartsHistory</a><a class="pill" href="#ChartsRegexp">ChartsRegexp</a><a class="pill" href="#WordHistory">WordHistory</a><a class="pill" href="#NickHistory">NickHistory</a><a class="pill" href="#SmileyHistory">SmileyHistory</a><a class="pill" href="#KarmaHistory">KarmaHistory</a><a class="pill" href="#NickTracking">NickTracking</a><a class="pill" href="#NickLimit">NickLimit</a><a class="pill" href="#SortByWords">SortByWords</a></div>
 <article class="opt" id="DailyActivity" data-k="dailyactivity number of days to show in &quot;daily actitity&quot;">
-<h3><a class="anchor" href="#DailyActivity" aria-label="Link to DailyActivity">DailyActivity</a><span class="purpose">number of days to show in &quot;Daily Actitity&quot;</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#DailyActivity" aria-label="Link to DailyActivity">DailyActivity</a></h3><p class="purpose">number of days to show in &quot;Daily Actitity&quot;</p><p class="meta"><b>Default</b> 0 (disabled)</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;xchat&quot;
@@ -640,10 +812,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
 <p>This option sets the number of days to show in the &quot;Daily activity&quot;
     section. Pisg will generate a graph that shows the actitivy during
     this timeframe. Setting the option to 0 disables the section.</p>
-<p class="meta"><b>Default:</b> 0 (disabled)</p>
+</div>
 </article>
 <article class="opt" id="ShowActiveTimes" data-k="showactivetimes enable/disable &quot;most active times&quot;">
-<h3><a class="anchor" href="#ShowActiveTimes" aria-label="Link to ShowActiveTimes">ShowActiveTimes</a><span class="purpose">enable/disable &quot;Most Active Times&quot;</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#ShowActiveTimes" aria-label="Link to ShowActiveTimes">ShowActiveTimes</a></h3><p class="purpose">enable/disable &quot;Most Active Times&quot;</p><p class="meta"><b>Default</b> 1 (enabled)</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;xchat&quot;
@@ -653,10 +826,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
 &lt;set ShowActiveTimes=&quot;1&quot;&gt;</pre>
 <p>With this option you can disable the &quot;Most Active Times&quot; section on the
     stats page. It will simply disappear when specifying 0.</p>
-<p class="meta"><b>Default:</b> 1 (enabled)</p>
+</div>
 </article>
 <article class="opt" id="ShowActiveNicks" data-k="showactivenicks enable/disable &quot;most active nicks&quot;">
-<h3><a class="anchor" href="#ShowActiveNicks" aria-label="Link to ShowActiveNicks">ShowActiveNicks</a><span class="purpose">enable/disable &quot;Most Active Nicks&quot;</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#ShowActiveNicks" aria-label="Link to ShowActiveNicks">ShowActiveNicks</a></h3><p class="purpose">enable/disable &quot;Most Active Nicks&quot;</p><p class="meta"><b>Default</b> 1 (enabled)</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;xchat&quot;
@@ -666,10 +840,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
 &lt;set ShowActiveNicks=&quot;1&quot;&gt;</pre>
 <p>With this option you can disable the &quot;Most Active Nicks&quot; section on the
     stats page.</p>
-<p class="meta"><b>Default:</b> 1 (enabled)</p>
+</div>
 </article>
 <article class="opt" id="ShowBigNumbers" data-k="showbignumbers enable/disable &quot;big numbers&quot; sections">
-<h3><a class="anchor" href="#ShowBigNumbers" aria-label="Link to ShowBigNumbers">ShowBigNumbers</a><span class="purpose">enable/disable &quot;Big Numbers&quot; sections</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#ShowBigNumbers" aria-label="Link to ShowBigNumbers">ShowBigNumbers</a></h3><p class="purpose">enable/disable &quot;Big Numbers&quot; sections</p><p class="meta"><b>Default</b> 1 (enabled)</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;xchat&quot;
@@ -680,10 +855,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
 <p>With this option you can disable the &quot;Big Numbers&quot; and &quot;Other
     Interesting numbers&quot; sections on the stats page. They will simply
     disappear when specifying 0.</p>
-<p class="meta"><b>Default:</b> 1 (enabled)</p>
+</div>
 </article>
 <article class="opt" id="ShowTopics" data-k="showtopics enable/disable &quot;latest topics&quot; sections">
-<h3><a class="anchor" href="#ShowTopics" aria-label="Link to ShowTopics">ShowTopics</a><span class="purpose">enable/disable &quot;Latest topics&quot; sections</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#ShowTopics" aria-label="Link to ShowTopics">ShowTopics</a></h3><p class="purpose">enable/disable &quot;Latest topics&quot; sections</p><p class="meta"><b>Default</b> 1 (enabled)</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;xchat&quot;
@@ -693,10 +869,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
 &lt;set ShowTopics=&quot;1&quot;&gt;</pre>
 <p>With this option you can disable the &quot;Latest topics&quot; section on the
     stats page. It will simply disappear when specifying 0.</p>
-<p class="meta"><b>Default:</b> 1 (enabled)</p>
+</div>
 </article>
 <article class="opt" id="ShowLines" data-k="showlines enable/disable &quot;number of lines&quot;">
-<h3><a class="anchor" href="#ShowLines" aria-label="Link to ShowLines">ShowLines</a><span class="purpose">enable/disable &quot;number of lines&quot;</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#ShowLines" aria-label="Link to ShowLines">ShowLines</a></h3><p class="purpose">enable/disable &quot;number of lines&quot;</p><p class="meta"><b>Default</b> 1 (enabled)</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;xchat&quot;
@@ -707,10 +884,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
 <p>The default behaviour is to add a column to the &quot;Most Active Nicks&quot;
     section displaying the number of lines a user wrote. With this option it
     can be disabled.</p>
-<p class="meta"><b>Default:</b> 1 (enabled)</p>
+</div>
 </article>
 <article class="opt" id="ShowWpl" data-k="showwpl enable/disable &quot;words per line&quot;">
-<h3><a class="anchor" href="#ShowWpl" aria-label="Link to ShowWpl">ShowWpl</a><span class="purpose">enable/disable &quot;words per line&quot;</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#ShowWpl" aria-label="Link to ShowWpl">ShowWpl</a></h3><p class="purpose">enable/disable &quot;words per line&quot;</p><p class="meta"><b>Default</b> 0 (disabled)</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;xchat&quot;
@@ -721,10 +899,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
 <p>With this option you can enable the &quot;words per line&quot; column in the
     &quot;Most Active Nicks&quot; section. It will add a column describing the average
     words per line for a person.</p>
-<p class="meta"><b>Default:</b> 0 (disabled)</p>
+</div>
 </article>
 <article class="opt" id="ShowCpl" data-k="showcpl enable/disable &quot;characters per line&quot;">
-<h3><a class="anchor" href="#ShowCpl" aria-label="Link to ShowCpl">ShowCpl</a><span class="purpose">enable/disable &quot;characters per line&quot;</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#ShowCpl" aria-label="Link to ShowCpl">ShowCpl</a></h3><p class="purpose">enable/disable &quot;characters per line&quot;</p><p class="meta"><b>Default</b> 0 (disabled)</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;xchat&quot;
@@ -735,10 +914,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
 <p>With this option you can enable the &quot;characters per line&quot; column in the
     &quot;Most Active Nicks&quot; section. It will add a column describing the average
     number of characters per line for a person.</p>
-<p class="meta"><b>Default:</b> 0 (disabled)</p>
+</div>
 </article>
 <article class="opt" id="ShowWords" data-k="showwords enable/disable &quot;number of words&quot;">
-<h3><a class="anchor" href="#ShowWords" aria-label="Link to ShowWords">ShowWords</a><span class="purpose">enable/disable &quot;number of words&quot;</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#ShowWords" aria-label="Link to ShowWords">ShowWords</a></h3><p class="purpose">enable/disable &quot;number of words&quot;</p><p class="meta"><b>Default</b> 0 (disabled)</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;xchat&quot;
@@ -749,10 +929,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
 <p>The <code>ShowWords</code> option adds a column to the &quot;Most
     Active Nicks&quot; list which list the total number of words a user has
     typed.</p>
-<p class="meta"><b>Default:</b> 0 (disabled)</p>
+</div>
 </article>
 <article class="opt" id="ShowLastSeen" data-k="showlastseen show when a user was last seen on a channel">
-<h3><a class="anchor" href="#ShowLastSeen" aria-label="Link to ShowLastSeen">ShowLastSeen</a><span class="purpose">show when a user was last seen on a channel</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#ShowLastSeen" aria-label="Link to ShowLastSeen">ShowLastSeen</a></h3><p class="purpose">show when a user was last seen on a channel</p><p class="meta"><b>Default</b> 1 (enabled)</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;xchat&quot;
@@ -762,10 +943,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
 &lt;set ShowLastSeen=&quot;1&quot;&gt;</pre>
 <p>With this option enabled, a column will be added to the &quot;Most Active
     Nicks&quot; section to display when a user was last seen. E.g. &quot;2 days ago&quot;.</p>
-<p class="meta"><b>Default:</b> 1 (enabled)</p>
+</div>
 </article>
 <article class="opt" id="ShowTime" data-k="showtime show when a nick was active">
-<h3><a class="anchor" href="#ShowTime" aria-label="Link to ShowTime">ShowTime</a><span class="purpose">show when a nick was active</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#ShowTime" aria-label="Link to ShowTime">ShowTime</a></h3><p class="purpose">show when a nick was active</p><p class="meta"><b>Default</b> 1 (enabled)</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;xchat&quot;
@@ -776,10 +958,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
 <p>The default behaviour is to add a column to the &quot;Most Active Nicks&quot;
     section displaying a fancy time bar to show when a user was active. With
     this option it can be disabled.</p>
-<p class="meta"><b>Default:</b> 1 (enabled)</p>
+</div>
 </article>
 <article class="opt" id="ShowLineTime" data-k="showlinetime mircstats like behaviour of time bar">
-<h3><a class="anchor" href="#ShowLineTime" aria-label="Link to ShowLineTime">ShowLineTime</a><span class="purpose">mIRCStats like behaviour of time bar</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#ShowLineTime" aria-label="Link to ShowLineTime">ShowLineTime</a></h3><p class="purpose">mIRCStats like behaviour of time bar</p><p class="meta"><b>Default</b> 0 (disabled)</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;bobot&quot;
@@ -792,10 +975,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
     With this option it can be done the same way as mIRCStats does it; that
     is, by putting that time bar next to the number of lines, in the same
     column.</p>
-<p class="meta"><b>Default:</b> 0 (disabled)</p>
+</div>
 </article>
 <article class="opt" id="ShowWordTime" data-k="showwordtime showlinetime like behavior of words column">
-<h3><a class="anchor" href="#ShowWordTime" aria-label="Link to ShowWordTime">ShowWordTime</a><span class="purpose">ShowLineTime like behavior of words column</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#ShowWordTime" aria-label="Link to ShowWordTime">ShowWordTime</a></h3><p class="purpose">ShowLineTime like behavior of words column</p><p class="meta"><b>Default</b> 0 (disabled)</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;bobot&quot;
@@ -808,10 +992,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
     With this option it can be done similarly to mIRCStats does it and like
     the ShowLineTime option, but using words instead of lines; that is, by
     putting that time bar next to the number of words, in the same column.</p>
-<p class="meta"><b>Default:</b> 0 (disabled)</p>
+</div>
 </article>
 <article class="opt" id="ShowRandQuote" data-k="showrandquote enable or disable the random quotes">
-<h3><a class="anchor" href="#ShowRandQuote" aria-label="Link to ShowRandQuote">ShowRandQuote</a><span class="purpose">enable or disable the random quotes</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#ShowRandQuote" aria-label="Link to ShowRandQuote">ShowRandQuote</a></h3><p class="purpose">enable or disable the random quotes</p><p class="meta"><b>Default</b> 1 (enabled)</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;bobot&quot;
@@ -822,10 +1007,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
 <p>The default behaviour is to add a column to the &quot;Most Active Nicks&quot;
     section displaying a users random quote. With this option it can be
     disabled.</p>
-<p class="meta"><b>Default:</b> 1 (enabled)</p>
+</div>
 </article>
 <article class="opt" id="ShowLegend" data-k="showlegend enable or disable the legend of the time bars">
-<h3><a class="anchor" href="#ShowLegend" aria-label="Link to ShowLegend">ShowLegend</a><span class="purpose">enable or disable the legend of the time bars</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#ShowLegend" aria-label="Link to ShowLegend">ShowLegend</a></h3><p class="purpose">enable or disable the legend of the time bars</p><p class="meta"><b>Default</b> 1 (enabled)</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;bobot&quot;
@@ -835,10 +1021,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
 &lt;set ShowLegend=&quot;1&quot;&gt;</pre>
 <p>By default, pisg shows a legend below the &quot;Most Active Times&quot; displaying
     what the different colors means. With this option it can be disabled.</p>
-<p class="meta"><b>Default:</b> 1 (enabled)</p>
+</div>
 </article>
 <article class="opt" id="ShowKickLine" data-k="showkickline enable or disable the kick line">
-<h3><a class="anchor" href="#ShowKickLine" aria-label="Link to ShowKickLine">ShowKickLine</a><span class="purpose">enable or disable the kick line</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#ShowKickLine" aria-label="Link to ShowKickLine">ShowKickLine</a></h3><p class="purpose">enable or disable the kick line</p><p class="meta"><b>Default</b> 1 (enabled)</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;bobot&quot;
@@ -848,10 +1035,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
 &lt;set ShowKickLine=&quot;1&quot;&gt;</pre>
 <p>By default, pisg shows an example kick line in the &quot;Most kicked&quot;-stats.
     With this option it can be disabled.</p>
-<p class="meta"><b>Default:</b> 1 (enabled)</p>
+</div>
 </article>
 <article class="opt" id="ShowActionLine" data-k="showactionline enable or disable the action line">
-<h3><a class="anchor" href="#ShowActionLine" aria-label="Link to ShowActionLine">ShowActionLine</a><span class="purpose">enable or disable the action line</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#ShowActionLine" aria-label="Link to ShowActionLine">ShowActionLine</a></h3><p class="purpose">enable or disable the action line</p><p class="meta"><b>Default</b> 1 (enabled)</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;bobot&quot;
@@ -861,10 +1049,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
 &lt;set ShowActionLine=&quot;1&quot;&gt;</pre>
 <p>By default, pisg shows an example action line in the &quot;Most actions&quot;-stats.
     With this option it can be disabled.</p>
-<p class="meta"><b>Default:</b> 1 (enabled)</p>
+</div>
 </article>
 <article class="opt" id="ShowShoutLine" data-k="showshoutline enable or disable the shout line">
-<h3><a class="anchor" href="#ShowShoutLine" aria-label="Link to ShowShoutLine">ShowShoutLine</a><span class="purpose">enable or disable the shout line</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#ShowShoutLine" aria-label="Link to ShowShoutLine">ShowShoutLine</a></h3><p class="purpose">enable or disable the shout line</p><p class="meta"><b>Default</b> 1 (enabled)</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;bobot&quot;
@@ -874,10 +1063,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
 &lt;set ShowShoutLine=&quot;1&quot;&gt;</pre>
 <p>By default, pisg shows an example shout line in the &quot;Most shouting
     people&quot;-stats.  With this option it can be disabled.</p>
-<p class="meta"><b>Default:</b> 1 (enabled)</p>
+</div>
 </article>
 <article class="opt" id="ShowFoulDecimals" data-k="showfouldecimals set how many decimals to show">
-<h3><a class="anchor" href="#ShowFoulDecimals" aria-label="Link to ShowFoulDecimals">ShowFoulDecimals</a><span class="purpose">set how many decimals to show</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#ShowFoulDecimals" aria-label="Link to ShowFoulDecimals">ShowFoulDecimals</a></h3><p class="purpose">set how many decimals to show</p><p class="meta"><b>Default</b> 1 decimal</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;bobot&quot;
@@ -887,10 +1077,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
 &lt;set ShowFoulDecimals=&quot;1&quot;&gt;</pre>
 <p>By default, pisg uses 1 decimal. With this option you could change 
     it to whatever you like. Negative is treated as the default value.</p>
-<p class="meta"><b>Default:</b> 1 decimal</p>
+</div>
 </article>
 <article class="opt" id="ShowFoulLine" data-k="showfoulline enable or disable the foul line">
-<h3><a class="anchor" href="#ShowFoulLine" aria-label="Link to ShowFoulLine">ShowFoulLine</a><span class="purpose">enable or disable the foul line</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#ShowFoulLine" aria-label="Link to ShowFoulLine">ShowFoulLine</a></h3><p class="purpose">enable or disable the foul line</p><p class="meta"><b>Default</b> 0 (disabled)</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;bobot&quot;
@@ -900,10 +1091,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
 &lt;set ShowFoulLine=&quot;1&quot;&gt;</pre>
 <p>By default, pisg doesn&#x27;t show an example foul line in the &quot;Most
     fouls&quot;-stats.  With this option it can be enabled.</p>
-<p class="meta"><b>Default:</b> 0 (disabled)</p>
+</div>
 </article>
 <article class="opt" id="ShowViolentLines" data-k="showviolentlines enable or disable the violent lines">
-<h3><a class="anchor" href="#ShowViolentLines" aria-label="Link to ShowViolentLines">ShowViolentLines</a><span class="purpose">enable or disable the violent lines</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#ShowViolentLines" aria-label="Link to ShowViolentLines">ShowViolentLines</a></h3><p class="purpose">enable or disable the violent lines</p><p class="meta"><b>Default</b> 1 (enabled)</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;bobot&quot;
@@ -913,10 +1105,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
 &lt;set ShowViolentLines=&quot;1&quot;&gt;</pre>
 <p>By default, pisg shows example violent lines in the &quot;Most aggressive&quot;
     and &quot;Most attacked&quot;-stats.  With this option it can be disabled.</p>
-<p class="meta"><b>Default:</b> 1 (enabled)</p>
+</div>
 </article>
 <article class="opt" id="ShowMuw" data-k="showmuw enable or disable &quot;most used words&quot;">
-<h3><a class="anchor" href="#ShowMuw" aria-label="Link to ShowMuw">ShowMuw</a><span class="purpose">enable or disable &quot;Most used words&quot;</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#ShowMuw" aria-label="Link to ShowMuw">ShowMuw</a></h3><p class="purpose">enable or disable &quot;Most used words&quot;</p><p class="meta"><b>Default</b> 1 (enabled)</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;xchat&quot;
@@ -927,10 +1120,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
 <p>By default, pisg adds an &quot;Most used words&quot; section to the stats page.
     With this option you can disable it from being shown.
     See also <a href="#WordHistory">WordHistory</a>.</p>
-<p class="meta"><b>Default:</b> 1 (enabled)</p>
+</div>
 </article>
 <article class="opt" id="ShowMrn" data-k="showmrn enable or disable &quot;most referenced nicks&quot;">
-<h3><a class="anchor" href="#ShowMrn" aria-label="Link to ShowMrn">ShowMrn</a><span class="purpose">enable or disable &quot;Most referenced nicks&quot;</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#ShowMrn" aria-label="Link to ShowMrn">ShowMrn</a></h3><p class="purpose">enable or disable &quot;Most referenced nicks&quot;</p><p class="meta"><b>Default</b> 1 (enabled)</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;xchat&quot;
@@ -941,10 +1135,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
 <p>By default,  pisg adds an &quot;Most referenced nicks&quot; section to the stats
     page.  With this option you can disable it from being shown.
     See also <a href="#NickHistory">NickHistory</a>.</p>
-<p class="meta"><b>Default:</b> 1 (enabled)</p>
+</div>
 </article>
 <article class="opt" id="ShowMru" data-k="showmru enable or disable &quot;most referenced urls&quot;">
-<h3><a class="anchor" href="#ShowMru" aria-label="Link to ShowMru">ShowMru</a><span class="purpose">enable or disable &quot;Most referenced URLs&quot;</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#ShowMru" aria-label="Link to ShowMru">ShowMru</a></h3><p class="purpose">enable or disable &quot;Most referenced URLs&quot;</p><p class="meta"><b>Default</b> 1 (enabled)</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;xchat&quot;
@@ -955,10 +1150,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
 <p>By default,  pisg adds an &quot;Most referenced URLs&quot; section to the stats
     page.  With this option you can disable it from being shown.
     See also <a href="#UrlHistory">UrlHistory</a>.</p>
-<p class="meta"><b>Default:</b> 1 (enabled)</p>
+</div>
 </article>
 <article class="opt" id="ShowCharts" data-k="showcharts enable or disable channel music charts">
-<h3><a class="anchor" href="#ShowCharts" aria-label="Link to ShowCharts">ShowCharts</a><span class="purpose">enable or disable channel music charts</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#ShowCharts" aria-label="Link to ShowCharts">ShowCharts</a></h3><p class="purpose">enable or disable channel music charts</p><p class="meta"><b>Default</b> 0 (disabled)</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;xchat&quot;
@@ -969,10 +1165,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
 <p>With this option set, pisg creates a chart listing of the top songs played
     on the channel. See also <a href="#ChartsHistory">ChartsHistory</a> and
     <a href="#ChartsRegexp">ChartsRegexp</a>.</p>
-<p class="meta"><b>Default:</b> 0 (disabled)</p>
+</div>
 </article>
 <article class="opt" id="ShowOps" data-k="showops enable or disable op statistics">
-<h3><a class="anchor" href="#ShowOps" aria-label="Link to ShowOps">ShowOps</a><span class="purpose">enable or disable op statistics</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#ShowOps" aria-label="Link to ShowOps">ShowOps</a></h3><p class="purpose">enable or disable op statistics</p><p class="meta"><b>Default</b> 1 (enabled)</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;xchat&quot;
@@ -984,10 +1181,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
     section. Here you can disable the feature, it&#x27;s useful if you don&#x27;t feel
     that the information is of any value, or your log format doesn&#x27;t support
     ops/deops.</p>
-<p class="meta"><b>Default:</b> 1 (enabled)</p>
+</div>
 </article>
 <article class="opt" id="ShowVoices" data-k="showvoices enable or disable voice statistics">
-<h3><a class="anchor" href="#ShowVoices" aria-label="Link to ShowVoices">ShowVoices</a><span class="purpose">enable or disable voice statistics</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#ShowVoices" aria-label="Link to ShowVoices">ShowVoices</a></h3><p class="purpose">enable or disable voice statistics</p><p class="meta"><b>Default</b> 0 (disabled)</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;xchat&quot;
@@ -998,10 +1196,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
 <p>By default, pisg doesn&#x27;t have voice statistics like it has op
     statistics. Enabling this option will add a section to the &quot;Most
     interesting numbers&quot; displaying who got most voices.</p>
-<p class="meta"><b>Default:</b> 0 (disabled)</p>
+</div>
 </article>
 <article class="opt" id="ShowHalfops" data-k="showhalfops enable or disable halfop statistics">
-<h3><a class="anchor" href="#ShowHalfops" aria-label="Link to ShowHalfops">ShowHalfops</a><span class="purpose">enable or disable halfop statistics</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#ShowHalfops" aria-label="Link to ShowHalfops">ShowHalfops</a></h3><p class="purpose">enable or disable halfop statistics</p><p class="meta"><b>Default</b> 0 (disabled)</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;xchat&quot;
@@ -1012,10 +1211,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
 <p>By default, pisg doesn&#x27;t have halfop statistics (+h on some servers)
     like it has op statistics. Enabling this option will add a section to
     the &quot;Most interesting numbers&quot; displaying who gave most half-ops.</p>
-<p class="meta"><b>Default:</b> 0 (disabled)</p>
+</div>
 </article>
 <article class="opt" id="ShowMostNicks" data-k="showmostnicks show who changed nick most often">
-<h3><a class="anchor" href="#ShowMostNicks" aria-label="Link to ShowMostNicks">ShowMostNicks</a><span class="purpose">show who changed nick most often</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#ShowMostNicks" aria-label="Link to ShowMostNicks">ShowMostNicks</a></h3><p class="purpose">show who changed nick most often</p><p class="meta"><b>Default</b> 0 (disabled)</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;xchat&quot;
@@ -1030,10 +1230,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
     See also <a href="#MostNicksHistory">MostNicksHistory</a>,
     <a href="#MostNicksVerbose">MostNicksVerbose</a>, and
     <a href="#NickLimit">NickLimit</a>.</p>
-<p class="meta"><b>Default:</b> 0 (disabled)</p>
+</div>
 </article>
 <article class="opt" id="ShowActiveGenders" data-k="showactivegenders show stats on which gender talked most">
-<h3><a class="anchor" href="#ShowActiveGenders" aria-label="Link to ShowActiveGenders">ShowActiveGenders</a><span class="purpose">show stats on which gender talked most</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#ShowActiveGenders" aria-label="Link to ShowActiveGenders">ShowActiveGenders</a></h3><p class="purpose">show stats on which gender talked most</p><p class="meta"><b>Default</b> 0 (disabled)</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;xchat&quot;
@@ -1043,10 +1244,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
 &lt;set ShowActiveGenders=&quot;1&quot;&gt;</pre>
 <p>Setting this option will make pisg create statistics on which gender
     (female/male/bot) talked most (see the &quot;sex&quot; option in <a href="#user-options">Specifying user options</a>). See also <a href="#NickLimit">NickLimit</a>.</p>
-<p class="meta"><b>Default:</b> 0 (disabled)</p>
+</div>
 </article>
 <article class="opt" id="ShowSmileys" data-k="showsmileys show most used smileys">
-<h3><a class="anchor" href="#ShowSmileys" aria-label="Link to ShowSmileys">ShowSmileys</a><span class="purpose">show most used smileys</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#ShowSmileys" aria-label="Link to ShowSmileys">ShowSmileys</a></h3><p class="purpose">show most used smileys</p><p class="meta"><b>Default</b> 0 (disabled)</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;xchat&quot;
@@ -1056,10 +1258,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
 &lt;set ShowSmileys=&quot;1&quot;&gt;</pre>
 <p>With this option, pisg will make a list of the most used smileys in the
     channel. See also <a href="#SmileyHistory">SmileyHistory</a>.</p>
-<p class="meta"><b>Default:</b> 0 (disabled)</p>
+</div>
 </article>
 <article class="opt" id="ShowKarma" data-k="showkarma show channel karma">
-<h3><a class="anchor" href="#ShowKarma" aria-label="Link to ShowKarma">ShowKarma</a><span class="purpose">show channel karma</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#ShowKarma" aria-label="Link to ShowKarma">ShowKarma</a></h3><p class="purpose">show channel karma</p><p class="meta"><b>Default</b> 0 (disabled)</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;xchat&quot;
@@ -1072,10 +1275,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
     &quot;nickname==&quot; resets it to zero. Only the last karma is remembered per
     nick/nick combination, so there is at most +- 1 karma point.
     See also <a href="#KarmaHistory">KarmaHistory</a> and <a href="#NickLimit">NickLimit</a>.</p>
-<p class="meta"><b>Default:</b> 0 (disabled)</p>
+</div>
 </article>
 <article class="opt" id="ShowMostActiveByHour" data-k="showmostactivebyhour show most active nicks by hour">
-<h3><a class="anchor" href="#ShowMostActiveByHour" aria-label="Link to ShowMostActiveByHour">ShowMostActiveByHour</a><span class="purpose">show most active nicks by hour</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#ShowMostActiveByHour" aria-label="Link to ShowMostActiveByHour">ShowMostActiveByHour</a></h3><p class="purpose">show most active nicks by hour</p><p class="meta"><b>Default</b> 0 (disabled)</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;xchat&quot;
@@ -1087,10 +1291,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
     &quot;Most Active Nicks By Hour&quot; - also look at the
     <a href="#ShowMostActiveByHourGraph">ShowMostActiveByHourGraph</a> and
     <a href="#ActiveNicksByHour">ActiveNicksByHour</a> settings.</p>
-<p class="meta"><b>Default:</b> 0 (disabled)</p>
+</div>
 </article>
 <article class="opt" id="ShowOnlyTop" data-k="showonlytop only count stats for top talkers, ignore less-active users">
-<h3><a class="anchor" href="#ShowOnlyTop" aria-label="Link to ShowOnlyTop">ShowOnlyTop</a><span class="purpose">only count stats for top talkers, ignore less-active users</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#ShowOnlyTop" aria-label="Link to ShowOnlyTop">ShowOnlyTop</a></h3><p class="purpose">only count stats for top talkers, ignore less-active users</p><p class="meta"><b>Default</b> 0 (disabled)</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;xchat&quot;
@@ -1104,10 +1309,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
     respected by the <a href="#ActiveNicks">ActiveNicks</a> and 
     <a href="#ActiveNicks2">ActiveNicks2</a> options. See also
     <a href="#BigNumbersThreshold">BigNumbersThreshold</a>.</p>
-<p class="meta"><b>Default:</b> 0 (disabled)</p>
+</div>
 </article>
 <article class="opt" id="ShowMostActiveByHourGraph" data-k="showmostactivebyhourgraph show graphs in most active nicks by hour">
-<h3><a class="anchor" href="#ShowMostActiveByHourGraph" aria-label="Link to ShowMostActiveByHourGraph">ShowMostActiveByHourGraph</a><span class="purpose">show graphs in most active nicks by hour</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#ShowMostActiveByHourGraph" aria-label="Link to ShowMostActiveByHourGraph">ShowMostActiveByHourGraph</a></h3><p class="purpose">show graphs in most active nicks by hour</p><p class="meta"><b>Default</b> 1 (enabled)</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;xchat&quot;
@@ -1119,18 +1325,20 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
 <p>By enabling this option and the <a href="#ShowMostActiveByHour">ShowMostActiveByHour</a>
     option, pisg will show graphs in the &quot;Most Active Nicks By Hour&quot;
     section.</p>
-<p class="meta"><b>Default:</b> 1 (enabled)</p>
+</div>
 </article>
 <article class="opt" id="ShowOverview" data-k="showoverview enable/disable the channel overview">
-<h3><a class="anchor" href="#ShowOverview" aria-label="Link to ShowOverview">ShowOverview</a><span class="purpose">enable/disable the channel overview</span> <span class="since">1.0a</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#ShowOverview" aria-label="Link to ShowOverview">ShowOverview</a> <span class="since">1.0a</span></h3><p class="purpose">enable/disable the channel overview</p><p class="meta"><b>Default</b> 1 (enabled)</p></div>
+<div class="opt-body">
 <pre>&lt;set ShowOverview=&quot;1&quot;&gt;</pre>
 <p>Shows a row of key numbers at the top of the page: lines, words, nicks, days covered, lines
     per day, the busiest and quietest hour, questions, links shared, the top talker and the
     number of joins and kicks.</p>
-<p class="meta"><b>Default:</b> 1 (enabled)</p>
+</div>
 </article>
 <article class="opt" id="ShowRelations" data-k="showrelations enable/disable the relation map and its tables">
-<h3><a class="anchor" href="#ShowRelations" aria-label="Link to ShowRelations">ShowRelations</a><span class="purpose">enable/disable the relation map and its tables</span> <span class="since">1.0a</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#ShowRelations" aria-label="Link to ShowRelations">ShowRelations</a> <span class="since">1.0a</span></h3><p class="purpose">enable/disable the relation map and its tables</p><p class="meta"><b>Default</b> 1 (enabled)</p></div>
+<div class="opt-body">
 <pre>&lt;set ShowRelations=&quot;1&quot;&gt;</pre>
 <p>Shows who talks to whom: an interactive map (click a nick or a line for details), a table of
     the closest pairs, and the &quot;social roles&quot; (who is talked to the most, the best listener, ...).
@@ -1141,81 +1349,91 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
     other statistics but off the map, or with ignore=&quot;y&quot; to remove it altogether. Nicks that are also
     ordinary words (and the channel name) are not counted as mentions.
     See also <a href="#RelationNicks">RelationNicks</a> and <a href="#RelationMinWeight">RelationMinWeight</a>.</p>
-<p class="meta"><b>Default:</b> 1 (enabled)</p>
+</div>
 </article>
 <article class="opt" id="RelationNicks" data-k="relationnicks number of nicks on the relation map">
-<h3><a class="anchor" href="#RelationNicks" aria-label="Link to RelationNicks">RelationNicks</a><span class="purpose">number of nicks on the relation map</span> <span class="since">1.0a</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#RelationNicks" aria-label="Link to RelationNicks">RelationNicks</a> <span class="since">1.0a</span></h3><p class="purpose">number of nicks on the relation map</p><p class="meta"><b>Default</b> 30</p></div>
+<div class="opt-body">
 <pre>&lt;set RelationNicks=&quot;30&quot;&gt;</pre>
 <p>The map shows this many of the most active people (bots excluded). More than about 40 makes
     the picture crowded.</p>
-<p class="meta"><b>Default:</b> 30</p>
+</div>
 </article>
 <article class="opt" id="RelationMinWeight" data-k="relationminweight minimum connection strength shown as a line on the relation map">
-<h3><a class="anchor" href="#RelationMinWeight" aria-label="Link to RelationMinWeight">RelationMinWeight</a><span class="purpose">minimum connection strength shown as a line on the relation map</span> <span class="since">1.0a</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#RelationMinWeight" aria-label="Link to RelationMinWeight">RelationMinWeight</a> <span class="since">1.0a</span></h3><p class="purpose">minimum connection strength shown as a line on the relation map</p><p class="meta"><b>Default</b> 3</p></div>
+<div class="opt-body">
 <pre>&lt;set RelationMinWeight=&quot;3&quot;&gt;</pre>
 <p>Connections weaker than this are not drawn, which keeps the map readable. A line addressed to
     someone is worth 3, a mention 1 and a quick reply 1. Raise it for a busy channel, lower it for a quiet one.</p>
-<p class="meta"><b>Default:</b> 3</p>
+</div>
 </article>
 <article class="opt" id="ShowTimePersonalities" data-k="showtimepersonalities enable/disable the time personalities section">
-<h3><a class="anchor" href="#ShowTimePersonalities" aria-label="Link to ShowTimePersonalities">ShowTimePersonalities</a><span class="purpose">enable/disable the time personalities section</span> <span class="since">1.0a</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#ShowTimePersonalities" aria-label="Link to ShowTimePersonalities">ShowTimePersonalities</a> <span class="since">1.0a</span></h3><p class="purpose">enable/disable the time personalities section</p><p class="meta"><b>Default</b> 1 (enabled)</p></div>
+<div class="opt-body">
 <pre>&lt;set ShowTimePersonalities=&quot;1&quot;&gt;</pre>
 <p>Shows who chats mostly at night (0-5h), in the morning (6-11h), in the afternoon (12-17h) and
     in the evening (18-23h), for the people with enough lines. The hours follow <a href="#TimeOffset">TimeOffset</a>.</p>
-<p class="meta"><b>Default:</b> 1 (enabled)</p>
+</div>
 </article>
 <article class="opt" id="ShowConcentration" data-k="showconcentration enable/disable the &quot;who carries the channel&quot; section">
-<h3><a class="anchor" href="#ShowConcentration" aria-label="Link to ShowConcentration">ShowConcentration</a><span class="purpose">enable/disable the &quot;who carries the channel&quot; section</span> <span class="since">1.0a</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#ShowConcentration" aria-label="Link to ShowConcentration">ShowConcentration</a> <span class="since">1.0a</span></h3><p class="purpose">enable/disable the &quot;who carries the channel&quot; section</p><p class="meta"><b>Default</b> 1 (enabled)</p></div>
+<div class="opt-body">
 <pre>&lt;set ShowConcentration=&quot;1&quot;&gt;</pre>
 <p>Shows how much of the channel the busiest people write: the share of all lines written by the
     top 1, 3, 5, 10 and 20 nicks, and how many nicks wrote half of everything.</p>
-<p class="meta"><b>Default:</b> 1 (enabled)</p>
+</div>
 </article>
 <article class="opt" id="ShowSignatureWords" data-k="showsignaturewords enable/disable the signature words section">
-<h3><a class="anchor" href="#ShowSignatureWords" aria-label="Link to ShowSignatureWords">ShowSignatureWords</a><span class="purpose">enable/disable the signature words section</span> <span class="since">1.0a</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#ShowSignatureWords" aria-label="Link to ShowSignatureWords">ShowSignatureWords</a> <span class="since">1.0a</span></h3><p class="purpose">enable/disable the signature words section</p><p class="meta"><b>Default</b> 1 (enabled)</p></div>
+<div class="opt-body">
 <pre>&lt;set ShowSignatureWords=&quot;1&quot;&gt;</pre>
 <p>Shows, for each of the regular talkers, the word they use a lot and that hardly anyone else uses.
     Short words, nicks and links are ignored (see <a href="#WordLength">WordLength</a> and <a href="#IgnoreWords">IgnoreWords</a>).</p>
-<p class="meta"><b>Default:</b> 1 (enabled)</p>
+</div>
 </article>
 <article class="opt" id="IgnoreWords" data-k="ignorewords ignore specified words">
-<h3><a class="anchor" href="#IgnoreWords" aria-label="Link to IgnoreWords">IgnoreWords</a><span class="purpose">ignore specified words</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#IgnoreWords" aria-label="Link to IgnoreWords">IgnoreWords</a></h3><p class="purpose">ignore specified words</p><p class="meta"><b>Default</b> unset</p></div>
+<div class="opt-body">
 <pre>&lt;set IgnoreWords=&quot;there about&quot;&gt;</pre>
 <p>Sometimes words in the &quot;most used words&quot; appears which you don&#x27;t want to
     see, with this option you can ignore these words. It also applies to the
     &quot;most referenced nicks&quot; section. It&#x27;s a space separated list of words.
     You can use * like in nick aliases.
     Can not be used in a channel-only context.</p>
-<p class="meta"><b>Default:</b> unset</p>
+</div>
 </article>
 <article class="opt" id="NoIgnoredQuotes" data-k="noignoredquotes control random quote output">
-<h3><a class="anchor" href="#NoIgnoredQuotes" aria-label="Link to NoIgnoredQuotes">NoIgnoredQuotes</a><span class="purpose">Control random quote output</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#NoIgnoredQuotes" aria-label="Link to NoIgnoredQuotes">NoIgnoredQuotes</a></h3><p class="purpose">Control random quote output</p><p class="meta"><b>Default</b> 0</p></div>
+<div class="opt-body">
 <pre>&lt;set NoIgnoredQuotes=&quot;1&quot;&gt;</pre>
 <p>When set to &quot;1&quot;, pisg will not output quotes containing ignored words.
      Pisg will output a blank line after trying 20 random quotes if all 20 random quotes were ignored.</p>
-<p class="meta"><b>Default:</b> 0</p>
+</div>
 </article>
 <article class="opt" id="FoulWords" data-k="foulwords specify words considered to be bad/foulwords language">
-<h3><a class="anchor" href="#FoulWords" aria-label="Link to FoulWords">FoulWords</a><span class="purpose">specify words considered to be bad/FoulWords language</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#FoulWords" aria-label="Link to FoulWords">FoulWords</a></h3><p class="purpose">specify words considered to be bad/FoulWords language</p><p class="meta"><b>Default</b> ass fuck bitch shit scheisse kacke arsch ficker ficken schlampe</p></div>
+<div class="opt-body">
 <pre>&lt;set FoulWords=&quot;ass fuck bitch&quot;&gt;</pre>
 <p>There is a section in the &quot;Most interesting numbers&quot; which tells who had
     a &quot;dirty mouth&quot; - here you can define which words are considered being
     bad/foul. It is a space separated list of words.
     You can use * like in nick aliases.
     Can not be used in a channel-only context.</p>
-<p class="meta"><b>Default:</b> ass fuck bitch shit scheisse kacke arsch ficker ficken schlampe</p>
+</div>
 </article>
 <article class="opt" id="ViolentWords" data-k="violentwords specify words considered to be aggressive/violent">
-<h3><a class="anchor" href="#ViolentWords" aria-label="Link to ViolentWords">ViolentWords</a><span class="purpose">specify words considered to be aggressive/violent</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#ViolentWords" aria-label="Link to ViolentWords">ViolentWords</a></h3><p class="purpose">specify words considered to be aggressive/violent</p><p class="meta"><b>Default</b> slaps beats smacks</p></div>
+<div class="opt-body">
 <pre>&lt;set ViolentWords=&quot;slaps beats kick&quot;&gt;</pre>
 <p>There is a section in the &quot;Most interesting numbers&quot; which tells who is
     most &quot;aggressive&quot; - here you can define which words are considered being
     &quot;violent&quot;. It is a space separated list of words. You can use * like in
     nick aliases. Can not be used in a channel-only context.</p>
-<p class="meta"><b>Default:</b> slaps beats smacks</p>
+</div>
 </article>
 <article class="opt" id="BadUrls" data-k="badurls words that keep a url out of the url statistics">
-<h3><a class="anchor" href="#BadUrls" aria-label="Link to BadUrls">BadUrls</a><span class="purpose">words that keep a URL out of the URL statistics</span> <span class="since">1.0a</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#BadUrls" aria-label="Link to BadUrls">BadUrls</a> <span class="since">1.0a</span></h3><p class="purpose">words that keep a URL out of the URL statistics</p><p class="meta"><b>Default</b> unset (no URLs are removed)</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;xchat&quot;
@@ -1237,10 +1455,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
     characters such as . + ( ) [ ] | mean exactly themselves. A lone * would remove every
     URL. To hide a single exact address instead, use the
     <a href="#ignoring-links">link ignore</a> setting.</p>
-<p class="meta"><b>Default:</b> unset (no URLs are removed)</p>
+</div>
 </article>
 <article class="opt" id="MinQuote" data-k="minquote minimum numbers of letters for a random quote">
-<h3><a class="anchor" href="#MinQuote" aria-label="Link to MinQuote">MinQuote</a><span class="purpose">minimum numbers of letters for a random quote</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#MinQuote" aria-label="Link to MinQuote">MinQuote</a></h3><p class="purpose">minimum numbers of letters for a random quote</p><p class="meta"><b>Default</b> 25</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;xchat&quot;
@@ -1253,10 +1472,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
     number of letters required for a random quote. Also see the
     <a href="#MaxQuote">MaxQuote</a> option. Note that pisg will still choose a
     short quote if it cannot find a longer one.</p>
-<p class="meta"><b>Default:</b> 25</p>
+</div>
 </article>
 <article class="opt" id="MaxQuote" data-k="maxquote maximum numbers of letters for a random quote">
-<h3><a class="anchor" href="#MaxQuote" aria-label="Link to MaxQuote">MaxQuote</a><span class="purpose">maximum numbers of letters for a random quote</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#MaxQuote" aria-label="Link to MaxQuote">MaxQuote</a></h3><p class="purpose">maximum numbers of letters for a random quote</p><p class="meta"><b>Default</b> 65</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;xchat&quot;
@@ -1268,10 +1488,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
     picked from a length range. With this option you can change the maximum
     number of letters required for a random quote. Also see the
     <a href="#MinQuote">MinQuote</a> option.</p>
-<p class="meta"><b>Default:</b> 65</p>
+</div>
 </article>
 <article class="opt" id="WordLength" data-k="wordlength minimum number of characters in an interesting word">
-<h3><a class="anchor" href="#WordLength" aria-label="Link to WordLength">WordLength</a><span class="purpose">minimum number of characters in an interesting word</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#WordLength" aria-label="Link to WordLength">WordLength</a></h3><p class="purpose">minimum number of characters in an interesting word</p><p class="meta"><b>Default</b> 5</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;xchat&quot;
@@ -1282,10 +1503,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
 <p>The &quot;Most Used Words&quot; section on the stats page display the most used
     words. The default is that a word only appears if it is longer than 5
     characters. With this option you can change that minimum.</p>
-<p class="meta"><b>Default:</b> 5</p>
+</div>
 </article>
 <article class="opt" id="QuoteWidth" data-k="quotewidth maximum allowed length of a &quot;word&quot; with no spaces">
-<h3><a class="anchor" href="#QuoteWidth" aria-label="Link to QuoteWidth">QuoteWidth</a><span class="purpose">maximum allowed length of a &quot;word&quot; with no spaces</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#QuoteWidth" aria-label="Link to QuoteWidth">QuoteWidth</a></h3><p class="purpose">maximum allowed length of a &quot;word&quot; with no spaces</p><p class="meta"><b>Default</b> 80</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;xchat&quot;
@@ -1297,10 +1519,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
     over the amount QuoteWidth is set to.  When used in breaking up
     URLs it will insert a space in the displayed URL, but not in the
     actual URL referenced by the HREF.</p>
-<p class="meta"><b>Default:</b> 80</p>
+</div>
 </article>
 <article class="opt" id="BigNumbersThreshold" data-k="bignumbersthreshold minimum number of lines per user for some &quot;big numbers&quot; statistics">
-<h3><a class="anchor" href="#BigNumbersThreshold" aria-label="Link to BigNumbersThreshold">BigNumbersThreshold</a><span class="purpose">Minimum number of lines per user for some &quot;Big Numbers&quot; statistics</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#BigNumbersThreshold" aria-label="Link to BigNumbersThreshold">BigNumbersThreshold</a></h3><p class="purpose">Minimum number of lines per user for some &quot;Big Numbers&quot; statistics</p><p class="meta"><b>Default</b> sqrt</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;xchat&quot;
@@ -1313,10 +1536,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
     happy&quot; sections. If the setting is &quot;sqrt&quot; (the default), it will be
     dynamically replaced with the square root of the number of lines of the
     most active nick. See also <a href="#ShowOnlyTop">ShowOnlyTop</a>.</p>
-<p class="meta"><b>Default:</b> sqrt</p>
+</div>
 </article>
 <article class="opt" id="ActiveNicks" data-k="activenicks nicks to show in &quot;most active nicks&quot;">
-<h3><a class="anchor" href="#ActiveNicks" aria-label="Link to ActiveNicks">ActiveNicks</a><span class="purpose">nicks to show in &quot;Most Active Nicks&quot;</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#ActiveNicks" aria-label="Link to ActiveNicks">ActiveNicks</a></h3><p class="purpose">nicks to show in &quot;Most Active Nicks&quot;</p><p class="meta"><b>Default</b> 25</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;mIRC&quot;
@@ -1326,10 +1550,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
 &lt;set ActiveNicks=&quot;10&quot;&gt;</pre>
 <p>With this option you can define how many nicks you want to appear in the
     &quot;Most Active Nicks&quot; section on the stats page.</p>
-<p class="meta"><b>Default:</b> 25</p>
+</div>
 </article>
 <article class="opt" id="ActiveNicks2" data-k="activenicks2 nicks to show in &quot;these didn&#x27;t make it..&quot;">
-<h3><a class="anchor" href="#ActiveNicks2" aria-label="Link to ActiveNicks2">ActiveNicks2</a><span class="purpose">nicks to show in &quot;These didn&#x27;t make it..&quot;</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#ActiveNicks2" aria-label="Link to ActiveNicks2">ActiveNicks2</a></h3><p class="purpose">nicks to show in &quot;These didn&#x27;t make it..&quot;</p><p class="meta"><b>Default</b> 30</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;mIRC&quot;
@@ -1339,10 +1564,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
 &lt;set ActiveNicks2=&quot;10&quot;&gt;</pre>
 <p>With this option you can define how many nicks you want to appear in the
     &quot;These didn&#x27;t make it&quot; section on the stats page.</p>
-<p class="meta"><b>Default:</b> 30</p>
+</div>
 </article>
 <article class="opt" id="ActiveNicksByHour" data-k="activenicksbyhour number of nicks to show in &quot;most active nicks by hour&quot;">
-<h3><a class="anchor" href="#ActiveNicksByHour" aria-label="Link to ActiveNicksByHour">ActiveNicksByHour</a><span class="purpose">number of nicks to show in &quot;Most Active Nicks By Hour&quot;</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#ActiveNicksByHour" aria-label="Link to ActiveNicksByHour">ActiveNicksByHour</a></h3><p class="purpose">number of nicks to show in &quot;Most Active Nicks By Hour&quot;</p><p class="meta"><b>Default</b> 10</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;mIRC&quot;
@@ -1352,10 +1578,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
 &lt;set ActiveNicksByHour=&quot;10&quot;&gt;</pre>
 <p>With this option you can define how many nicks you want to appear in the
     &quot;Most Active Nicks By Hour&quot; section on the stats page.</p>
-<p class="meta"><b>Default:</b> 10</p>
+</div>
 </article>
 <article class="opt" id="MostNicksHistory" data-k="mostnickshistory maximum number of nicks to show in &quot;users with most nicknames&quot;">
-<h3><a class="anchor" href="#MostNicksHistory" aria-label="Link to MostNicksHistory">MostNicksHistory</a><span class="purpose">maximum number of nicks to show in &quot;users with most nicknames&quot;</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#MostNicksHistory" aria-label="Link to MostNicksHistory">MostNicksHistory</a></h3><p class="purpose">maximum number of nicks to show in &quot;users with most nicknames&quot;</p><p class="meta"><b>Default</b> 5</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;mIRC&quot;
@@ -1366,10 +1593,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
 <p>With this option you can define how many nicks you want to appear in
     the &quot;Users with most nicknames&quot; section. See also
     <a href="#ShowMostNicks">ShowMostNicks</a> and <a href="#MostNicksVerbose">MostNicksVerbose</a>.</p>
-<p class="meta"><b>Default:</b> 5</p>
+</div>
 </article>
 <article class="opt" id="MostNicksVerbose" data-k="mostnicksverbose show nicks used in &quot;most nicks&quot;">
-<h3><a class="anchor" href="#MostNicksVerbose" aria-label="Link to MostNicksVerbose">MostNicksVerbose</a><span class="purpose">show nicks used in &quot;most nicks&quot;</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#MostNicksVerbose" aria-label="Link to MostNicksVerbose">MostNicksVerbose</a></h3><p class="purpose">show nicks used in &quot;most nicks&quot;</p><p class="meta"><b>Default</b> 1 (enabled)</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;mIRC&quot;
@@ -1381,10 +1609,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
     a user has had in the &quot;Most used nicks&quot; section.
     See also <a href="#ShowMostNicks">ShowMostNicks</a>,
     <a href="#MostNicksHistory">MostNicksHistory</a>, and <a href="#NickLimit">NickLimit</a>.</p>
-<p class="meta"><b>Default:</b> 1 (enabled)</p>
+</div>
 </article>
 <article class="opt" id="TopicHistory" data-k="topichistory maximum number of topics to show">
-<h3><a class="anchor" href="#TopicHistory" aria-label="Link to TopicHistory">TopicHistory</a><span class="purpose">maximum number of topics to show</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#TopicHistory" aria-label="Link to TopicHistory">TopicHistory</a></h3><p class="purpose">maximum number of topics to show</p><p class="meta"><b>Default</b> 3</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;mIRC&quot;
@@ -1394,10 +1623,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
 &lt;set TopicHistory=&quot;10&quot;&gt;</pre>
 <p>With this option you can define how many topics you want to appear in
     the &quot;Latest topics&quot; section.</p>
-<p class="meta"><b>Default:</b> 3</p>
+</div>
 </article>
 <article class="opt" id="UrlHistory" data-k="urlhistory maximum number of urls to show">
-<h3><a class="anchor" href="#UrlHistory" aria-label="Link to UrlHistory">UrlHistory</a><span class="purpose">maximum number of URLs to show</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#UrlHistory" aria-label="Link to UrlHistory">UrlHistory</a></h3><p class="purpose">maximum number of URLs to show</p><p class="meta"><b>Default</b> 5</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;mIRC&quot;
@@ -1407,10 +1637,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
 &lt;set UrlHistory=&quot;10&quot;&gt;</pre>
 <p>With this option you can define how many URLs you want to appear in
     the &quot;Most referenced URLs&quot; section. See also <a href="#ShowMru">ShowMru</a>.</p>
-<p class="meta"><b>Default:</b> 5</p>
+</div>
 </article>
 <article class="opt" id="ChartsHistory" data-k="chartshistory number of songs to show">
-<h3><a class="anchor" href="#ChartsHistory" aria-label="Link to ChartsHistory">ChartsHistory</a><span class="purpose">number of songs to show</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#ChartsHistory" aria-label="Link to ChartsHistory">ChartsHistory</a></h3><p class="purpose">number of songs to show</p><p class="meta"><b>Default</b> 5 (the Top Five)</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;mIRC&quot;
@@ -1421,10 +1652,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
 <p>This option sets the number of songs that will be show in the channel music
     charts. See also <a href="#ShowCharts">ShowCharts</a> and
     <a href="#ChartsRegexp">ChartsRegexp</a>.</p>
-<p class="meta"><b>Default:</b> 5 (the Top Five)</p>
+</div>
 </article>
 <article class="opt" id="ChartsRegexp" data-k="chartsregexp how to recognize songs played">
-<h3><a class="anchor" href="#ChartsRegexp" aria-label="Link to ChartsRegexp">ChartsRegexp</a><span class="purpose">how to recognize songs played</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#ChartsRegexp" aria-label="Link to ChartsRegexp">ChartsRegexp</a></h3><p class="purpose">how to recognize songs played</p><p class="meta"><b>Default</b> &quot;(?:np:|(?:now )?playing:? (?:MPEG stream from)?)\s*(.*)&quot;</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;mIRC&quot;
@@ -1434,10 +1666,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
     open an issue at https://github.com/PISG/pisg/issues if you have a better default. The regexp MUST
     contain a single () pair to extract the song name. See also the perlre(1)
     manpage, <a href="#ShowCharts">ShowCharts</a> and <a href="#ChartsHistory">ChartsHistory</a>.</p>
-<p class="meta"><b>Default:</b> &quot;(?:np:|(?:now )?playing:? (?:MPEG stream from)?)\s*(.*)&quot;</p>
+</div>
 </article>
 <article class="opt" id="WordHistory" data-k="wordhistory maximum number of words to show">
-<h3><a class="anchor" href="#WordHistory" aria-label="Link to WordHistory">WordHistory</a><span class="purpose">maximum number of words to show</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#WordHistory" aria-label="Link to WordHistory">WordHistory</a></h3><p class="purpose">maximum number of words to show</p><p class="meta"><b>Default</b> 10</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;mIRC&quot;
@@ -1447,10 +1680,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
 &lt;set WordHistory=&quot;15&quot;&gt;</pre>
 <p>With this option you can define how many words you want to appear in
     the &quot;Most used words&quot; section. See also <a href="#ShowMuw">ShowMuw</a>.</p>
-<p class="meta"><b>Default:</b> 10</p>
+</div>
 </article>
 <article class="opt" id="NickHistory" data-k="nickhistory maximum number of nicks to show in &quot;most referenced nicks&quot;">
-<h3><a class="anchor" href="#NickHistory" aria-label="Link to NickHistory">NickHistory</a><span class="purpose">maximum number of nicks to show in &quot;Most referenced nicks&quot;</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#NickHistory" aria-label="Link to NickHistory">NickHistory</a></h3><p class="purpose">maximum number of nicks to show in &quot;Most referenced nicks&quot;</p><p class="meta"><b>Default</b> 5</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  logfile = &quot;channel.log&quot;
  format = &quot;mIRC&quot;
@@ -1460,10 +1694,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
 &lt;set NickHistory=&quot;15&quot;&gt;</pre>
 <p>With this option you can define how many nicks you want to appear in
     the &quot;Most referenced nicks&quot; section. See also <a href="#ShowMrn">ShowMrn</a>.</p>
-<p class="meta"><b>Default:</b> 5</p>
+</div>
 </article>
 <article class="opt" id="SmileyHistory" data-k="smileyhistory maximum number of smileys to show in smiley stats">
-<h3><a class="anchor" href="#SmileyHistory" aria-label="Link to SmileyHistory">SmileyHistory</a><span class="purpose">maximum number of smileys to show in smiley stats</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#SmileyHistory" aria-label="Link to SmileyHistory">SmileyHistory</a></h3><p class="purpose">maximum number of smileys to show in smiley stats</p><p class="meta"><b>Default</b> 10</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  logfile = &quot;channel.log&quot;
  format = &quot;mIRC&quot;
@@ -1473,10 +1708,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
 &lt;set SmileyHistory=&quot;15&quot;&gt;</pre>
 <p>At most this many smileys will appear in smiley stats.
     See also <a href="#ShowSmileys">ShowSmileys</a>.</p>
-<p class="meta"><b>Default:</b> 10</p>
+</div>
 </article>
 <article class="opt" id="KarmaHistory" data-k="karmahistory maximum number of nicks to show in &quot;karma&quot;">
-<h3><a class="anchor" href="#KarmaHistory" aria-label="Link to KarmaHistory">KarmaHistory</a><span class="purpose">maximum number of nicks to show in &quot;Karma&quot;</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#KarmaHistory" aria-label="Link to KarmaHistory">KarmaHistory</a></h3><p class="purpose">maximum number of nicks to show in &quot;Karma&quot;</p><p class="meta"><b>Default</b> 5</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  logfile = &quot;channel.log&quot;
  format = &quot;mIRC&quot;
@@ -1486,10 +1722,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
 &lt;set KarmaHistory=&quot;15&quot;&gt;</pre>
 <p>At most this many nicks will appear in the good and bad karma stats.
     See also <a href="#ShowKarma">ShowKarma</a> and <a href="#NickLimit">NickLimit</a>.</p>
-<p class="meta"><b>Default:</b> 5</p>
+</div>
 </article>
 <article class="opt" id="NickTracking" data-k="nicktracking track nick changes and create aliases">
-<h3><a class="anchor" href="#NickTracking" aria-label="Link to NickTracking">NickTracking</a><span class="purpose">track nick changes and create aliases</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#NickTracking" aria-label="Link to NickTracking">NickTracking</a></h3><p class="purpose">track nick changes and create aliases</p><p class="meta"><b>Default</b> 0 (disabled)</p></div>
+<div class="opt-body">
 <pre>&lt;set NickTracking=&quot;1&quot;&gt;</pre>
 <p>Enabling this option will track nick changes as well as it can. It will
     then automatically create aliases for these nicks. Useful for
@@ -1497,10 +1734,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
     Nick tracking does not work for log formats that do not use the nickname
     for the person running the logger, but only show &quot;You&quot; there.
     See <a href="#Maintainer">Maintainer</a>.</p>
-<p class="meta"><b>Default:</b> 0 (disabled)</p>
+</div>
 </article>
 <article class="opt" id="NickLimit" data-k="nicklimit maximum number of nicks in lists">
-<h3><a class="anchor" href="#NickLimit" aria-label="Link to NickLimit">NickLimit</a><span class="purpose">maximum number of nicks in lists</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#NickLimit" aria-label="Link to NickLimit">NickLimit</a></h3><p class="purpose">maximum number of nicks in lists</p><p class="meta"><b>Default</b> 10</p></div>
+<div class="opt-body">
 <pre>&lt;set NickLimit=&quot;0&quot;&gt;</pre>
 <p>This option trims lists of nicks to a maximum length, replacing the rest
     with &quot;...&quot;. Setting to 0 disables trimming. Affected are the used nicks in
@@ -1508,10 +1746,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
     and nicks in the &quot;Good/bad karma by&quot; columns. See
     <a href="#ShowMostNicks">ShowMostNicks</a>, <a href="#ShowKarma">ShowKarma</a>, and
     <a href="#ShowActiveGenders">ShowActiveGenders</a>.</p>
-<p class="meta"><b>Default:</b> 10</p>
+</div>
 </article>
 <article class="opt" id="SortByWords" data-k="sortbywords sort &quot;most active nicks&quot; by words">
-<h3><a class="anchor" href="#SortByWords" aria-label="Link to SortByWords">SortByWords</a><span class="purpose">sort &quot;most active nicks&quot; by words</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#SortByWords" aria-label="Link to SortByWords">SortByWords</a></h3><p class="purpose">sort &quot;most active nicks&quot; by words</p><p class="meta"><b>Default</b> 0 (disabled)</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  logfile = &quot;channel.log&quot;
  format = &quot;xchat&quot;
@@ -1521,28 +1760,32 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
 &lt;set SortByWords=&quot;1&quot;&gt;</pre>
 <p>The default for the &quot;Most Active Nicks&quot; section - is to sort users by
     lines. Enabling this will sort it by words instead.</p>
-<p class="meta"><b>Default:</b> 0 (disabled)</p>
+</div>
 </article>
 </section>
 
-<section id="reference-new">
-<h2><span class="hash">#</span>Options added in 1.0a</h2>
+<section id="reference-new" class="chapter">
+<p class="kicker"><span class="ch-num">06</span>Option reference</p>
+<h2><a class="anchor" href="#reference-new">Options added in 1.0a</a></h2>
 <p class="sec-intro">The seven sections added in 1.0a are on by default in every colour scheme. Set them to <code>0</code> for the page pisg wrote before 1.0a &mdash; see the <a href="../changelog/#v1.0-upgrading">upgrade notes</a>. Each option is described in its chapter, marked <span class="since">1.0a</span>.</p>
 <div class="pill-row"><a class="pill" href="#ShowOverview">ShowOverview</a><a class="pill" href="#ShowRelations">ShowRelations</a><a class="pill" href="#RelationNicks">RelationNicks</a><a class="pill" href="#RelationMinWeight">RelationMinWeight</a><a class="pill" href="#ShowTimePersonalities">ShowTimePersonalities</a><a class="pill" href="#ShowConcentration">ShowConcentration</a><a class="pill" href="#ShowSignatureWords">ShowSignatureWords</a><a class="pill" href="#ShowNavBar">ShowNavBar</a><a class="pill" href="#HomeLink">HomeLink</a><a class="pill" href="#BadUrls">BadUrls</a><a class="pill" href="#ChannelIndex">ChannelIndex</a></div>
 </section>
 
-<section id="reference-pictures">
-<h2><span class="hash">#</span>Picture options</h2>
+<section id="reference-pictures" class="chapter">
+<p class="kicker"><span class="ch-num">07</span>Option reference</p>
+<h2><a class="anchor" href="#reference-pictures">Picture options</a></h2>
 <div class="pill-row"><a class="pill" href="#PicLocation">PicLocation</a><a class="pill" href="#UserPics">UserPics</a><a class="pill" href="#ImagePath">ImagePath</a><a class="pill" href="#DefaultPic">DefaultPic</a><a class="pill" href="#ImageGlobPath">ImageGlobPath</a><a class="pill" href="#PicWidth">PicWidth</a><a class="pill" href="#PicHeight">PicHeight</a></div>
 <article class="opt" id="PicLocation" data-k="piclocation path to images on stats page">
-<h3><a class="anchor" href="#PicLocation" aria-label="Link to PicLocation">PicLocation</a><span class="purpose">path to images on stats page</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#PicLocation" aria-label="Link to PicLocation">PicLocation</a></h3><p class="purpose">path to images on stats page</p><p class="meta"><b>Default</b> Current directory</p></div>
+<div class="opt-body">
 <pre>&lt;set PicLocation=&quot;gfx/&quot;&gt;</pre>
 <p>The location to the pictures used on the stats page - not the user
     pictures but the different bars in &quot;Most Active Times&quot;.</p>
-<p class="meta"><b>Default:</b> Current directory</p>
+</div>
 </article>
 <article class="opt" id="UserPics" data-k="userpics number of user pictures per row">
-<h3><a class="anchor" href="#UserPics" aria-label="Link to UserPics">UserPics</a><span class="purpose">number of user pictures per row</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#UserPics" aria-label="Link to UserPics">UserPics</a></h3><p class="purpose">number of user pictures per row</p><p class="meta"><b>Default</b> yes (1)</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  UserPics = &quot;no&quot;
@@ -1557,10 +1800,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
     of size 60x60. Set <code>UserPics</code> to no or 0 to disable user
     pictures. The latter is useful if you share a user config file between
     channels and want to disable user pictures for some channels.</p>
-<p class="meta"><b>Default:</b> yes (1)</p>
+</div>
 </article>
 <article class="opt" id="ImagePath" data-k="imagepath path to user pictures (html page)">
-<h3><a class="anchor" href="#ImagePath" aria-label="Link to ImagePath">ImagePath</a><span class="purpose">path to user pictures (HTML page)</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#ImagePath" aria-label="Link to ImagePath">ImagePath</a></h3><p class="purpose">path to user pictures (HTML page)</p><p class="meta"><b>Default</b> current directory</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;mIRC&quot;
@@ -1571,10 +1815,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
 <p><code>ImagePath</code> defines the path to where user
     pictures are located, relative to the HTML page generated. The default is
     that user pictures is located in the same directory as the HTML page.</p>
-<p class="meta"><b>Default:</b> current directory</p>
+</div>
 </article>
 <article class="opt" id="DefaultPic" data-k="defaultpic use a default user picture">
-<h3><a class="anchor" href="#DefaultPic" aria-label="Link to DefaultPic">DefaultPic</a><span class="purpose">use a default user picture</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#DefaultPic" aria-label="Link to DefaultPic">DefaultPic</a></h3><p class="purpose">use a default user picture</p><p class="meta"><b>Default</b> unset</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;mIRC&quot;
@@ -1586,10 +1831,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
     users which have no other picture defined in the <code>user</code>
     element. This is good for showing &quot;No picture available&quot; or something.
     May contain globbing patterns, see <a href="#ImageGlobPath">ImageGlobPath</a> below.</p>
-<p class="meta"><b>Default:</b> unset</p>
+</div>
 </article>
 <article class="opt" id="ImageGlobPath" data-k="imageglobpath path to user pictures (output generation)">
-<h3><a class="anchor" href="#ImageGlobPath" aria-label="Link to ImageGlobPath">ImageGlobPath</a><span class="purpose">path to user pictures (output generation)</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#ImageGlobPath" aria-label="Link to ImageGlobPath">ImageGlobPath</a></h3><p class="purpose">path to user pictures (output generation)</p><p class="meta"><b>Default</b> current <a href="#ImagePath">ImagePath</a> setting</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;mIRC&quot;
@@ -1606,10 +1852,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
     (NB: This setting will be different from <a href="#ImagePath">ImagePath</a> if
     the latter is not relative to the current directory, e.g. if you are
     writing the HTML file outside of the current directory.)</p>
-<p class="meta"><b>Default:</b> current <a href="#ImagePath">ImagePath</a> setting</p>
+</div>
 </article>
 <article class="opt" id="PicWidth" data-k="picwidth define a standard width for user pictures">
-<h3><a class="anchor" href="#PicWidth" aria-label="Link to PicWidth">PicWidth</a><span class="purpose">define a standard width for user pictures</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#PicWidth" aria-label="Link to PicWidth">PicWidth</a></h3><p class="purpose">define a standard width for user pictures</p><p class="meta"><b>Default</b> unset</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;mIRC&quot;
@@ -1620,10 +1867,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
 <p><code>PicWidth</code> defines the standard width for user
     pictures. Setting the &#x27;width&#x27; attribute of image-elements on the
     outputted stats page. See also <a href="#PicHeight">PicHeight</a>.</p>
-<p class="meta"><b>Default:</b> unset</p>
+</div>
 </article>
 <article class="opt" id="PicHeight" data-k="picheight define a standard height for user pictures">
-<h3><a class="anchor" href="#PicHeight" aria-label="Link to PicHeight">PicHeight</a><span class="purpose">define a standard height for user pictures</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#PicHeight" aria-label="Link to PicHeight">PicHeight</a></h3><p class="purpose">define a standard height for user pictures</p><p class="meta"><b>Default</b> unset</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;mIRC&quot;
@@ -1634,15 +1882,17 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
 <p><code>PicHeight</code> defines the standard height for user
     pictures. Setting the &#x27;height&#x27; attribute of image-elements on the
     outputted stats page. See also <a href="#PicWidth">PicWidth</a>.</p>
-<p class="meta"><b>Default:</b> unset</p>
+</div>
 </article>
 </section>
 
-<section id="reference-misc">
-<h2><span class="hash">#</span>Misc options</h2>
+<section id="reference-misc" class="chapter">
+<p class="kicker"><span class="ch-num">08</span>Option reference</p>
+<h2><a class="anchor" href="#reference-misc">Misc options</a></h2>
 <div class="pill-row"><a class="pill" href="#Charset">Charset</a><a class="pill" href="#LogCharset">LogCharset</a><a class="pill" href="#LogCharsetFallback">LogCharsetFallback</a><a class="pill" href="#TimeOffset">TimeOffset</a><a class="pill" href="#RegexpAliases">RegexpAliases</a><a class="pill" href="#LangFile">LangFile</a><a class="pill" href="#CssDir">CssDir</a><a class="pill" href="#HiCell">HiCell</a><a class="pill" href="#LogType">LogType</a><a class="pill" href="#StatsDump">StatsDump</a></div>
 <article class="opt" id="Charset" data-k="charset character set to use for stats page">
-<h3><a class="anchor" href="#Charset" aria-label="Link to Charset">Charset</a><span class="purpose">character set to use for stats page</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#Charset" aria-label="Link to Charset">Charset</a></h3><p class="purpose">character set to use for stats page</p><p class="meta"><b>Default</b> iso-8859-1</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;xchat&quot;
@@ -1657,10 +1907,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
     Note: you also have to tell your webserver to transmit the charset to
     the browser. With Apache, use &quot;AddDefaultCharset off&quot; in the server
     config.</p>
-<p class="meta"><b>Default:</b> iso-8859-1</p>
+</div>
 </article>
 <article class="opt" id="LogCharset" data-k="logcharset character set for logfiles">
-<h3><a class="anchor" href="#LogCharset" aria-label="Link to LogCharset">LogCharset</a><span class="purpose">character set for logfiles</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#LogCharset" aria-label="Link to LogCharset">LogCharset</a></h3><p class="purpose">character set for logfiles</p><p class="meta"><b>Default</b> empty (no conversion)</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;xchat&quot;
@@ -1673,10 +1924,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
 <p>If <code>LogCharset</code> is set and different from
     <a href="#Charset">Charset</a>, pisg will convert the charset using
     Text::Iconv. Using this option slows down log processing.</p>
-<p class="meta"><b>Default:</b> empty (no conversion)</p>
+</div>
 </article>
 <article class="opt" id="LogCharsetFallback" data-k="logcharsetfallback fallback character set for logfiles">
-<h3><a class="anchor" href="#LogCharsetFallback" aria-label="Link to LogCharsetFallback">LogCharsetFallback</a><span class="purpose">fallback character set for logfiles</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#LogCharsetFallback" aria-label="Link to LogCharsetFallback">LogCharsetFallback</a></h3><p class="purpose">fallback character set for logfiles</p><p class="meta"><b>Default</b> empty (no fallback conversion)</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;xchat&quot;
@@ -1697,10 +1949,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
     short: <code>LogCharset</code> = utf-8,
     <code>LogCharsetFallback</code> = iso-8859-15 works, the other way
     round does not.)</p>
-<p class="meta"><b>Default:</b> empty (no fallback conversion)</p>
+</div>
 </article>
 <article class="opt" id="TimeOffset" data-k="timeoffset use a different time zone than the local machine">
-<h3><a class="anchor" href="#TimeOffset" aria-label="Link to TimeOffset">TimeOffset</a><span class="purpose">use a different time zone than the local machine</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#TimeOffset" aria-label="Link to TimeOffset">TimeOffset</a></h3><p class="purpose">use a different time zone than the local machine</p><p class="meta"><b>Default</b> +0</p></div>
+<div class="opt-body">
 <pre>&lt;channel=&quot;#channel&quot;&gt;
  Logfile = &quot;channel.log&quot;
  Format = &quot;mIRC&quot;
@@ -1713,10 +1966,11 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
     of the generated stats. Sometimes when you have a shell on an external
     box, and it&#x27;s in another country, you want to use another time. This is
     accomplished by the <code>TimeOffset</code> command.</p>
-<p class="meta"><b>Default:</b> +0</p>
+</div>
 </article>
 <article class="opt" id="RegexpAliases" data-k="regexpaliases use regular expressions in user aliases">
-<h3><a class="anchor" href="#RegexpAliases" aria-label="Link to RegexpAliases">RegexpAliases</a><span class="purpose">use regular expressions in user aliases</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#RegexpAliases" aria-label="Link to RegexpAliases">RegexpAliases</a></h3><p class="purpose">use regular expressions in user aliases</p><p class="meta"><b>Default</b> 0 (disabled)</p></div>
+<div class="opt-body">
 <pre>&lt;user nick=&quot;Joe&quot; alias=&quot;Joe\d+&quot;&gt;
 
 &lt;set RegexpAliases=&quot;1&quot;&gt;</pre>
@@ -1724,26 +1978,29 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
     parsed as regular expressions; this setting also applies to the
     <a href="#IgnoreWords">IgnoreWords</a>, <a href="#FoulWords">FoulWords</a>, and
     <a href="#ViolentWords">ViolentWords</a> settings.</p>
-<p class="meta"><b>Default:</b> 0 (disabled)</p>
+</div>
 </article>
 <article class="opt" id="LangFile" data-k="langfile filename of language file">
-<h3><a class="anchor" href="#LangFile" aria-label="Link to LangFile">LangFile</a><span class="purpose">filename of language file</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#LangFile" aria-label="Link to LangFile">LangFile</a></h3><p class="purpose">filename of language file</p><p class="meta"><b>Default</b> lang.txt</p></div>
+<div class="opt-body">
 <pre>&lt;set LangFile=&quot;mylang.txt&quot;&gt;</pre>
 <p>With this option you have an alternative way to define the name and/or
     path to the language file. Usually you don&#x27;t have to touch this option.</p>
-<p class="meta"><b>Default:</b> lang.txt</p>
+</div>
 </article>
 <article class="opt" id="CssDir" data-k="cssdir path to directory with css files">
-<h3><a class="anchor" href="#CssDir" aria-label="Link to CssDir">CssDir</a><span class="purpose">path to directory with CSS files</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#CssDir" aria-label="Link to CssDir">CssDir</a></h3><p class="purpose">path to directory with CSS files</p><p class="meta"><b>Default</b> layout/ (in current directory)</p></div>
+<div class="opt-body">
 <pre>&lt;set CssDir=&quot;/usr/share/pisg/layout/&quot;&gt;</pre>
 <p><code>CssDir</code> is used to define the paths to the CSS files
     (the <a href="#ColorScheme">ColorScheme</a>s). Usually you don&#x27;t
     need to change this. This setting is only used when statically including
     the CSS file.</p>
-<p class="meta"><b>Default:</b> layout/ (in current directory)</p>
+</div>
 </article>
 <article class="opt" id="HiCell" data-k="hicell colors for color gradient in most active nicks section">
-<h3><a class="anchor" href="#HiCell" aria-label="Link to HiCell">HiCell</a><span class="purpose">colors for color gradient in most active nicks section</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#HiCell" aria-label="Link to HiCell">HiCell</a></h3><p class="purpose">colors for color gradient in most active nicks section</p><p class="meta"><b>Default</b> #BABADD, #CCCCCC</p></div>
+<div class="opt-body">
 <pre>&lt;set HiCell=&quot;#BABADD&quot; HiCell2=&quot;#CCCCCC&quot;&gt;
 &lt;set HiCell=&quot;&quot;&gt;</pre>
 <p><code>HiCell</code> and <code>HiCell2</code> define the colors
@@ -1752,27 +2009,30 @@ $ pisg -co pisg.conf -nf 8 -t -week</pre>
     <code>HiCell</code> the empty string (&quot;&quot;), pisg will not generate a color
     gradient; you might want to use this with <a href="#ColorScheme">ColorScheme</a>=&quot;none&quot;
     or <a href="#AltColorScheme">AltColorScheme</a>.</p>
-<p class="meta"><b>Default:</b> #BABADD, #CCCCCC</p>
+</div>
 </article>
 <article class="opt" id="LogType" data-k="logtype type of log (not the format of the log)">
-<h3><a class="anchor" href="#LogType" aria-label="Link to LogType">LogType</a><span class="purpose">type of log (not the format of the log)</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#LogType" aria-label="Link to LogType">LogType</a></h3><p class="purpose">type of log (not the format of the log)</p><p class="meta"><b>Default</b> Logfile</p></div>
+<div class="opt-body">
 <pre>&lt;set LogType=&quot;Logfile&quot;&gt;</pre>
 <p>The type of logs kept for your channel. Currently only &quot;Logfile&quot; is
     supported, so you don&#x27;t need to change this option.</p>
-<p class="meta"><b>Default:</b> Logfile</p>
+</div>
 </article>
 <article class="opt" id="StatsDump" data-k="statsdump dump raw statistics into file">
-<h3><a class="anchor" href="#StatsDump" aria-label="Link to StatsDump">StatsDump</a><span class="purpose">dump raw statistics into file</span></h3>
+<div class="opt-head"><h3><a class="anchor" href="#StatsDump" aria-label="Link to StatsDump">StatsDump</a></h3><p class="purpose">dump raw statistics into file</p><p class="meta"><b>Default</b> Unset</p></div>
+<div class="opt-body">
 <pre>&lt;set StatsDump=&quot;statsdump&quot;&gt;</pre>
 <p>This option is intended for debugging pisg, but might be useful to process
     the parsed logs with another program. The file contains the %stats and
     %lines hashes in perl&#x27;s Data::Dumper format.</p>
-<p class="meta"><b>Default:</b> Unset</p>
+</div>
 </article>
 </section>
 
-<section id="tools">
-<h2><span class="hash">#</span>Optional tools</h2>
+<section id="tools" class="chapter">
+<p class="kicker"><span class="ch-num">09</span>More</p>
+<h2><a class="anchor" href="#tools">Optional tools</a></h2>
 <p class="sec-intro">None of these are needed to run pisg. They live in <code>scripts/</code>
 and each one solves something that otherwise means editing config files by hand. Every one of them
 refuses to overwrite work you did yourself.</p>
@@ -1869,8 +2129,9 @@ user, so the configuration does not need to know ZNC&rsquo;s layout:</p>
 
 </section>
 
-<section id="example-config">
-<h2><span class="hash">#</span>Example configuration</h2>
+<section id="example-config" class="chapter">
+<p class="kicker"><span class="ch-num">10</span>More</p>
+<h2><a class="anchor" href="#example-config">Example configuration</a></h2>
 
 <p>A ready-to-use <code>pisg.cfg</code> for a channel called <code>#example</code>. It lists every
 option pisg understands, with what it does, so you can copy it and change only the lines marked
@@ -2320,8 +2581,9 @@ Options are at pisg's own defaults unless the comment says <em>recommended</em>.
 </div>
 </section>
 
-<section id="copyright">
-<h2><span class="hash">#</span>Copyright and licence</h2>
+<section id="copyright" class="chapter">
+<p class="kicker"><span class="ch-num">11</span>More</p>
+<h2><a class="anchor" href="#copyright">Copyright and licence</a></h2>
 
 <p>pisg - Perl IRC Statistics Generator</p>
 <p>Copyright (C) 2001-2012  The pisg project</p>
@@ -2337,23 +2599,25 @@ Options are at pisg's own defaults unless the comment says <em>recommended</em>.
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA</p>
 </section>
+</div>
 
-<footer>
+<footer class="doc-foot">
   <p><a href="../">pisg</a> &middot; <a href="../changelog/">Changelog</a> &middot;
-  <a href="../demo/">Live example</a> &middot;
+  <a href="../themes/">Themes</a> &middot; <a href="../demo/">Live example</a> &middot;
   <a href="https://github.com/PISG/pisg">GitHub</a> &middot;
   <a href="https://sourceforge.net/projects/pisg/">Original project</a></p>
-  <p style="margin-top:8px"><a href="../privacy/">Privacy</a> &middot;
+  <p><a href="../privacy/">Privacy</a> &middot;
   <a href="../cookies/">Cookies</a> &middot; <a href="../terms/">Terms</a></p>
-  <p style="margin-top:8px">pisg 1.0a is free software under the GPL, version 2 or later. Started in 2001 by
-  Morten “mbrix” Brix Pedersen.</p>
+  <p>pisg 1.0a is free software under the GPL, version 2 or later. Started in 2001 by
+  Morten “mbrix” Brix Pedersen. This page is built from <code>docs/pisg-doc.html</code>, which ships
+  with pisg.</p>
 </footer>
 
 </main>
-</div></div>
+</div>
 </div>
 
 <button id="top-btn" title="Back to top" aria-label="Back to top">↑</button>
-<script src="../assets/site.js?v=ae94b127"></script>
+<script src="../assets/site.js?v=74392f73"></script>
 </body>
 </html>
