@@ -32,15 +32,17 @@
   <div class="wrap" style="display:block;max-width:70ch">
     <p class="eyebrow"><span class="dot" style="background:var(--gold);box-shadow:0 0 0 3px rgba(229,181,103,.15)" aria-hidden="true"></span>Error 404</p>
     <h1 style="font-size:38px">Nothing here</h1>
-    <p class="tagline">That page does not exist on this site. It may have moved when the pages lost
-    their <code>.html</code> endings.</p>
+    <p class="tagline">That page does not exist on this site. It may have moved: the rebuilt site
+    left <code>/new/</code> for the root, and the pages lost their <code>.html</code> endings. If a
+    link brought you here, you are about to be forwarded.</p>
 
     <div class="term" style="margin-top:28px">
       <div class="bar"><i></i><i></i><i></i><span>where things are now</span></div>
-      <div class="body"><span class="out">/index.html   </span><span class="pr">&rarr;</span><span class="hl">  /</span>
-<span class="out">/docs.html    </span><span class="pr">&rarr;</span><span class="hl">  /docs/</span>
+      <div class="body"><span class="out">/new/anything   </span><span class="pr">&rarr;</span><span class="hl">  /anything</span>
+<span class="out">/index.html     </span><span class="pr">&rarr;</span><span class="hl">  /</span>
+<span class="out">/docs.html      </span><span class="pr">&rarr;</span><span class="hl">  /docs/</span>
 <span class="out">/changelog.html </span><span class="pr">&rarr;</span><span class="hl">  /changelog/</span>
-<span class="out">/#SomeOption  </span><span class="pr">&rarr;</span><span class="hl">  /docs/#SomeOption</span></div>
+<span class="out">/#SomeOption    </span><span class="pr">&rarr;</span><span class="hl">  /docs/#SomeOption</span></div>
     </div>
 
     <div class="cta-row">
@@ -64,9 +66,18 @@
 </footer>
 
 <script>
-/* Old deep links pointed at option anchors on the home page; those live in /docs/ now.
-   If someone lands here with such a hash, send them to the right place. */
+/* Two kinds of old link land here, and both have an obvious destination.
+
+   1. The site was built at /new/ before it replaced the old one, and those links
+      were shared. Everything under /new/ now lives at the same path without it.
+   2. Until 2026 the whole manual sat on the home page, so links like
+      pisg.github.io/#ShowRandQuote are still out there; the manual is at /docs/. */
 (function () {
+  var p = location.pathname;
+  if (p.indexOf('/new/') === 0 || p === '/new') {
+    location.replace(p.replace(/^\/new/, '') + location.search + location.hash || '/');
+    return;
+  }
   var h = location.hash.slice(1);
   if (h && /^[A-Za-z][A-Za-z0-9_-]{1,40}$/.test(h)) {
     location.replace('/docs/#' + h);

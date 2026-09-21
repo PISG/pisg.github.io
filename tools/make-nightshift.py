@@ -10,7 +10,8 @@ the page still behaves like a real one at real scale.
 import io, re, json, os, sys
 
 SRC = r'C:\Users\admin\Desktop\output\montreal.html'
-DST = r'C:\Users\admin\Desktop\Github\pisg.github.io\new\demo\nightshift.html'
+SITE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DST  = os.path.join(SITE, 'demo', 'nightshift.html')
 
 h = io.open(SRC, encoding='utf-8', errors='replace').read()
 

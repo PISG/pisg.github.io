@@ -5,12 +5,12 @@ from docs/pisg-doc.xml), plus the chapters that manual does not have yet: the op
 added in 1.0 and the optional tools.
 
 Input  : SRC below — a copy of the generated pisg-doc.html
-Output : new/docs/index.html
+Output : docs/index.html
 """
 import io, re, os
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-SITE = os.path.dirname(HERE)                                    # .../pisg.github.io/new
+SITE = os.path.dirname(HERE)                                    # the repository root
 SRC  = r'C:\Users\admin\Desktop\output\pisg-doc.html'
 OUT  = os.path.join(SITE, 'docs', 'index.html')
 

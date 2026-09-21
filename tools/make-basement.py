@@ -3,10 +3,11 @@
 Second example channel: a small, chatty room with user pictures.
 Same idea as build_demo.py — real pisg 1.0 output, invented people.
 """
-import io, re, json
+import io, os, re, json
 
 SRC = r'C:\Users\admin\Desktop\output\canada.html'
-DST = r'C:\Users\admin\Desktop\Github\pisg.github.io\new\demo\basement.html'
+SITE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DST  = os.path.join(SITE, 'demo', 'basement.html')
 
 h = io.open(SRC, encoding='utf-8', errors='replace').read()
 

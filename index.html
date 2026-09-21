@@ -1,1390 +1,662 @@
 <!DOCTYPE html>
-<html lang="en-us">
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>PISG - Perl IRC Statistics Generator</title>
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
-<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
-<link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
-<link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
-<style>
-  /* Docs-page-only additions, layered on top of the site's existing stylesheet.css */
-  .docs-wrapper {
-    display: flex;
-    align-items: flex-start;
-    max-width: 64rem;
-    margin: 0 auto;
-    padding: 2rem 6rem;
-    gap: 3rem;
-  }
-  .docs-toc {
-    position: sticky;
-    top: 1.5rem;
-    flex: 0 0 220px;
-    font-size: 0.85rem;
-    line-height: 1.5;
-    max-height: calc(100vh - 3rem);
-    overflow-y: auto;
-  }
-  .docs-toc h4 {
-    margin: 1rem 0 0.3rem;
-    text-transform: uppercase;
-    font-size: 0.72rem;
-    letter-spacing: 0.05em;
-    color: #777;
-  }
-  .docs-toc h4:first-child { margin-top: 0; }
-  .docs-toc ul { list-style: none; margin: 0; padding: 0; }
-  .docs-toc li { margin: 0.15rem 0; }
-  .docs-toc li a {
-    display: block;
-    border: none;
-    background: none;
-    box-shadow: none;
-    padding: 0;
-    margin: 0;
-    border-radius: 0;
-    color: #159957;
-    text-decoration: none;
-    white-space: normal;
-  }
-  .docs-toc li a:hover { text-decoration: underline; }
-  .docs-toc li a.opt-link { color: #555; }
-  .docs-content { flex: 1 1 auto; min-width: 0; }
-  .docs-content h2 {
-    border-bottom: 1px solid #eee;
-    padding-bottom: 0.3rem;
-    margin-top: 2.5rem;
-  }
-  .docs-content h3 { margin-top: 1.8rem; }
-  div.opt {
-    border: 1px solid #e3e3e3;
-    border-radius: 6px;
-    padding: 1rem 1.2rem;
-    margin: 1.2rem 0;
-    background: #fafafa;
-  }
-  div.opt h4 {
-    margin: 0 0 0.6rem;
-    font-family: monospace;
-    font-size: 1.05rem;
-  }
-  div.opt pre {
-    background: #272822;
-    color: #f8f8f2;
-    padding: 0.7rem 0.9rem;
-    border-radius: 4px;
-    overflow-x: auto;
-    font-size: 0.85rem;
-  }
-  div.opt .meta {
-    font-size: 0.85rem;
-    color: #555;
-    margin-top: 0.5rem;
-  }
-  div.opt .meta b { color: #222; }
-  code, div.opt pre, .docs-content pre {
-    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
-  }
-  .docs-content pre:not(div.opt pre) {
-    background: #272822;
-    color: #f8f8f2;
-    padding: 0.8rem 1rem;
-    border-radius: 4px;
-    overflow-x: auto;
-    font-size: 0.85rem;
-  }
-  .back-top { font-size: 0.8rem; }
-  @media (max-width: 900px) {
-    .docs-wrapper { flex-direction: column; padding: 1.5rem; }
-    .docs-toc { position: static; max-height: none; width: 100%; }
-  }
-</style>
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#0b0e13">
+<link rel="canonical" href="https://pisg.github.io/">
+<title>pisg — Perl IRC Statistics Generator</title>
+<meta name="description" content="pisg turns IRC logfiles into statistics pages: who talks, when, to whom. Perl, GPL, no database, 30+ log formats, twelve themes. Version 1.0.">
+<meta property="og:title" content="pisg — Perl IRC Statistics Generator">
+<meta property="og:description" content="Point it at your channel logs, run it, upload the page. Who talks, when, to whom — since 2001.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://pisg.github.io/">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%230d1117'/><rect x='18' y='52' width='14' height='30' fill='%2358a6ff'/><rect x='38' y='34' width='14' height='48' fill='%233fd18b'/><rect x='58' y='44' width='14' height='38' fill='%23e5b567'/><rect x='78' y='24' width='14' height='58' fill='%23bc8cff'/></svg>">
+<link rel="stylesheet" href="assets/site.css?v=ae94b127">
 </head>
-<body>
+<body id="top">
+<a class="skip" href="#main">Skip to content</a>
 
-<section class="page-header">
-<h1 class="project-name">PISG</h1>
-<h2 class="project-tagline">Perl IRC Statistics Generator</h2>
-<a href="https://github.com/PISG/pisg" class="btn">View on GitHub</a>
-<a href="https://github.com/PISG/pisg/archive/0.80-preview2.zip" class="btn">Download .zip</a>
-<a href="https://github.com/PISG/pisg/archive/0.80-preview2.tar.gz" class="btn">Download .tar.gz</a>
-<a href="irc://irc.undernet.org/PISG" class="btn">Find us on UnderNET @ #PISG</a>
+<!-- ===================== TOP BAR ===================== -->
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="pisg — top of page">
+      <span><span class="dollar">$</span>&nbsp;pisg</span>
+      <span class="ver">1.0a</span>
+    </a>
+    <button class="menu-btn" id="menu-btn" aria-expanded="false" aria-controls="navlinks"><span aria-hidden="true">&#9776;</span><span class="sr-only">Menu</span></button>
+    <nav class="links" id="navlinks" aria-label="Main">
+      <a href="#install">Install</a>
+      <a href="#whatsnew">New in 1.0a</a>
+      <a href="themes/">Themes</a>
+      <a href="#formats">Formats</a>
+      <a href="#faq">FAQ</a>
+      <span class="sep" aria-hidden="true"></span>
+      <a href="docs/">Documentation</a>
+      <a href="changelog/">Changelog</a>
+      <a class="ext" href="demo/">Live example &#8599;</a>
+      <a class="x-reg" href="https://github.com/PISG/pisg">GitHub &#8599;</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main" tabindex="-1">
+
+<!-- ===================== HERO ===================== -->
+<div class="hero">
+  <div class="wrap">
+    <div>
+      <p class="eyebrow"><span class="dot" style="background:var(--gold);box-shadow:0 0 0 3px rgba(229,181,103,.15)" aria-hidden="true"></span>Version 1.0a &mdash; alpha &middot; September 2026</p>
+      <h1><span class="dollar">$</span> pisg</h1>
+      <p class="tagline">The Perl IRC Statistics Generator. Point it at your channel logs, run it,
+      upload one HTML file. It tells you who talks, when they talk, and who they talk to &mdash;
+      no database, no daemon, no JavaScript required to read it.</p>
+      <div class="cta-row">
+        <a class="btn primary" href="#install">Get started <span class="arrow" aria-hidden="true">&rarr;</span></a>
+        <a class="btn" href="demo/nightshift.html">See a real page</a>
+        <a class="btn" href="docs/">Documentation</a>
+      </div>
+      <p class="lede" style="margin-top:22px;font-size:14px">Free software since 2001,
+      GPL-2.0-or-later. Runs anywhere Perl runs. <strong>1.0a is an alpha</strong>: everything
+      described here works, but it has not had a long run in the wild yet &mdash;
+      <a href="https://github.com/PISG/pisg/issues">tell us what breaks</a>.</p>
+    </div>
+
+    <div class="term" aria-hidden="false">
+      <div class="bar"><i></i><i></i><i></i><span>~/pisg</span></div>
+      <div class="body"><span class="pr">$</span> <span class="cmd">./pisg</span>
+<span class="out">pisg v1.0a - Perl IRC Statistics Generator</span>
+<span class="out">Reading config file: </span><span class="hl">pisg.cfg</span>
+<span class="out">Parsing </span><span class="n">#nightshift</span><span class="out"> logs in </span><span class="hl">logs/nightshift/</span><span class="out"> ...</span>
+<span class="out">  50 files, </span><span class="n">164,019</span><span class="out"> lines, 915 nicks</span>
+<span class="out">Writing </span><span class="hl">site/nightshift.html</span><span class="out">     </span><span class="ok">done</span>
+<span class="out">Parsing </span><span class="n">#basement</span><span class="out"> logs ...            </span><span class="ok">done</span>
+<span class="dim">Skipped channel #dormant: no logs in logs/dormant/</span>
+<span class="out">Wrote </span><span class="hl">site/channels.json</span><span class="out"> (2 channels)</span>
+<span class="ok">Total: 192,464 lines in 00:00:13</span>
+<span class="pr">$</span> <span class="caret" aria-hidden="true"></span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== FACTS ===================== -->
+<div class="facts">
+  <dl class="wrap">
+    <div class="fact"><dt>Latest</dt><dd class="hl">1.0a</dd></div>
+    <div class="fact"><dt>Needs</dt><dd>Perl 5</dd></div>
+    <div class="fact"><dt>Log formats</dt><dd>30+</dd></div>
+    <div class="fact"><dt>Themes</dt><dd>12</dd></div>
+    <div class="fact"><dt>Licence</dt><dd>GPL-2.0+</dd></div>
+    <div class="fact"><dt>Since</dt><dd>2001</dd></div>
+  </dl>
+</div>
+
+<!-- ===================== WHAT IT IS ===================== -->
+<section id="what">
+  <div class="wrap">
+    <header>
+      <p class="kicker">What it is</p>
+      <h2>A log file in, a statistics page out.</h2>
+      <p class="lede">pisg is one Perl script and a config file. It reads the logs your bot or client
+      already writes, counts everything worth counting, and writes a self-contained HTML page you can
+      drop on any web host &mdash; including GitHub Pages.</p>
+    </header>
+    <div class="grid g3">
+      <div class="card">
+        <span class="ico">01</span>
+        <h3>Nothing to install</h3>
+        <p>No database, no cron requirement, no web framework, no build step. Perl 5 and a text editor.
+        Run it by hand or from cron as often as you like.</p>
+      </div>
+      <div class="card">
+        <span class="ico">02</span>
+        <h3>Reads the logs you have</h3>
+        <p>eggdrop, ZNC, mIRC, irssi, XChat, AdiIRC, BitchX, energymech, KVIrc, supybot and two dozen
+        more. Gzipped and bzipped logs are read as they are.</p>
+      </div>
+      <div class="card">
+        <span class="ico">03</span>
+        <h3>Statistics people actually read</h3>
+        <p>Not just line counts: who talks to whom, who owns the night shift, whose words are their
+        own, and how much of the channel rests on five people.</p>
+      </div>
+    </div>
+
+    <div class="note good" style="margin-top:26px">
+      <strong>New in 1.0a &mdash;</strong> a relation map, four new themes that follow the reader's
+      light/dark setting, a landing page for several channels, and profiles your users manage from IRC.
+      <a href="changelog/">Read the 1.0a changelog &rarr;</a>
+    </div>
+  </div>
 </section>
 
-<section class="main-content">
+<!-- ===================== INSTALL ===================== -->
+<section id="install">
+  <div class="wrap">
+    <header>
+      <p class="kicker">Quick start</p>
+      <h2>Four commands and one config file.</h2>
+      <p class="lede">This is the whole thing. The example below uses an eggdrop's daily logs; swap
+      <code>Format</code> and <code>LogDir</code> for whatever writes your logs.</p>
+    </header>
 
-<p><b>Latest version:</b> 0.73 - released on January 18th 2012 - <a href="#changelog">changelog</a></p>
-<p><b>Latest preview:</b> 0.80-preview2 - released on February 21st 2016 - <a href="#changelog">changelog</a></p>
-<p><b>Website under construction:</b> For now, you can still use <a href="http://pisg.sourceforge.net/">http://pisg.sourceforge.net/</a></p>
+    <div class="console">
+      <div class="bar"><i></i><i></i><i></i><span>setting up pisg</span></div>
 
-<h3 id="introduction">Introduction</h3>
-<p>pisg is an IRC channel statics generator written in Perl, it creates
-statistics from different logfile formats. It was originally written because
-IRCStats wasn't open source. So here's an open source/GPL'ed version to anyone interested.
-It's a funny thing for your IRC channel, and it's highly
-customizeable.</p>
+      <div class="crow">
+        <span class="cnum">1</span>
+        <div>
+          <div class="cmdline"><span class="cmd">git clone</span> <span class="arg">https://github.com/PISG/pisg.git</span></div>
+          <span class="cnote">Or grab a release tarball from the
+          <a href="https://github.com/PISG/pisg/releases">releases page</a> and unpack it. Nothing is
+          compiled and nothing is installed system-wide &mdash; the folder you unpack is the program.</span>
+        </div>
+        <button class="copybtn" type="button">Copy</button>
+      </div>
 
-<p><b>Supported logfile formats:</b></p>
-<table border="0">
- <tr>
-  <td align="left" valign="top">
-   <ul>
-    <li>X-Chat</li>
-    <li>mIRC</li>
-    <li>AdiIRC</li>
-    <li>Eggdrops</li>
-    <li>bxlog for BitchX</li>
-    <li>irssi</li>
-    <li>virc98</li>
-    <li>dancer</li>
-   </ul>
-  </td>
-  <td align="left" valign="top">
-   <ul>
-    <li>Trillian</li>
-    <li>Grufti</li>
-    <li>mbot</li>
-    <li>winbot</li>
-    <li>zcbot</li>
-    <li>muh</li>
-    <li>energymech</li>
-    <li>ircII</li>
-   </ul>
-  </td>
-  <td align="left" valign="top">
-   <ul>
-    <li>psybnc</li>
-    <li>ircle</li>
-    <li>infobot</li>
-    <li>axur</li>
-    <li>bobot++</li>
-    <li>oer</li>
-    <li>perlbot</li>
-    <li>Vision</li>
-   </ul>
-  </td>
-  <td align="left" valign="top">
-   <ul>
-    <li>pircbot</li>
-    <li>KVIrc</li>
-    <li>HydraIRC</li>
-    <li>sirc</li>
-    <li>moobot</li>
-    <li>supybot</li>
-    <li>blootbot</li>
-    <li>dircproxy</li>
-   </ul>
-  </td>
- </tr>
-</table>
+      <div class="crow">
+        <span class="cnum">2</span>
+        <div>
+          <div class="cmdline"><span class="cmd">cp</span> <span class="arg">pisg.cfg.example pisg.cfg</span></div>
+          <span class="cnote">The example config lists every option with a one-line explanation, so you
+          can read it instead of the manual. Then edit the channel block:</span>
+          <pre style="margin-top:12px">&lt;set ColorScheme="modern"&gt;
+&lt;set HomeLink="index.html"&gt;
 
-<h3 id="changelog">Changelog</h3>
-<p>Release notes for the versions linked above, newest first. See the full <a href="https://github.com/PISG/pisg/releases">releases page</a> on GitHub for assets and diffs.</p>
+&lt;channel="#nightshift"&gt;
+ Format     = "eggdrop"
+ LogDir     = "/home/eggdrop/logs/nightshift/"
+ Network    = "Undernet"
+ Maintainer = "vox"
+ OutputFile = "site/nightshift.html"
+&lt;/channel&gt;</pre>
+        </div>
+        <button class="copybtn" type="button">Copy</button>
+      </div>
 
-<div class="opt" id="changelog-0.80-preview2">
-<h4>0.80-preview2 — February 21st 2016 <span style="font-weight:normal;color:#888;">(pre-release)</span></h4>
-<ul>
-  <li>Removed the need for separate .png files.</li>
-  <li>Replaced SourceForge links with GitHub Pages.</li>
-  <li>Greatly improved cache performance.</li>
-</ul>
-</div>
+      <div class="crow">
+        <span class="cnum">3</span>
+        <div>
+          <div class="cmdline"><span class="cmd">./pisg</span></div>
+          <span class="cnote">On Windows: <code>perl pisg</code>. Every channel in the config is parsed
+          in one run; a channel that cannot be read is skipped with a warning and the others still get
+          their page. Add <code>-ch</code>, <code>-l</code> and <code>-o</code> to do a single channel
+          straight from the command line &mdash; <code>./pisg --help</code> lists the lot.</span>
+        </div>
+        <button class="copybtn" type="button">Copy</button>
+      </div>
 
-<div class="opt" id="changelog-0.80-preview">
-<h4>0.80-preview — February 2016 <span style="font-weight:normal;color:#888;">(pre-release)</span></h4>
-<ul>
-  <li>Simple checksums now used for validating the cache.</li>
-  <li>Rounded corners and flatter graphics.</li>
-</ul>
-</div>
+      <div class="crow">
+        <span class="cnum">4</span>
+        <div>
+          <div class="cmdline"><span class="cmd">rsync</span> <span class="arg">-a site/ you@host:/var/www/stats/</span></div>
+          <span class="cnote">Upload the folder. The pages are self-contained HTML &mdash; the CSS and
+          the bar images are inside the file &mdash; so there is nothing else to copy and nothing to
+          configure on the server. Put <code>site/index.html</code> next to them for the landing page.</span>
+        </div>
+        <button class="copybtn" type="button">Copy</button>
+      </div>
+    </div>
 
-<div class="opt" id="changelog-0.73">
-<h4>0.73 — January 18th 2012</h4>
-<ul>
-  <li>Latest stable release. See the <a href="https://github.com/PISG/pisg/releases/tag/0.73">release page</a> for the full history leading up to it.</li>
-</ul>
-</div>
-
-<p><a href="#what-is-pisg" class="btn">Read the full documentation ↓</a></p>
-
+    <div class="note">Want it updated by itself? Add one crontab line &mdash; see
+    <code>scripts/crontab</code> in the distribution, or
+    <a href="docs/#running-pisg">Running pisg</a> in the manual.</div>
+  </div>
 </section>
 
-<div class="docs-wrapper">
-
-<nav class="docs-toc">
-  <h4>On this page</h4>
-  <ul>
-    <li><a href="#introduction">Introduction</a></li>
-    <li><a href="#changelog">Changelog</a></li>
-  </ul>
-  <h4>Guide</h4>
-  <ul>
-    <li><a href="#what-is-pisg">What is pisg?</a></li>
-    <li><a href="#requirements">Requirements</a></li>
-    <li><a href="#setting-up-pisg">Setting up pisg</a></li>
-    <li><a href="#setting-up-a-channel">Setting up a channel</a></li>
-    <li><a href="#user-options">User options</a></li>
-    <li><a href="#global-options">Global options</a></li>
-    <li><a href="#ignoring-links">Ignoring links</a></li>
-    <li><a href="#including-config">Including config files</a></li>
-    <li><a href="#using-css">Changing the layout</a></li>
-    <li><a href="#running-pisg">Running pisg</a></li>
-    <li><a href="#mailing-list-and-bugs">Help &amp; bug reports</a></li>
-  </ul>
-  <h4>General options</h4>
-  <ul>
-    <li><a class="opt-link" href="#Channel">Channel</a></li>
-    <li><a class="opt-link" href="#Format">Format</a></li>
-    <li><a class="opt-link" href="#Network">Network</a></li>
-    <li><a class="opt-link" href="#OutputFile">OutputFile</a></li>
-    <li><a class="opt-link" href="#OutputTag">OutputTag</a></li>
-    <li><a class="opt-link" href="#Logfile">Logfile</a></li>
-    <li><a class="opt-link" href="#LogDir">LogDir</a></li>
-    <li><a class="opt-link" href="#NFiles">NFiles</a></li>
-    <li><a class="opt-link" href="#Maintainer">Maintainer</a></li>
-    <li><a class="opt-link" href="#ColorScheme">ColorScheme</a></li>
-    <li><a class="opt-link" href="#AltColorScheme">AltColorScheme</a></li>
-    <li><a class="opt-link" href="#Lang">Lang</a></li>
-    <li><a class="opt-link" href="#PageHead">PageHead</a></li>
-    <li><a class="opt-link" href="#PageFoot">PageFoot</a></li>
-    <li><a class="opt-link" href="#LogPrefix">LogPrefix</a></li>
-    <li><a class="opt-link" href="#LogSuffix">LogSuffix</a></li>
-    <li><a class="opt-link" href="#Silent">Silent</a></li>
-    <li><a class="opt-link" href="#CacheDir">CacheDir</a></li>
-  </ul>
-  <h4>Statistics options</h4>
-  <ul>
-    <li><a class="opt-link" href="#DailyActivity">DailyActivity</a></li>
-    <li><a class="opt-link" href="#ShowActiveTimes">ShowActiveTimes</a></li>
-    <li><a class="opt-link" href="#ShowActiveNicks">ShowActiveNicks</a></li>
-    <li><a class="opt-link" href="#ShowBigNumbers">ShowBigNumbers</a></li>
-    <li><a class="opt-link" href="#ShowTopics">ShowTopics</a></li>
-    <li><a class="opt-link" href="#ShowLines">ShowLines</a></li>
-    <li><a class="opt-link" href="#ShowWpl">ShowWpl</a></li>
-    <li><a class="opt-link" href="#ShowCpl">ShowCpl</a></li>
-    <li><a class="opt-link" href="#ShowWords">ShowWords</a></li>
-    <li><a class="opt-link" href="#ShowLastSeen">ShowLastSeen</a></li>
-    <li><a class="opt-link" href="#ShowTime">ShowTime</a></li>
-    <li><a class="opt-link" href="#ShowLineTime">ShowLineTime</a></li>
-    <li><a class="opt-link" href="#ShowWordTime">ShowWordTime</a></li>
-    <li><a class="opt-link" href="#ShowRandQuote">ShowRandQuote</a></li>
-    <li><a class="opt-link" href="#ShowLegend">ShowLegend</a></li>
-    <li><a class="opt-link" href="#ShowKickLine">ShowKickLine</a></li>
-    <li><a class="opt-link" href="#ShowActionLine">ShowActionLine</a></li>
-    <li><a class="opt-link" href="#ShowShoutLine">ShowShoutLine</a></li>
-    <li><a class="opt-link" href="#ShowFoulDecimals">ShowFoulDecimals</a></li>
-    <li><a class="opt-link" href="#ShowFoulLine">ShowFoulLine</a></li>
-    <li><a class="opt-link" href="#ShowViolentLines">ShowViolentLines</a></li>
-    <li><a class="opt-link" href="#ShowMuw">ShowMuw</a></li>
-    <li><a class="opt-link" href="#ShowMrn">ShowMrn</a></li>
-    <li><a class="opt-link" href="#ShowMru">ShowMru</a></li>
-    <li><a class="opt-link" href="#ShowCharts">ShowCharts</a></li>
-    <li><a class="opt-link" href="#ShowOps">ShowOps</a></li>
-    <li><a class="opt-link" href="#ShowVoices">ShowVoices</a></li>
-    <li><a class="opt-link" href="#ShowHalfops">ShowHalfops</a></li>
-    <li><a class="opt-link" href="#ShowMostNicks">ShowMostNicks</a></li>
-    <li><a class="opt-link" href="#ShowActiveGenders">ShowActiveGenders</a></li>
-    <li><a class="opt-link" href="#ShowSmileys">ShowSmileys</a></li>
-    <li><a class="opt-link" href="#ShowKarma">ShowKarma</a></li>
-    <li><a class="opt-link" href="#ShowMostActiveByHour">ShowMostActiveByHour</a></li>
-    <li><a class="opt-link" href="#ShowOnlyTop">ShowOnlyTop</a></li>
-    <li><a class="opt-link" href="#ShowMostActiveByHourGraph">ShowMostActiveByHourGraph</a></li>
-    <li><a class="opt-link" href="#IgnoreWords">IgnoreWords</a></li>
-    <li><a class="opt-link" href="#NoIgnoredQuotes">NoIgnoredQuotes</a></li>
-    <li><a class="opt-link" href="#FoulWords">FoulWords</a></li>
-    <li><a class="opt-link" href="#ViolentWords">ViolentWords</a></li>
-    <li><a class="opt-link" href="#MinQuote">MinQuote</a></li>
-    <li><a class="opt-link" href="#MaxQuote">MaxQuote</a></li>
-    <li><a class="opt-link" href="#WordLength">WordLength</a></li>
-    <li><a class="opt-link" href="#QuoteWidth">QuoteWidth</a></li>
-    <li><a class="opt-link" href="#BigNumbersThreshold">BigNumbersThreshold</a></li>
-    <li><a class="opt-link" href="#ActiveNicks">ActiveNicks</a></li>
-    <li><a class="opt-link" href="#ActiveNicks2">ActiveNicks2</a></li>
-    <li><a class="opt-link" href="#ActiveNicksByHour">ActiveNicksByHour</a></li>
-    <li><a class="opt-link" href="#MostNicksHistory">MostNicksHistory</a></li>
-    <li><a class="opt-link" href="#MostNicksVerbose">MostNicksVerbose</a></li>
-    <li><a class="opt-link" href="#TopicHistory">TopicHistory</a></li>
-    <li><a class="opt-link" href="#UrlHistory">UrlHistory</a></li>
-    <li><a class="opt-link" href="#ChartsHistory">ChartsHistory</a></li>
-    <li><a class="opt-link" href="#ChartsRegexp">ChartsRegexp</a></li>
-    <li><a class="opt-link" href="#WordHistory">WordHistory</a></li>
-    <li><a class="opt-link" href="#NickHistory">NickHistory</a></li>
-    <li><a class="opt-link" href="#SmileyHistory">SmileyHistory</a></li>
-    <li><a class="opt-link" href="#KarmaHistory">KarmaHistory</a></li>
-    <li><a class="opt-link" href="#NickTracking">NickTracking</a></li>
-    <li><a class="opt-link" href="#NickLimit">NickLimit</a></li>
-    <li><a class="opt-link" href="#SortByWords">SortByWords</a></li>
-  </ul>
-  <h4>Picture options</h4>
-  <ul>
-    <li><a class="opt-link" href="#PicLocation">PicLocation</a></li>
-    <li><a class="opt-link" href="#UserPics">UserPics</a></li>
-    <li><a class="opt-link" href="#ImagePath">ImagePath</a></li>
-    <li><a class="opt-link" href="#DefaultPic">DefaultPic</a></li>
-    <li><a class="opt-link" href="#ImageGlobPath">ImageGlobPath</a></li>
-    <li><a class="opt-link" href="#PicWidth">PicWidth</a></li>
-    <li><a class="opt-link" href="#PicHeight">PicHeight</a></li>
-  </ul>
-  <h4>Misc options</h4>
-  <ul>
-    <li><a class="opt-link" href="#Charset">Charset</a></li>
-    <li><a class="opt-link" href="#LogCharset">LogCharset</a></li>
-    <li><a class="opt-link" href="#LogCharsetFallback">LogCharsetFallback</a></li>
-    <li><a class="opt-link" href="#TimeOffset">TimeOffset</a></li>
-    <li><a class="opt-link" href="#RegexpAliases">RegexpAliases</a></li>
-    <li><a class="opt-link" href="#LangFile">LangFile</a></li>
-    <li><a class="opt-link" href="#CssDir">CssDir</a></li>
-    <li><a class="opt-link" href="#HiCell">HiCell / HiCell2</a></li>
-    <li><a class="opt-link" href="#LogType">LogType</a></li>
-    <li><a class="opt-link" href="#StatsDump">StatsDump</a></li>
-  </ul>
-  <h4>&nbsp;</h4>
-  <ul>
-    <li><a href="#example-config">Full example pisg.cfg</a></li>
-    <li><a href="#copyright">Copyright &amp; License</a></li>
-  </ul>
-</nav>
-
-<main class="docs-content">
-
-<p><em>pisg 0.73 documentation — how to install and configure pisg.</em></p>
-
-<h2 id="what-is-pisg">What is pisg?</h2>
-<p>pisg is an IRC statistics generator. It takes IRC logfiles and turns them into nice looking stats.</p>
-<p>In general, you would do something like this to get it running:</p>
-<ul>
-  <li>Enable logging in an IRC bot, or in your IRC client. The log will be outputted into a file.</li>
-  <li>You set up pisg, you define the channel name, and the path to the logfile you created.</li>
-  <li>You run pisg, pisg runs the log through and creates statistics, it then creates an HTML page which you can upload to a webserver.</li>
-</ul>
-
-<h3 id="requirements">What are the requirements to run pisg?</h3>
-<ul>
-  <li>An IRC client or bot where pisg supports the output logfile.</li>
-  <li>Any operating system which Perl runs on, this includes popular OSes such as Linux, FreeBSD, Windows and Mac. You will have a hard time finding an OS where Perl isn't supported. For Windows this means that you need to download <a href="http://activestate.com/Products/ActivePerl/">ActivePerl</a>.</li>
-  <li><em>Optional</em> — a system to host the statistics page 24 hours a day, 7 days a week.</li>
-  <li><em>Optional</em> — a system to log the channel, 24 hours a day, 7 days a week.</li>
-</ul>
-
-<h2 id="setting-up-pisg">Setting up pisg for the first time</h2>
-<p>Most configuration happens through the <code>pisg.cfg</code> file, the file format is made to be easy to read, and easy to extend for further use. It uses an XML-like format, with elements and attributes.</p>
-
-<h3 id="setting-up-a-channel">Setting up a channel</h3>
-<p>An element called <a class="opt-link" href="#Channel">Channel</a> is made for defining channels, a quick example of a channel is here:</p>
-<pre>&lt;channel="#channel"&gt;
- Logfile = "channel.log"
- Format = "mIRC"
- Maintainer = "John"
- OutputFile = "mychan.html"
-&lt;/channel&gt;</pre>
-<p>The above will define a <a class="opt-link" href="#Channel">Channel</a> called <code>#channel</code>, the logfile pisg will look for is called <code>channel.log</code> and the <a class="opt-link" href="#Format">Format</a> of the logfile will be <code>mIRC</code>. The <a class="opt-link" href="#Maintainer">Maintainer</a> (which will be stated on the output page) is <code>John</code>.</p>
-<p>That is basically it! Now, there are a lot more options that you can use for your channels, for this please refer to the reference documentation below.</p>
-<p>Also be aware of the fact that pisg uses various images to show the time-related bars. These images are placed in the <code>gfx/</code> folder and should be placed into the same directory as your outputted HTML file.</p>
-
-<h3 id="user-options">Specifying user options</h3>
-<p>User options are set with a simple XML-like syntax in the form:</p>
-<pre>&lt;user nick="NICK" option="VALUE"&gt;</pre>
-<p>Remember, the nick is always required.</p>
-<p>For example to add aliases to a nick, then you could do this:</p>
-<pre>&lt;user nick="Joe" alias="Joe^*"&gt;</pre>
-<p>The asterisk (*) means that it will match all nicks starting with 'Joe^'. So it will add all Joe^'s to 'Joe' in the stats.</p>
-<p>Another thing you can do is to add a picture to a user:</p>
-<pre>&lt;user nick="Ben" pic="ben_holiday.jpg"&gt;</pre>
-<p>If you have a larger picture of the user as well, you can make the picture on the stats page link to it:</p>
-<pre>&lt;user nick="Ben" pic="ben_holiday.jpg" bigpic="ben-big.jpg"&gt;</pre>
-<p>You can include * or ? to enable filename globbing to randomly choose one from several pictures (see the <a class="opt-link" href="#ImageGlobPath">ImageGlobPath</a> option):</p>
-<pre>&lt;user nick="Ben" pic="ben_*.jpg"&gt;</pre>
-<p>You can also set a user's sex. The sex setting can be "f"emale, "m"ale, or "b"ot:</p>
-<pre>&lt;user nick="Ben" sex="m"&gt;</pre>
-<p>Also you can add links to URLs and e-mails:</p>
-<pre>&lt;user nick="Christine" link="http://www.christine.com"&gt;</pre>
-<p>or</p>
-<pre>&lt;user nick="Chris" link="chris@host.com"&gt;</pre>
-<p>The last thing you can do is to ignore nicks (for example bots):</p>
-<pre>&lt;user nick="nameofbot" ignore="y"&gt;</pre>
-<p>You don't have to do all this in many lines, you could just as easily do:</p>
-<pre>&lt;user nick="Joe" alias="Joe^away Joe^work" pic="joe.jpg" link="joe@joe.com" sex="m"&gt;</pre>
-<p>(Here the aliases are a space separated list of nicks, that also works! But * as a wildcard is smarter, although it is slower.)</p>
-
-<h3 id="global-options">Setting global options</h3>
-<p>Many times, it will be useful to set up global options, global options are set like this:</p>
-<pre>&lt;set option="VALUE"&gt;</pre>
-<p>Any global option will be overridden by anything defined within channel elements (see <a href="#setting-up-a-channel">Setting up a channel</a>).</p>
-<p>For example, to change the background color of the stats page, you could do:</p>
-<pre>&lt;set bgcolor="black"&gt;</pre>
-<p>You can set many options in a single <code>set</code>:</p>
-<pre>&lt;set lang="DE" timeoffset="+1"&gt;</pre>
-<p>The above will set the language on the statistics page to DE (Deutsch, German) and set the time offset to +1.</p>
-<p>All options available are listed in the reference sections below.</p>
-
-<h3 id="ignoring-links">Ignoring links</h3>
-<p>It's possible to ignore links in the "Most referenced URLs" section:</p>
-<pre>&lt;link url="http://www.slashdot.org" ignore="y"&gt;</pre>
-
-<h3 id="including-config">Including common settings for various channels</h3>
-<p>If you have, for example, more than one channel, where the users are the same, or you don't want to maintain more than one user file, you can use the "include" setting in the main config file:</p>
-<pre>&lt;include="/home/vetinari/pisg/users.cfg"&gt;</pre>
-<p>This will include the file <code>/home/vetinari/pisg/users.cfg</code> in the config at the place where the include statement is set.</p>
-<p>Note that you can <strong>NOT</strong> include a file from an included file!</p>
-
-<h3 id="using-css">Changing the layout of your stats page</h3>
-<p>The standard layout and colors in the outputted HTML page are made to be somewhat clean and neutral. But you have the chance to change the layout yourself.</p>
-<p>There are a few predefined color schemes for you to use, use the <a class="opt-link" href="#ColorScheme">ColorScheme</a> option when using them. The colorschemes distributed with pisg are: default (which is the default), darkgalaxy, darkred, justgrey, ocean, orange_grey, pisg, softgreen.</p>
-<p>When changing it, you need a fair knowledge of CSS (Cascading Style Sheets). CSS is what most of the web uses today to define styles and layout on HTML pages. With the pisg distribution, look in the <code>layout</code> directory. In it resides <code>default.css</code> which is the file being included onto the HTML page. Open it in a text editor like vi or notepad. Then change it until you're happy with it. Be aware that you might want to look at the <a class="opt-link" href="#HiCell">HiCell and HiCell2</a> options through pisg.cfg for changing the last two colors.</p>
-<p>If you have created a nice stylesheet which others can take advantage of, you are encouraged to send it to the pisg mailing list so that it can be distributed with the next version of pisg.</p>
-<p>If you want to embed the statistics into another page, use the "none" color scheme. Pisg will then omit the HTML header and write only the body part.</p>
-
-<h3 id="running-pisg">Running pisg</h3>
-<p>When everything is set up in the pisg configuration file (pisg.cfg), then you simply run pisg on the command-line.</p>
-<p>Using Linux, BSD or another UNIX-like system:</p>
-<pre>user@host:pisg-0.37$ ./pisg</pre>
-<p>Using Windows:</p>
-<pre>c:\pisg&gt; perl pisg</pre>
-<p>The program will run and parse the logfiles you specified in the configuration file.</p>
-<p>If you are using Linux, BSD or another UNIX-like system and want to run pisg automatically several times a day, then see the <code>crontab</code> file in the <code>scripts/</code> directory.</p>
-<p>For Windows, see the <code>windows-upload-ftp.txt</code> file with the pisg distribution, this file is also placed in the <code>scripts/</code> directory.</p>
-
-<h3 id="mailing-list-and-bugs">Obtaining help and reporting bugs</h3>
-<p>If your problem could not be resolved through here, then you should send an e-mail to the pisg mailing list. You can subscribe and see more info at <a href="http://lists.sourceforge.net/lists/listinfo/pisg-general">lists.sourceforge.net/lists/listinfo/pisg-general</a>.</p>
-<p>If you believe that you have found a bug, you should use the SourceForge <a href="http://sourceforge.net/tracker/?group_id=31862&amp;atid=403711">bug tracking system</a>.</p>
-
-<h2 id="reference">General pisg options</h2>
-
-<div class="opt" id="Channel">
-<h4>Channel — define channel name</h4>
-<pre>&lt;channel="#channel"&gt;
- Logfile = "channel.log"
- Format = "mIRC"
- Maintainer = "John"
-&lt;/channel&gt;</pre>
-<p><b>Description:</b> <code>Channel</code> is used in two contexts, globally when using &lt;set&gt; and when defining new channels. It sets the name of the channel.</p>
-<p class="meta"><b>Default:</b> Unset</p>
-</div>
-
-<div class="opt" id="Format">
-<h4>Format — the logfile format</h4>
-<pre>&lt;channel="#channel"&gt;
- Logfile = "channel.log"
- Format = "eggdrop"
- Maintainer = "John"
-&lt;/channel&gt;
-
-&lt;set Format="mIRC"&gt;</pre>
-<p><b>Description:</b> <code>Format</code> is used to define the format of the logfile, pisg supports a various number of different logfiles, see the FORMATS file included with the pisg distribution. If your logfiles have the suffix .gz or .bz2, they will automatically be decompressed and read by pisg. See also <a class="opt-link" href="#Maintainer">Maintainer</a>.</p>
-<p class="meta"><b>Default:</b> Unset</p>
-</div>
-
-<div class="opt" id="Network">
-<h4>Network — the IRC network of the channel</h4>
-<pre>&lt;channel="#channel"&gt;
- Logfile = "channel.log"
- Format = "eggdrop"
- Network = "Undernet"
-&lt;/channel&gt;
-
-&lt;set Network="Quakenet"&gt;</pre>
-<p><b>Description:</b> <code>Network</code> is used to set the network which the channel resides on, this name is displayed on the stats page.</p>
-<p class="meta"><b>Default:</b> SomeIRCNetwork</p>
-</div>
-
-<div class="opt" id="OutputFile">
-<h4>OutputFile — name of the generated HTML page</h4>
-<pre>&lt;channel="#channel"&gt;
- Logfile = "channel.log"
- Format = "eggdrop"
- OutputFile = "mychan.html"
-&lt;/channel&gt;
-
-&lt;set OutputFile="mychan.html"&gt;</pre>
-<p><b>Description:</b> <code>OutputFile</code> is used to define the name of the generated statistics page.</p>
-<p class="meta"><b>Default:</b> index.html</p>
-</div>
-
-<div class="opt" id="OutputTag">
-<h4>OutputTag — tag to insert into OutputFile</h4>
-<pre>&lt;channel="#channel"&gt;
- LogDir = "logs/"
- Format = "eggdrop"
- OutputFile = "mychan%t.html"
- OutputTag = "-week"
-&lt;/channel&gt;
-
-&lt;set OutputTag="-week"&gt;</pre>
-<p><b>Description:</b> <code>OutputTag</code> specifies a string that will replace occurrences of "%t" in <a class="opt-link" href="#OutputFile">OutputFile</a>. This option is most useful when used as a command line switch (-t) to pisg in conjunction with <a class="opt-link" href="#NFiles">NFiles</a> (-nf). Example:</p>
-<pre>$ pisg -co pisg.conf
-$ pisg -co pisg.conf -nf 8 -t -week</pre>
-<p>Leaving out the <code>OutputTag</code> settings from the above pisg.conf snippet, this writes both the full statistics (mychan.html) and statistics for the last week (mychan-week.html) using the same pisg config file. (Assuming that there are separate logfiles for each day.)</p>
-<p class="meta"><b>Default:</b> unset</p>
-</div>
-
-<div class="opt" id="Logfile">
-<h4>Logfile — name of logfile to parse</h4>
-<pre>&lt;channel="#channel"&gt;
- Logfile="/home/foo/eggdrop/logs/mylog.txt"
- Format = "eggdrop"
-&lt;/channel&gt;
-
-&lt;set Logfile="foo.log"&gt;</pre>
-<p><b>Description:</b> This defines the filename of the logfile to parse for the channel. If you want to parse a directory full of logfiles, you should use the <a class="opt-link" href="#LogDir">LogDir</a> option instead. Providing this option multiple times will parse multiple files in the order the statements appear. Wildcards (* ? []) will be expanded. See also <a class="opt-link" href="#LogDir">LogDir</a> and <a class="opt-link" href="#NFiles">NFiles</a>.</p>
-<p class="meta"><b>Default:</b> unset</p>
-</div>
-
-<div class="opt" id="LogDir">
-<h4>LogDir — parse a directory full of logs</h4>
-<pre>&lt;channel="#channel"&gt;
- LogDir="/home/foo/eggdrop/logs/"
- Format = "eggdrop"
-&lt;/channel&gt;
-
-&lt;set LogDir="dailylogs/"&gt;</pre>
-<p><b>Description:</b> When <code>LogDir</code> is defined to a valid path to a directory, then pisg will run through that directory, parse all logfiles in it and create one HTML page from it. Useful for example with eggdrop logs. Providing this option multiple times will parse all the files in multiple directories in the order the statements appear. See also <a class="opt-link" href="#NFiles">NFiles</a>, <a class="opt-link" href="#LogPrefix">LogPrefix</a>, and <a class="opt-link" href="#LogSuffix">LogSuffix</a>.</p>
-<p class="meta"><b>Default:</b> unset</p>
-</div>
-
-<div class="opt" id="NFiles">
-<h4>NFiles — parse only the last files in LogDir</h4>
-<pre>&lt;channel="#channel"&gt;
- LogDir="/home/foo/eggdrop/logs/"
- NFiles="8"
- Format="eggdrop"
-&lt;/channel&gt;
-
-&lt;set NFiles="8"&gt;</pre>
-<p><b>Description:</b> When <code>NFiles</code> is set to a positive integer, pisg will process only that many last logfiles from the <a class="opt-link" href="#Logfile">Logfile</a> and <a class="opt-link" href="#LogDir">LogDir</a> options. Useful to create statistics that cover the last week or month (assuming there is a separate logfile per day/week/etc.).</p>
-<p class="meta"><b>Default:</b> 0 (process all files)</p>
-</div>
-
-<div class="opt" id="Maintainer">
-<h4>Maintainer — name of the maintainer</h4>
-<pre>&lt;channel="#channel"&gt;
- Logfile = "channel.log"
- Format = "mIRC"
- Maintainer = "Benny"
-&lt;/channel&gt;
-
-&lt;set Maintainer="Benny"&gt;</pre>
-<p><b>Description:</b> <code>Maintainer</code> is used to define the name of the maintainer of the statistics page, this can be either the person generating the stats or the bot/client doing the logging. The maintainer is displayed on the outputted stats page. This setting is also used by some log parsers where "You" is used instead of the nick in the log (e.g. "You have been kicked"). See also <a class="opt-link" href="#Format">Format</a>, <a class="opt-link" href="#NickTracking">NickTracking</a>.</p>
-<p class="meta"><b>Default:</b> MAINTAINER</p>
-</div>
-
-<div class="opt" id="ColorScheme">
-<h4>ColorScheme — use a different color scheme for stats page</h4>
-<pre>&lt;channel="#channel"&gt;
- Logfile = "channel.log"
- ColorScheme = "darkgalaxy"
- Maintainer = "John"
-&lt;/channel&gt;
-
-&lt;set ColorScheme="default"&gt;</pre>
-<p><b>Description:</b> <code>ColorScheme</code> is used to define the color scheme used for the statistics page. It's actually the CSS file being included. CSS files distributed with pisg are: darkgalaxy, darkred, default, justgrey, ocean, orange_grey, pisg, softgreen (omit the .css). The file will be included statically in the generated HTML page. If you give a file name or URL (i.e. a color scheme name with .css or a path), the file will be linked to instead. Using "none" will cause pisg to write only the body of the page; use this to include the statistics into a custom page. See also <a class="opt-link" href="#CssDir">CssDir</a>, <a class="opt-link" href="#AltColorScheme">AltColorScheme</a>, <a class="opt-link" href="#HiCell">HiCell/HiCell2</a>.</p>
-<p class="meta"><b>Default:</b> default</p>
-</div>
-
-<div class="opt" id="AltColorScheme">
-<h4>AltColorScheme — alternate stylesheets for stats page</h4>
-<pre>&lt;channel="#channel"&gt;
- Logfile = "channel.log"
- ColorScheme = "darkgalaxy"
- AltColorScheme = "layout/ocean.css"
- Maintainer = "John"
-&lt;/channel&gt;
-
-&lt;set AltColorScheme="layout/darkgalaxy.css layout/justgrey.css"&gt;</pre>
-<p><b>Description:</b> <code>AltColorScheme</code> defines an alternate CSS file to be used for the statistics page. Multiple files can be given (space separated). Note that this is not supported by all browsers. See also <a class="opt-link" href="#ColorScheme">ColorScheme</a> and <a class="opt-link" href="#CssDir">CssDir</a>.</p>
-<p class="meta"><b>Default:</b> default</p>
-</div>
-
-<div class="opt" id="Lang">
-<h4>Lang — define the language / translation to use</h4>
-<pre>&lt;channel="#channel"&gt;
- Logfile = "channel.log"
- Format = "mIRC"
- Lang = "DE"
- OutputFile = "mychan-%l.html"
-&lt;/channel&gt;
-
-&lt;set Lang="FR,SE"&gt;</pre>
-<p><b>Description:</b> <code>Lang</code> defines the language to use for the stats. Currently, lang.txt includes: EN (English), BG (Bulgarian), CA (Catalan), CZ (Czech), DA (Danish), DE (German), EE (Estonian), ES (Spanish), FI (Finnish), FR (French), GR (Greek), HE (Hebrew), HU (Hungarian), IS (Icelandic), IT (Italian), NL (Dutch), NL_BE (Flemish), NO (Norwegian), PL (Polish), PT (Portuguese), PT_BR (Portuguese/Brazil), RO (Romanian), RU (Russian), SE (Swedish), SI (Slovenian), SK (Slovak), SQ (Albanian), TR (Turkish), YU (Serbian). Output in several languages can be generated at the same time, separate the languages by comma. The tag %l in the output file name will be replaced by the language name. See also <a class="opt-link" href="#LangFile">LangFile</a>.</p>
-<p class="meta"><b>Default:</b> EN (English)</p>
-</div>
-
-<div class="opt" id="PageHead">
-<h4>PageHead — define a file as page header</h4>
-<pre>&lt;channel="#channel"&gt;
- Logfile = "channel.log"
- Format = "mIRC"
- OutputFile = "stats.html"
- PageHead = "myheader.txt"
-&lt;/channel&gt;
-
-&lt;set PageHead="someheader.txt"&gt;</pre>
-<p><b>Description:</b> <code>PageHead</code> is used to include a file in the stats page, for example an introduction text, a link to an image or a banner. The file can hold anything, it will be included raw in the stats page — so HTML should be preferred. The file will be included at the top of the page. This option is the opposite of <a class="opt-link" href="#PageFoot">PageFoot</a>.</p>
-<p class="meta"><b>Default:</b> none</p>
-</div>
-
-<div class="opt" id="PageFoot">
-<h4>PageFoot — define a file as page footer</h4>
-<pre>&lt;channel="#channel"&gt;
- Logfile = "channel.log"
- Format = "mIRC"
- outputfile = "stats.html"
- PageFoot = "myfooter.txt"
-&lt;/channel&gt;
-
-&lt;set PageFoot="somefooter.txt"&gt;</pre>
-<p><b>Description:</b> <code>PageFoot</code> is used to include a file in the stats page, for example an introduction text, a link to an image or a banner. The file can hold anything, it will be included raw in the stats page — so HTML should be preferred. The file will be included at the bottom of the page. This option is the opposite of <a class="opt-link" href="#PageHead">PageHead</a>.</p>
-<p class="meta"><b>Default:</b> none</p>
-</div>
-
-<div class="opt" id="LogPrefix">
-<h4>LogPrefix — only parse logs prefixed with a user defined string</h4>
-<pre>&lt;channel="#channel"&gt;
- LogDir="/home/foo/eggdrop/logs/"
- Format = "eggdrop"
- LogPrefix = "logjun"
-&lt;/channel&gt;
-
-&lt;set LogPrefix="logjanuary"&gt;</pre>
-<p><b>Description:</b> When using the <a class="opt-link" href="#LogDir">LogDir</a> option and you only want to use a slew of the files in it, you can have pisg choose only files which are prefixed with a special string.</p>
-<p class="meta"><b>Default:</b> unset</p>
-</div>
-
-<div class="opt" id="LogSuffix">
-<h4>LogSuffix — regexp to sort logfiles by format month||day||year</h4>
-<pre>&lt;set LogSuffix="\.\d\d([A-Za-z]+)\d\d\d\d||\.(\d\d)[A-Za-z]+\d\d\d\d||\.\d\d[A-Za-z]+(\d\d\d\d)"&gt;</pre>
-<p><b>Description:</b> <code>LogSuffix</code> is used to define the suffix of a logfile, it only works when <a class="opt-link" href="#LogDir">LogDir</a> is defined. The example in the synopsis is for the eggdrop bot's default format.</p>
-<p class="meta"><b>Default:</b> Unset</p>
-</div>
-
-<div class="opt" id="Silent">
-<h4>Silent — make pisg silent, suppress messages</h4>
-<pre>&lt;set Silent="1"&gt;</pre>
-<p><b>Description:</b> This option is useful mainly from the command line when invoking pisg with <code>--silent 1</code>. But it can also be used in the configuration file. It will suppress all standard output from pisg. Error messages will still be sent.</p>
-<p class="meta"><b>Default:</b> 0 (disabled)</p>
-</div>
-
-<div class="opt" id="CacheDir">
-<h4>CacheDir — use a cache to speed up log parsing</h4>
-<pre>&lt;set CacheDir="pisg_cache"&gt;
-&lt;set CacheDir="/path/to/pisg_cache"&gt;</pre>
-<p><b>Description:</b> Setting this option makes pisg dump the results of log parsing into cache files. The next time pisg is run, it compares the timestamp of the log(s) with the timestamp stored in the cache file. When the log was not changed, the cached data is used. (This means that it does not work if you only have a single big logfile. Split the log at arbitrary points and use <a class="opt-link" href="#LogDir">LogDir</a> or <a class="opt-link" href="#Logfile">Logfile</a>="dir/*".)</p>
-<p>Note that the cache files should be deleted when the pisg config file is changed since the cache data uses the old config settings. <a class="opt-link" href="#NickTracking">NickTracking</a> does not work especially well with the cache when using different <a class="opt-link" href="#NFiles">NFiles</a> settings.</p>
-<p class="meta"><b>Default:</b> Unset</p>
-</div>
-
-<h2 id="reference-stats">Options for various statistics features</h2>
-
-<div class="opt" id="DailyActivity">
-<h4>DailyActivity — number of days to show in "Daily Activity"</h4>
-<pre>&lt;channel="#channel"&gt;
- Logfile = "channel.log"
- Format = "xchat"
- DailyActivity = "0"
-&lt;/channel&gt;
-
-&lt;set DailyActivity="31"&gt;</pre>
-<p><b>Description:</b> This option sets the number of days to show in the "Daily activity" section. Pisg will generate a graph that shows the activity during this timeframe. Setting the option to 0 disables the section.</p>
-<p class="meta"><b>Default:</b> 0 (disabled)</p>
-</div>
-
-<div class="opt" id="ShowActiveTimes">
-<h4>ShowActiveTimes — enable/disable "Most Active Times"</h4>
-<pre>&lt;set ShowActiveTimes="1"&gt;</pre>
-<p><b>Description:</b> With this option you can disable the "Most Active Times" section on the stats page. It will simply disappear when specifying 0.</p>
-<p class="meta"><b>Default:</b> 1 (enabled)</p>
-</div>
-
-<div class="opt" id="ShowActiveNicks">
-<h4>ShowActiveNicks — enable/disable "Most Active Nicks"</h4>
-<pre>&lt;set ShowActiveNicks="1"&gt;</pre>
-<p><b>Description:</b> With this option you can disable the "Most Active Nicks" section on the stats page.</p>
-<p class="meta"><b>Default:</b> 1 (enabled)</p>
-</div>
-
-<div class="opt" id="ShowBigNumbers">
-<h4>ShowBigNumbers — enable/disable "Big Numbers" sections</h4>
-<pre>&lt;set ShowBigNumbers="1"&gt;</pre>
-<p><b>Description:</b> With this option you can disable the "Big Numbers" and "Other Interesting numbers" sections on the stats page. They will simply disappear when specifying 0.</p>
-<p class="meta"><b>Default:</b> 1 (enabled)</p>
-</div>
-
-<div class="opt" id="ShowTopics">
-<h4>ShowTopics — enable/disable "Latest topics" section</h4>
-<pre>&lt;set ShowTopics="1"&gt;</pre>
-<p><b>Description:</b> With this option you can disable the "Latest topics" section on the stats page. It will simply disappear when specifying 0.</p>
-<p class="meta"><b>Default:</b> 1 (enabled)</p>
-</div>
-
-<div class="opt" id="ShowLines">
-<h4>ShowLines — enable/disable "number of lines"</h4>
-<pre>&lt;set ShowLines="1"&gt;</pre>
-<p><b>Description:</b> The default behaviour is to add a column to the "Most Active Nicks" section displaying the number of lines a user wrote. With this option it can be disabled.</p>
-<p class="meta"><b>Default:</b> 1 (enabled)</p>
-</div>
-
-<div class="opt" id="ShowWpl">
-<h4>ShowWpl — enable/disable "words per line"</h4>
-<pre>&lt;set ShowWpl="1"&gt;</pre>
-<p><b>Description:</b> With this option you can enable the "words per line" column in the "Most Active Nicks" section. It will add a column describing the average words per line for a person.</p>
-<p class="meta"><b>Default:</b> 0 (disabled)</p>
-</div>
-
-<div class="opt" id="ShowCpl">
-<h4>ShowCpl — enable/disable "characters per line"</h4>
-<pre>&lt;set ShowCpl="1"&gt;</pre>
-<p><b>Description:</b> With this option you can enable the "characters per line" column in the "Most Active Nicks" section. It will add a column describing the average number of characters per line for a person.</p>
-<p class="meta"><b>Default:</b> 0 (disabled)</p>
-</div>
-
-<div class="opt" id="ShowWords">
-<h4>ShowWords — enable/disable "number of words"</h4>
-<pre>&lt;set ShowWords="1"&gt;</pre>
-<p><b>Description:</b> The <code>ShowWords</code> option adds a column to the "Most Active Nicks" list which lists the total number of words a user has typed.</p>
-<p class="meta"><b>Default:</b> 0 (disabled)</p>
-</div>
-
-<div class="opt" id="ShowLastSeen">
-<h4>ShowLastSeen — show when a user was last seen on a channel</h4>
-<pre>&lt;set ShowLastSeen="1"&gt;</pre>
-<p><b>Description:</b> With this option enabled, a column will be added to the "Most Active Nicks" section to display when a user was last seen. E.g. "2 days ago".</p>
-<p class="meta"><b>Default:</b> 1 (enabled)</p>
-</div>
-
-<div class="opt" id="ShowTime">
-<h4>ShowTime — show when a nick was active</h4>
-<pre>&lt;set ShowTime="1"&gt;</pre>
-<p><b>Description:</b> The default behaviour is to add a column to the "Most Active Nicks" section displaying a fancy time bar to show when a user was active. With this option it can be disabled.</p>
-<p class="meta"><b>Default:</b> 1 (enabled)</p>
-</div>
-
-<div class="opt" id="ShowLineTime">
-<h4>ShowLineTime — mIRCStats-like behaviour of time bar</h4>
-<pre>&lt;set ShowLineTime="1"&gt;</pre>
-<p><b>Description:</b> The default behaviour is to add a column to the "Most Active Nicks" section displaying a fancy time bar to show when a user was active. With this option it can be done the same way as mIRCStats does it; that is, by putting that time bar next to the number of lines, in the same column.</p>
-<p class="meta"><b>Default:</b> 0 (disabled)</p>
-</div>
-
-<div class="opt" id="ShowWordTime">
-<h4>ShowWordTime — ShowLineTime-like behaviour of words column</h4>
-<pre>&lt;set ShowWordTime="1"&gt;</pre>
-<p><b>Description:</b> The default behaviour is to add a column to the "Most Active Nicks" section displaying a fancy time bar to show when a user was active. With this option it can be done similarly to how ShowLineTime does it, but using words instead of lines; that is, by putting that time bar next to the number of words, in the same column.</p>
-<p class="meta"><b>Default:</b> 0 (disabled)</p>
-</div>
-
-<div class="opt" id="ShowRandQuote">
-<h4>ShowRandQuote — enable or disable the random quotes</h4>
-<pre>&lt;set ShowRandQuote="1"&gt;</pre>
-<p><b>Description:</b> The default behaviour is to add a column to the "Most Active Nicks" section displaying a user's random quote. With this option it can be disabled.</p>
-<p class="meta"><b>Default:</b> 1 (enabled)</p>
-</div>
-
-<div class="opt" id="ShowLegend">
-<h4>ShowLegend — enable or disable the legend of the time bars</h4>
-<pre>&lt;set ShowLegend="1"&gt;</pre>
-<p><b>Description:</b> By default, pisg shows a legend below the "Most Active Times" displaying what the different colors mean. With this option it can be disabled.</p>
-<p class="meta"><b>Default:</b> 1 (enabled)</p>
-</div>
-
-<div class="opt" id="ShowKickLine">
-<h4>ShowKickLine — enable or disable the kick line</h4>
-<pre>&lt;set ShowKickLine="1"&gt;</pre>
-<p><b>Description:</b> By default, pisg shows an example kick line in the "Most kicked" stats. With this option it can be disabled.</p>
-<p class="meta"><b>Default:</b> 1 (enabled)</p>
-</div>
-
-<div class="opt" id="ShowActionLine">
-<h4>ShowActionLine — enable or disable the action line</h4>
-<pre>&lt;set ShowActionLine="1"&gt;</pre>
-<p><b>Description:</b> By default, pisg shows an example action line in the "Most actions" stats. With this option it can be disabled.</p>
-<p class="meta"><b>Default:</b> 1 (enabled)</p>
-</div>
-
-<div class="opt" id="ShowShoutLine">
-<h4>ShowShoutLine — enable or disable the shout line</h4>
-<pre>&lt;set ShowShoutLine="1"&gt;</pre>
-<p><b>Description:</b> By default, pisg shows an example shout line in the "Most shouting people" stats. With this option it can be disabled.</p>
-<p class="meta"><b>Default:</b> 1 (enabled)</p>
-</div>
-
-<div class="opt" id="ShowFoulDecimals">
-<h4>ShowFoulDecimals — set how many decimals to show</h4>
-<pre>&lt;set ShowFoulDecimals="1"&gt;</pre>
-<p><b>Description:</b> By default, pisg uses 1 decimal. With this option you could change it to whatever you like. Negative is treated as the default value.</p>
-<p class="meta"><b>Default:</b> 1 decimal</p>
-</div>
-
-<div class="opt" id="ShowFoulLine">
-<h4>ShowFoulLine — enable or disable the foul line</h4>
-<pre>&lt;set ShowFoulLine="1"&gt;</pre>
-<p><b>Description:</b> By default, pisg doesn't show an example foul line in the "Most fouls" stats. With this option it can be enabled.</p>
-<p class="meta"><b>Default:</b> 0 (disabled)</p>
-</div>
-
-<div class="opt" id="ShowViolentLines">
-<h4>ShowViolentLines — enable or disable the violent lines</h4>
-<pre>&lt;set ShowViolentLines="1"&gt;</pre>
-<p><b>Description:</b> By default, pisg shows example violent lines in the "Most aggressive" and "Most attacked" stats. With this option it can be disabled.</p>
-<p class="meta"><b>Default:</b> 1 (enabled)</p>
-</div>
-
-<div class="opt" id="ShowMuw">
-<h4>ShowMuw — enable or disable "Most used words"</h4>
-<pre>&lt;set ShowMuw="1"&gt;</pre>
-<p><b>Description:</b> By default, pisg adds a "Most used words" section to the stats page. With this option you can disable it from being shown. See also <a class="opt-link" href="#WordHistory">WordHistory</a>.</p>
-<p class="meta"><b>Default:</b> 1 (enabled)</p>
-</div>
-
-<div class="opt" id="ShowMrn">
-<h4>ShowMrn — enable or disable "Most referenced nicks"</h4>
-<pre>&lt;set ShowMrn="1"&gt;</pre>
-<p><b>Description:</b> By default, pisg adds a "Most referenced nicks" section to the stats page. With this option you can disable it from being shown. See also <a class="opt-link" href="#NickHistory">NickHistory</a>.</p>
-<p class="meta"><b>Default:</b> 1 (enabled)</p>
-</div>
-
-<div class="opt" id="ShowMru">
-<h4>ShowMru — enable or disable "Most referenced URLs"</h4>
-<pre>&lt;set ShowMru="1"&gt;</pre>
-<p><b>Description:</b> By default, pisg adds a "Most referenced URLs" section to the stats page. With this option you can disable it from being shown. See also <a class="opt-link" href="#UrlHistory">UrlHistory</a>.</p>
-<p class="meta"><b>Default:</b> 1 (enabled)</p>
-</div>
-
-<div class="opt" id="ShowCharts">
-<h4>ShowCharts — enable or disable channel music charts</h4>
-<pre>&lt;set ShowCharts="1"&gt;</pre>
-<p><b>Description:</b> With this option set, pisg creates a chart listing of the top songs played on the channel. See also <a class="opt-link" href="#ChartsHistory">ChartsHistory</a> and <a class="opt-link" href="#ChartsRegexp">ChartsRegexp</a>.</p>
-<p class="meta"><b>Default:</b> 0 (disabled)</p>
-</div>
-
-<div class="opt" id="ShowOps">
-<h4>ShowOps — enable or disable op statistics</h4>
-<pre>&lt;set ShowOps="0"&gt;</pre>
-<p><b>Description:</b> By default, pisg has op statistics in the "Most interesting numbers" section. Here you can disable the feature, it's useful if you don't feel that the information is of any value, or your log format doesn't support ops/deops.</p>
-<p class="meta"><b>Default:</b> 1 (enabled)</p>
-</div>
-
-<div class="opt" id="ShowVoices">
-<h4>ShowVoices — enable or disable voice statistics</h4>
-<pre>&lt;set ShowVoices="1"&gt;</pre>
-<p><b>Description:</b> By default, pisg doesn't have voice statistics like it has op statistics. Enabling this option will add a section to the "Most interesting numbers" displaying who got the most voices.</p>
-<p class="meta"><b>Default:</b> 0 (disabled)</p>
-</div>
-
-<div class="opt" id="ShowHalfops">
-<h4>ShowHalfops — enable or disable halfop statistics</h4>
-<pre>&lt;set ShowHalfops="1"&gt;</pre>
-<p><b>Description:</b> By default, pisg doesn't have halfop statistics (+h on some servers) like it has op statistics. Enabling this option will add a section to the "Most interesting numbers" displaying who gave the most half-ops.</p>
-<p class="meta"><b>Default:</b> 0 (disabled)</p>
-</div>
-
-<div class="opt" id="ShowMostNicks">
-<h4>ShowMostNicks — show who changed nick most often</h4>
-<pre>&lt;set ShowMostNicks="1"&gt;</pre>
-<p><b>Description:</b> By enabling this option, pisg will add a section to the stats showing who had the most nicks, and what the nicks were. This option only works properly when <a class="opt-link" href="#NickTracking">NickTracking</a> is enabled or <a href="#user-options">user aliases</a> have been defined. See also <a class="opt-link" href="#MostNicksHistory">MostNicksHistory</a>, <a class="opt-link" href="#MostNicksVerbose">MostNicksVerbose</a>, and <a class="opt-link" href="#NickLimit">NickLimit</a>.</p>
-<p class="meta"><b>Default:</b> 0 (disabled)</p>
-</div>
-
-<div class="opt" id="ShowActiveGenders">
-<h4>ShowActiveGenders — show stats on which gender talked most</h4>
-<pre>&lt;set ShowActiveGenders="1"&gt;</pre>
-<p><b>Description:</b> Setting this option will make pisg create statistics on which gender (female/male/bot) talked most (see the "sex" option in <a href="#user-options">user options</a>). See also <a class="opt-link" href="#NickLimit">NickLimit</a>.</p>
-<p class="meta"><b>Default:</b> 0 (disabled)</p>
-</div>
-
-<div class="opt" id="ShowSmileys">
-<h4>ShowSmileys — show most used smileys</h4>
-<pre>&lt;set ShowSmileys="1"&gt;</pre>
-<p><b>Description:</b> With this option, pisg will make a list of the most used smileys in the channel. See also <a class="opt-link" href="#SmileyHistory">SmileyHistory</a>.</p>
-<p class="meta"><b>Default:</b> 0 (disabled)</p>
-</div>
-
-<div class="opt" id="ShowKarma">
-<h4>ShowKarma — show channel karma</h4>
-<pre>&lt;set ShowKarma="1"&gt;</pre>
-<p><b>Description:</b> With this option, pisg will analyze the channel karma. Users can give other users (or things) good or bad karma by saying "nickname++" or "nickname--"; "nickname==" resets it to zero. Only the last karma is remembered per nick/nick combination, so there is at most +- 1 karma point. See also <a class="opt-link" href="#KarmaHistory">KarmaHistory</a> and <a class="opt-link" href="#NickLimit">NickLimit</a>.</p>
-<p class="meta"><b>Default:</b> 0 (disabled)</p>
-</div>
-
-<div class="opt" id="ShowMostActiveByHour">
-<h4>ShowMostActiveByHour — show most active nicks by hour</h4>
-<pre>&lt;set ShowMostActiveByHour="1"&gt;</pre>
-<p><b>Description:</b> By enabling this option, pisg will add a section to the stats showing "Most Active Nicks By Hour" — also look at the <a class="opt-link" href="#ShowMostActiveByHourGraph">ShowMostActiveByHourGraph</a> and <a class="opt-link" href="#ActiveNicksByHour">ActiveNicksByHour</a> settings.</p>
-<p class="meta"><b>Default:</b> 0 (disabled)</p>
-</div>
-
-<div class="opt" id="ShowOnlyTop">
-<h4>ShowOnlyTop — only count stats for top talkers, ignore less-active users</h4>
-<pre>&lt;set ShowOnlyTop="1"&gt;</pre>
-<p><b>Description:</b> By enabling this option, stats in the "Big Numbers" and "Interesting Numbers" section will only be counted for users who were the most active. E.g. users who appear in the "Most Active Nicks" section, as respected by the <a class="opt-link" href="#ActiveNicks">ActiveNicks</a> and <a class="opt-link" href="#ActiveNicks2">ActiveNicks2</a> options. See also <a class="opt-link" href="#BigNumbersThreshold">BigNumbersThreshold</a>.</p>
-<p class="meta"><b>Default:</b> 0 (disabled)</p>
-</div>
-
-<div class="opt" id="ShowMostActiveByHourGraph">
-<h4>ShowMostActiveByHourGraph — show graphs in most active nicks by hour</h4>
-<pre>&lt;set ShowMostActiveByHour="1"&gt;
-&lt;set ShowMostActiveByHourGraph="1"&gt;</pre>
-<p><b>Description:</b> By enabling this option and the <a class="opt-link" href="#ShowMostActiveByHour">ShowMostActiveByHour</a> option, pisg will show graphs in the "Most Active Nicks By Hour" section.</p>
-<p class="meta"><b>Default:</b> 1 (enabled)</p>
-</div>
-
-<div class="opt" id="IgnoreWords">
-<h4>IgnoreWords — ignore specified words</h4>
-<pre>&lt;set IgnoreWords="there about"&gt;</pre>
-<p><b>Description:</b> Sometimes words appear in "most used words" which you don't want to see; with this option you can ignore these words. It also applies to the "most referenced nicks" section. It's a space separated list of words. You can use * like in nick aliases. Cannot be used in a channel-only context.</p>
-<p class="meta"><b>Default:</b> unset</p>
-</div>
-
-<div class="opt" id="NoIgnoredQuotes">
-<h4>NoIgnoredQuotes — control random quote output</h4>
-<pre>&lt;set NoIgnoredQuotes="1"&gt;</pre>
-<p><b>Description:</b> When set to "1", pisg will not output quotes containing ignored words. Pisg will output a blank line after trying 20 random quotes if all 20 random quotes were ignored.</p>
-<p class="meta"><b>Default:</b> 0</p>
-</div>
-
-<div class="opt" id="FoulWords">
-<h4>FoulWords — specify words considered to be bad/foul language</h4>
-<pre>&lt;set FoulWords="ass fuck bitch"&gt;</pre>
-<p><b>Description:</b> There is a section in the "Most interesting numbers" which tells who had a "dirty mouth" — here you can define which words are considered bad/foul. It is a space separated list of words. You can use * like in nick aliases. Cannot be used in a channel-only context.</p>
-<p class="meta"><b>Default:</b> ass fuck bitch shit scheisse kacke arsch ficker ficken schlampe</p>
-</div>
-
-<div class="opt" id="ViolentWords">
-<h4>ViolentWords — specify words considered to be aggressive/violent</h4>
-<pre>&lt;set ViolentWords="slaps beats kick"&gt;</pre>
-<p><b>Description:</b> There is a section in the "Most interesting numbers" which tells who is most "aggressive" — here you can define which words are considered "violent". It is a space separated list of words. You can use * like in nick aliases. Cannot be used in a channel-only context.</p>
-<p class="meta"><b>Default:</b> slaps beats smacks</p>
-</div>
-
-<div class="opt" id="MinQuote">
-<h4>MinQuote — minimum number of letters for a random quote</h4>
-<pre>&lt;set MinQuote="5"&gt;</pre>
-<p><b>Description:</b> The random quotes displayed in the "Most Active Nicks" section will be picked from a length range. With this option you can change the minimum number of letters required for a random quote. Also see the <a class="opt-link" href="#MaxQuote">MaxQuote</a> option. Note that pisg will still choose a short quote if it cannot find a longer one.</p>
-<p class="meta"><b>Default:</b> 25</p>
-</div>
-
-<div class="opt" id="MaxQuote">
-<h4>MaxQuote — maximum number of letters for a random quote</h4>
-<pre>&lt;set MaxQuote="100"&gt;</pre>
-<p><b>Description:</b> The random quotes displayed in the "Most Active Nicks" section will be picked from a length range. With this option you can change the maximum number of letters required for a random quote. Also see the <a class="opt-link" href="#MinQuote">MinQuote</a> option.</p>
-<p class="meta"><b>Default:</b> 65</p>
-</div>
-
-<div class="opt" id="WordLength">
-<h4>WordLength — minimum number of characters in an interesting word</h4>
-<pre>&lt;set WordLength="2"&gt;</pre>
-<p><b>Description:</b> The "Most Used Words" section on the stats page displays the most used words. The default is that a word only appears if it is longer than 5 characters. With this option you can change that minimum.</p>
-<p class="meta"><b>Default:</b> 5</p>
-</div>
-
-<div class="opt" id="QuoteWidth">
-<h4>QuoteWidth — maximum allowed length of a "word" with no spaces</h4>
-<pre>&lt;set QuoteWidth="48"&gt;</pre>
-<p><b>Description:</b> Pisg will automatically insert a space in words that have a length over the amount QuoteWidth is set to. When used in breaking up URLs it will insert a space in the displayed URL, but not in the actual URL referenced by the HREF.</p>
-<p class="meta"><b>Default:</b> 80</p>
-</div>
-
-<div class="opt" id="BigNumbersThreshold">
-<h4>BigNumbersThreshold — minimum number of lines per user for some "Big Numbers" statistics</h4>
-<pre>&lt;set BigNumbersThreshold="sqrt"&gt;</pre>
-<p><b>Description:</b> Pisg will ignore users with fewer than this setting's lines in the "questions asked", "shouts loudest", "CAPSLOCK", "longest line", "most sad", and "most happy" sections. If the setting is "sqrt" (the default), it will be dynamically replaced with the square root of the number of lines of the most active nick. See also <a class="opt-link" href="#ShowOnlyTop">ShowOnlyTop</a>.</p>
-<p class="meta"><b>Default:</b> sqrt</p>
-</div>
-
-<div class="opt" id="ActiveNicks">
-<h4>ActiveNicks — nicks to show in "Most Active Nicks"</h4>
-<pre>&lt;set ActiveNicks="10"&gt;</pre>
-<p><b>Description:</b> With this option you can define how many nicks you want to appear in the "Most Active Nicks" section on the stats page.</p>
-<p class="meta"><b>Default:</b> 25</p>
-</div>
-
-<div class="opt" id="ActiveNicks2">
-<h4>ActiveNicks2 — nicks to show in "These didn't make it.."</h4>
-<pre>&lt;set ActiveNicks2="10"&gt;</pre>
-<p><b>Description:</b> With this option you can define how many nicks you want to appear in the "These didn't make it" section on the stats page.</p>
-<p class="meta"><b>Default:</b> 30</p>
-</div>
-
-<div class="opt" id="ActiveNicksByHour">
-<h4>ActiveNicksByHour — number of nicks to show in "Most Active Nicks By Hour"</h4>
-<pre>&lt;set ActiveNicksByHour="10"&gt;</pre>
-<p><b>Description:</b> With this option you can define how many nicks you want to appear in the "Most Active Nicks By Hour" section on the stats page.</p>
-<p class="meta"><b>Default:</b> 10</p>
-</div>
-
-<div class="opt" id="MostNicksHistory">
-<h4>MostNicksHistory — maximum number of nicks to show in "users with most nicknames"</h4>
-<pre>&lt;set MostNicksHistory="10"&gt;</pre>
-<p><b>Description:</b> With this option you can define how many nicks you want to appear in the "Users with most nicknames" section. See also <a class="opt-link" href="#ShowMostNicks">ShowMostNicks</a> and <a class="opt-link" href="#MostNicksVerbose">MostNicksVerbose</a>.</p>
-<p class="meta"><b>Default:</b> 5</p>
-</div>
-
-<div class="opt" id="MostNicksVerbose">
-<h4>MostNicksVerbose — show nicks used in "most nicks"</h4>
-<pre>&lt;set MostNicksVerbose="1"&gt;</pre>
-<p><b>Description:</b> By disabling this option you can stop pisg from displaying all the nicks a user has had in the "Most used nicks" section. See also <a class="opt-link" href="#ShowMostNicks">ShowMostNicks</a>, <a class="opt-link" href="#MostNicksHistory">MostNicksHistory</a>, and <a class="opt-link" href="#NickLimit">NickLimit</a>.</p>
-<p class="meta"><b>Default:</b> 1 (enabled)</p>
-</div>
-
-<div class="opt" id="TopicHistory">
-<h4>TopicHistory — maximum number of topics to show</h4>
-<pre>&lt;set TopicHistory="10"&gt;</pre>
-<p><b>Description:</b> With this option you can define how many topics you want to appear in the "Latest topics" section.</p>
-<p class="meta"><b>Default:</b> 3</p>
-</div>
-
-<div class="opt" id="UrlHistory">
-<h4>UrlHistory — maximum number of URLs to show</h4>
-<pre>&lt;set UrlHistory="10"&gt;</pre>
-<p><b>Description:</b> With this option you can define how many URLs you want to appear in the "Most referenced URLs" section. See also <a class="opt-link" href="#ShowMru">ShowMru</a>.</p>
-<p class="meta"><b>Default:</b> 5</p>
-</div>
-
-<div class="opt" id="ChartsHistory">
-<h4>ChartsHistory — number of songs to show</h4>
-<pre>&lt;set ChartsHistory="5"&gt;</pre>
-<p><b>Description:</b> This option sets the number of songs that will be shown in the channel music charts. See also <a class="opt-link" href="#ShowCharts">ShowCharts</a> and <a class="opt-link" href="#ChartsRegexp">ChartsRegexp</a>.</p>
-<p class="meta"><b>Default:</b> 5 (the Top Five)</p>
-</div>
-
-<div class="opt" id="ChartsRegexp">
-<h4>ChartsRegexp — how to recognize songs played</h4>
-<pre>&lt;channel="#channel"&gt;
- Logfile = "channel.log"
- Format = "mIRC"
- ChartsRegexp = "(?:is )?(?:np:|(?:now )?playing:? |listening to:? )(?:MPEG stream from)?\s*(.*)"
-&lt;/channel&gt;</pre>
-<p><b>Description:</b> This option is a perl regexp that is used to recognize songs played. Please tell the pisg mailing list if you have a better default. The regexp MUST contain a single () pair to extract the song name. See also the perlre(1) manpage, <a class="opt-link" href="#ShowCharts">ShowCharts</a> and <a class="opt-link" href="#ChartsHistory">ChartsHistory</a>.</p>
-<p class="meta"><b>Default:</b> "(?:np:|(?:now )?playing:? (?:MPEG stream from)?)\s*(.*)"</p>
-</div>
-
-<div class="opt" id="WordHistory">
-<h4>WordHistory — maximum number of words to show</h4>
-<pre>&lt;set WordHistory="15"&gt;</pre>
-<p><b>Description:</b> With this option you can define how many words you want to appear in the "Most used words" section. See also <a class="opt-link" href="#ShowMuw">ShowMuw</a>.</p>
-<p class="meta"><b>Default:</b> 10</p>
-</div>
-
-<div class="opt" id="NickHistory">
-<h4>NickHistory — maximum number of nicks to show in "Most referenced nicks"</h4>
-<pre>&lt;set NickHistory="15"&gt;</pre>
-<p><b>Description:</b> With this option you can define how many nicks you want to appear in the "Most referenced nicks" section. See also <a class="opt-link" href="#ShowMrn">ShowMrn</a>.</p>
-<p class="meta"><b>Default:</b> 5</p>
-</div>
-
-<div class="opt" id="SmileyHistory">
-<h4>SmileyHistory — maximum number of smileys to show in smiley stats</h4>
-<pre>&lt;set SmileyHistory="15"&gt;</pre>
-<p><b>Description:</b> At most this many smileys will appear in smiley stats. See also <a class="opt-link" href="#ShowSmileys">ShowSmileys</a>.</p>
-<p class="meta"><b>Default:</b> 10</p>
-</div>
-
-<div class="opt" id="KarmaHistory">
-<h4>KarmaHistory — maximum number of nicks to show in "Karma"</h4>
-<pre>&lt;set KarmaHistory="15"&gt;</pre>
-<p><b>Description:</b> At most this many nicks will appear in the good and bad karma stats. See also <a class="opt-link" href="#ShowKarma">ShowKarma</a> and <a class="opt-link" href="#NickLimit">NickLimit</a>.</p>
-<p class="meta"><b>Default:</b> 5</p>
-</div>
-
-<div class="opt" id="NickTracking">
-<h4>NickTracking — track nick changes and create aliases</h4>
-<pre>&lt;set NickTracking="1"&gt;</pre>
-<p><b>Description:</b> Enabling this option will track nick changes as well as it can. It will then automatically create aliases for these nicks. Useful for <a class="opt-link" href="#ShowMostNicks">ShowMostNicks</a> and other stats. Nick tracking does not work for log formats that do not use the nickname for the person running the logger, but only show "You" there. See <a class="opt-link" href="#Maintainer">Maintainer</a>.</p>
-<p class="meta"><b>Default:</b> 0 (disabled)</p>
-</div>
-
-<div class="opt" id="NickLimit">
-<h4>NickLimit — maximum number of nicks in lists</h4>
-<pre>&lt;set NickLimit="0"&gt;</pre>
-<p><b>Description:</b> This option trims lists of nicks to a maximum length, replacing the rest with "...". Setting to 0 disables trimming. Affected are the used nicks in the "Users with most nicknames" section, nicks in "Most active genders", and nicks in the "Good/bad karma by" columns. See <a class="opt-link" href="#ShowMostNicks">ShowMostNicks</a>, <a class="opt-link" href="#ShowKarma">ShowKarma</a>, and <a class="opt-link" href="#ShowActiveGenders">ShowActiveGenders</a>.</p>
-<p class="meta"><b>Default:</b> 10</p>
-</div>
-
-<div class="opt" id="SortByWords">
-<h4>SortByWords — sort "most active nicks" by words</h4>
-<pre>&lt;set SortByWords="1"&gt;</pre>
-<p><b>Description:</b> The default for the "Most Active Nicks" section is to sort users by lines. Enabling this will sort it by words instead.</p>
-<p class="meta"><b>Default:</b> 0 (disabled)</p>
-</div>
-
-<h2 id="reference-pictures">Picture options</h2>
-
-<div class="opt" id="PicLocation">
-<h4>PicLocation — path to images on stats page</h4>
-<pre>&lt;set PicLocation="gfx/"&gt;</pre>
-<p><b>Description:</b> The location of the pictures used on the stats page — not the user pictures, but the different bars in "Most Active Times".</p>
-<p class="meta"><b>Default:</b> Current directory</p>
-</div>
-
-<div class="opt" id="UserPics">
-<h4>UserPics — number of user pictures per row</h4>
-<pre>&lt;channel="#channel"&gt;
- Logfile = "channel.log"
- UserPics = "no"
-&lt;/channel&gt;
-
-&lt;set UserPics="3"&gt;</pre>
-<p><b>Description:</b> <code>UserPics</code> allows you to configure the number of user pictures per row. By default, one picture will be shown. Since pictures are usually higher than one line of text, this lets the table grow. With settings greater than 1, several pictures will be placed next to each other. A good setting would be <code>UserPics</code>=3 and pictures of size 60x60. Set <code>UserPics</code> to no or 0 to disable user pictures. The latter is useful if you share a user config file between channels and want to disable user pictures for some channels.</p>
-<p class="meta"><b>Default:</b> yes (1)</p>
-</div>
-
-<div class="opt" id="ImagePath">
-<h4>ImagePath — path to user pictures (HTML page)</h4>
-<pre>&lt;set ImagePath="users/"&gt;</pre>
-<p><b>Description:</b> <code>ImagePath</code> defines the path to where user pictures are located, relative to the HTML page generated. The default is that user pictures are located in the same directory as the HTML page.</p>
-<p class="meta"><b>Default:</b> current directory</p>
-</div>
-
-<div class="opt" id="DefaultPic">
-<h4>DefaultPic — use a default user picture</h4>
-<pre>&lt;set DefaultPic="unknown.gif"&gt;</pre>
-<p><b>Description:</b> <code>DefaultPic</code> defines a picture to be displayed for all users which have no other picture defined in the <code>user</code> element. This is good for showing "No picture available" or something. May contain globbing patterns, see <a class="opt-link" href="#ImageGlobPath">ImageGlobPath</a> below.</p>
-<p class="meta"><b>Default:</b> unset</p>
-</div>
-
-<div class="opt" id="ImageGlobPath">
-<h4>ImageGlobPath — path to user pictures (output generation)</h4>
-<pre>&lt;set ImageGlobPath="/var/www/pisg/"&gt;
-&lt;set DefaultPic="default-??.gif"&gt;</pre>
-<p><b>Description:</b> <code>ImageGlobPath</code> defines the path to the directory where user pictures are located, relative to the current directory. This setting is used to choose random pictures if ? or * (globbing characters) are used in the picture name. ? matches a single character, * matches a (possibly empty) string. The default is the <a class="opt-link" href="#ImagePath">ImagePath</a> setting. (NB: this setting will be different from <a class="opt-link" href="#ImagePath">ImagePath</a> if the latter is not relative to the current directory, e.g. if you are writing the HTML file outside of the current directory.)</p>
-<p class="meta"><b>Default:</b> current ImagePath setting</p>
-</div>
-
-<div class="opt" id="PicWidth">
-<h4>PicWidth — define a standard width for user pictures</h4>
-<pre>&lt;set PicWidth="500"&gt;</pre>
-<p><b>Description:</b> <code>PicWidth</code> defines the standard width for user pictures. Sets the 'width' attribute of image elements on the outputted stats page. See also <a class="opt-link" href="#PicHeight">PicHeight</a>.</p>
-<p class="meta"><b>Default:</b> unset</p>
-</div>
-
-<div class="opt" id="PicHeight">
-<h4>PicHeight — define a standard height for user pictures</h4>
-<pre>&lt;set PicHeight="500"&gt;</pre>
-<p><b>Description:</b> <code>PicHeight</code> defines the standard height for user pictures. Sets the 'height' attribute of image elements on the outputted stats page. See also <a class="opt-link" href="#PicWidth">PicWidth</a>.</p>
-<p class="meta"><b>Default:</b> unset</p>
-</div>
-
-<h2 id="reference-misc">Misc options</h2>
-
-<div class="opt" id="Charset">
-<h4>Charset — character set to use for stats page</h4>
-<pre>&lt;set Charset="iso-8859-15"&gt;</pre>
-<p><b>Description:</b> The pisg stats page defines a character set in a meta tag, this can be used if your country uses a different one than the default. Pisg will also use this setting to convert the language templates from <a class="opt-link" href="#LangFile">LangFile</a> if the language defines a source charset. Note: you also have to tell your webserver to transmit the charset to the browser. With Apache, use "AddDefaultCharset off" in the server config.</p>
-<p class="meta"><b>Default:</b> iso-8859-1</p>
-</div>
-
-<div class="opt" id="LogCharset">
-<h4>LogCharset — character set for logfiles</h4>
-<pre>&lt;set Charset="iso-8859-15"&gt;
-&lt;set LogCharset="iso-8859-15"&gt;</pre>
-<p><b>Description:</b> If <code>LogCharset</code> is set and different from <a class="opt-link" href="#Charset">Charset</a>, pisg will convert the charset using Text::Iconv. Using this option slows down log processing.</p>
-<p class="meta"><b>Default:</b> empty (no conversion)</p>
-</div>
-
-<div class="opt" id="LogCharsetFallback">
-<h4>LogCharsetFallback — fallback character set for logfiles</h4>
-<pre>&lt;set Charset="utf-8"&gt;
-&lt;set LogCharset="utf-8"&gt;
-&lt;set LogCharsetFallback="iso-8859-15"&gt;</pre>
-<p><b>Description:</b> <code>LogCharsetFallback</code> defines a fallback charset for the <a class="opt-link" href="#LogCharset">LogCharset</a> conversion. This is useful if you have mixed unicode/iso-8859-* logs. Pisg will first try the conversion from <a class="opt-link" href="#LogCharset">LogCharset</a>. If that fails, <code>LogCharsetFallback</code> is used. Note that this only works for charsets where certain byte sequences are illegal, like UTF-8. (In short: <code>LogCharset</code> = utf-8, <code>LogCharsetFallback</code> = iso-8859-15 works, the other way round does not.)</p>
-<p class="meta"><b>Default:</b> empty (no fallback conversion)</p>
-</div>
-
-<div class="opt" id="TimeOffset">
-<h4>TimeOffset — use a different time zone than the local machine</h4>
-<pre>&lt;set TimeOffset="+2"&gt;</pre>
-<p><b>Description:</b> By default, pisg uses the time of the local machine to display the time of the generated stats. Sometimes when you have a shell on an external box, and it's in another country, you want to use another time. This is accomplished by the <code>TimeOffset</code> command.</p>
-<p class="meta"><b>Default:</b> +0</p>
-</div>
-
-<div class="opt" id="RegexpAliases">
-<h4>RegexpAliases — use regular expressions in user aliases</h4>
-<pre>&lt;user nick="Joe" alias="Joe\d+"&gt;
-
-&lt;set RegexpAliases="1"&gt;</pre>
-<p><b>Description:</b> Enabling this option will make all aliases in &lt;user&gt; lines be parsed as regular expressions; this setting also applies to the <a class="opt-link" href="#IgnoreWords">IgnoreWords</a>, <a class="opt-link" href="#FoulWords">FoulWords</a>, and <a class="opt-link" href="#ViolentWords">ViolentWords</a> settings.</p>
-<p class="meta"><b>Default:</b> 0 (disabled)</p>
-</div>
-
-<div class="opt" id="LangFile">
-<h4>LangFile — filename of language file</h4>
-<pre>&lt;set LangFile="mylang.txt"&gt;</pre>
-<p><b>Description:</b> With this option you have an alternative way to define the name and/or path to the language file. Usually you don't have to touch this option.</p>
-<p class="meta"><b>Default:</b> lang.txt</p>
-</div>
-
-<div class="opt" id="CssDir">
-<h4>CssDir — path to directory with CSS files</h4>
-<pre>&lt;set CssDir="/usr/share/pisg/layout/"&gt;</pre>
-<p><b>Description:</b> <code>CssDir</code> is used to define the paths to the CSS files (the <a class="opt-link" href="#ColorScheme">ColorScheme</a>s). Usually you don't need to change this. This setting is only used when statically including the CSS file.</p>
-<p class="meta"><b>Default:</b> layout/ (in current directory)</p>
-</div>
-
-<div class="opt" id="HiCell">
-<h4>HiCell, HiCell2 — colors for color gradient in most active nicks section</h4>
-<pre>&lt;set HiCell="#BABADD" HiCell2="#CCCCCC"&gt;
-&lt;set HiCell=""&gt;</pre>
-<p><b>Description:</b> <code>HiCell</code> and <code>HiCell2</code> define the colors to be used for the color gradient in the most active nicks section. They should match your <a class="opt-link" href="#ColorScheme">ColorScheme</a>. When setting <code>HiCell</code> to the empty string (""), pisg will not generate a color gradient; you might want to use this with <a class="opt-link" href="#ColorScheme">ColorScheme</a>="none" or <a class="opt-link" href="#AltColorScheme">AltColorScheme</a>.</p>
-<p class="meta"><b>Default:</b> #BABADD, #CCCCCC</p>
-</div>
-
-<div class="opt" id="LogType">
-<h4>LogType — type of log (not the format of the log)</h4>
-<pre>&lt;set LogType="Logfile"&gt;</pre>
-<p><b>Description:</b> The type of logs kept for your channel. Currently only "Logfile" is supported, so you don't need to change this option.</p>
-<p class="meta"><b>Default:</b> Logfile</p>
-</div>
-
-<div class="opt" id="StatsDump">
-<h4>StatsDump — dump raw statistics into file</h4>
-<pre>&lt;set StatsDump="statsdump"&gt;</pre>
-<p><b>Description:</b> This option is intended for debugging pisg, but might be useful to process the parsed logs with another program. The file contains the %stats and %lines hashes in perl's Data::Dumper format.</p>
-<p class="meta"><b>Default:</b> Unset</p>
-</div>
-
-<h2 id="example-config">Full example pisg.cfg — every option in one place</h2>
-<p>Below is a fully-loaded <code>pisg.cfg</code> that touches every single option documented on this page — global settings, a channel definition, user options, link ignoring, and an include. It won't necessarily make sense as a "real" config (some settings contradict each other on purpose just to show the syntax), so treat it as a copy/paste reference: grab the block you need, drop it into your own <code>pisg.cfg</code>, and tweak the values.</p>
-
-<h3>1. Global options (&lt;set&gt;)</h3>
-<p>Anything set here applies to every channel, unless a channel overrides it below.</p>
-<pre>&lt;set Network="Undernet"&gt;
-&lt;set OutputFile="mychan.html"&gt;
-&lt;set OutputTag="-week"&gt;
-&lt;set Logfile="foo.log"&gt;
-&lt;set LogDir="dailylogs/"&gt;
-&lt;set NFiles="8"&gt;
-&lt;set Maintainer="Seb"&gt;
-&lt;set ColorScheme="darkgalaxy"&gt;
-&lt;set AltColorScheme="layout/ocean.css layout/justgrey.css"&gt;
-&lt;set Lang="EN,FR"&gt;
-&lt;set PageHead="header.txt"&gt;
-&lt;set PageFoot="footer.txt"&gt;
-&lt;set LogPrefix="logjanuary"&gt;
-&lt;set LogSuffix="\.\d\d([A-Za-z]+)\d\d\d\d||\.(\d\d)[A-Za-z]+\d\d\d\d||\.\d\d[A-Za-z]+(\d\d\d\d)"&gt;
-&lt;set Silent="0"&gt;
-&lt;set CacheDir="pisg_cache"&gt;
-
-&lt;set DailyActivity="31"&gt;
-&lt;set ShowActiveTimes="1"&gt;
-&lt;set ShowActiveNicks="1"&gt;
-&lt;set ShowBigNumbers="1"&gt;
-&lt;set ShowTopics="1"&gt;
-&lt;set ShowLines="1"&gt;
-&lt;set ShowWpl="1"&gt;
-&lt;set ShowCpl="1"&gt;
-&lt;set ShowWords="1"&gt;
-&lt;set ShowLastSeen="1"&gt;
-&lt;set ShowTime="1"&gt;
-&lt;set ShowLineTime="0"&gt;
-&lt;set ShowWordTime="0"&gt;
-&lt;set ShowRandQuote="1"&gt;
-&lt;set ShowLegend="1"&gt;
-&lt;set ShowKickLine="1"&gt;
-&lt;set ShowActionLine="1"&gt;
-&lt;set ShowShoutLine="1"&gt;
-&lt;set ShowFoulDecimals="2"&gt;
-&lt;set ShowFoulLine="1"&gt;
-&lt;set ShowViolentLines="1"&gt;
-&lt;set ShowMuw="1"&gt;
-&lt;set ShowMrn="1"&gt;
-&lt;set ShowMru="1"&gt;
-&lt;set ShowCharts="1"&gt;
-&lt;set ShowOps="1"&gt;
-&lt;set ShowVoices="1"&gt;
-&lt;set ShowHalfops="1"&gt;
-&lt;set ShowMostNicks="1"&gt;
-&lt;set ShowActiveGenders="1"&gt;
-&lt;set ShowSmileys="1"&gt;
-&lt;set ShowKarma="1"&gt;
-&lt;set ShowMostActiveByHour="1"&gt;
-&lt;set ShowOnlyTop="0"&gt;
-&lt;set ShowMostActiveByHourGraph="1"&gt;
-
-&lt;set IgnoreWords="there about"&gt;
-&lt;set NoIgnoredQuotes="1"&gt;
-&lt;set FoulWords="ass fuck bitch shit scheisse kacke arsch ficker ficken schlampe"&gt;
-&lt;set ViolentWords="slaps beats smacks"&gt;
-&lt;set MinQuote="5"&gt;
-&lt;set MaxQuote="100"&gt;
-&lt;set WordLength="4"&gt;
-&lt;set QuoteWidth="48"&gt;
-&lt;set BigNumbersThreshold="sqrt"&gt;
-&lt;set ActiveNicks="25"&gt;
-&lt;set ActiveNicks2="30"&gt;
-&lt;set ActiveNicksByHour="10"&gt;
-&lt;set MostNicksHistory="5"&gt;
-&lt;set MostNicksVerbose="1"&gt;
-&lt;set TopicHistory="5"&gt;
-&lt;set UrlHistory="10"&gt;
-&lt;set ChartsHistory="5"&gt;
-&lt;set ChartsRegexp="(?:is )?(?:np:|(?:now )?playing:? |listening to:? )(?:MPEG stream from)?\s*(.*)"&gt;
-&lt;set WordHistory="15"&gt;
-&lt;set NickHistory="10"&gt;
-&lt;set SmileyHistory="10"&gt;
-&lt;set KarmaHistory="5"&gt;
-&lt;set NickTracking="1"&gt;
-&lt;set NickLimit="10"&gt;
-&lt;set SortByWords="0"&gt;
-
-&lt;set PicLocation="gfx/"&gt;
-&lt;set UserPics="3"&gt;
-&lt;set ImagePath="users/"&gt;
-&lt;set DefaultPic="default-??.gif"&gt;
-&lt;set ImageGlobPath="/var/www/pisg/"&gt;
-&lt;set PicWidth="60"&gt;
-&lt;set PicHeight="60"&gt;
-
-&lt;set Charset="utf-8"&gt;
-&lt;set LogCharset="utf-8"&gt;
-&lt;set LogCharsetFallback="iso-8859-15"&gt;
-&lt;set TimeOffset="+0"&gt;
-&lt;set RegexpAliases="0"&gt;
-&lt;set LangFile="lang.txt"&gt;
-&lt;set CssDir="layout/"&gt;
-&lt;set HiCell="#BABADD" HiCell2="#CCCCCC"&gt;
-&lt;set LogType="Logfile"&gt;
-&lt;set StatsDump="statsdump"&gt;</pre>
-
-<h3>2. Channel definition</h3>
-<p>A channel block only needs to set what's different from the globals above — here it overrides the log source, format, and output name for this specific channel.</p>
-<pre>&lt;channel="#pisg"&gt;
- Logfile = "channel.log"
- Format = "eggdrop"
- Network = "Undernet"
- OutputFile = "pisg.html"
- Maintainer = "Seb"
- ColorScheme = "darkgalaxy"
-&lt;/channel&gt;</pre>
-
-<h3>3. User options</h3>
-<p>One line per user, covering aliases, pictures, sex, links, and ignoring.</p>
-<pre>&lt;user nick="Seb" alias="Seb^* DooubleTap" pic="seb.jpg" bigpic="seb-big.jpg" sex="m" link="https://github.com/DooubleTap"&gt;
-&lt;user nick="Ben" pic="ben_*.jpg"&gt;
-&lt;user nick="Christine" sex="f" link="http://www.christine.com"&gt;
-&lt;user nick="nameofbot" sex="b" ignore="y"&gt;</pre>
-
-<h3>4. Ignoring a link</h3>
-<pre>&lt;link url="http://www.slashdot.org" ignore="y"&gt;</pre>
-
-<h3>5. Including a shared config</h3>
-<p>Useful when several channels share the same user list.</p>
-<pre>&lt;include="/home/vetinari/pisg/users.cfg"&gt;</pre>
-
-<h2 id="copyright">Copyright and License</h2>
-<p>pisg — Perl IRC Statistics Generator</p>
-<p>Copyright (C) 2001-2012 The pisg project</p>
-<p>This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.</p>
-<p>This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</p>
-<p>You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA</p>
-
-<p class="back-top"><a href="#">↑ Back to top</a></p>
+<!-- ===================== WHAT'S NEW ===================== -->
+<section id="whatsnew">
+  <div class="wrap">
+    <header>
+      <p class="kicker">New in 1.0a</p>
+      <h2>Same parsers, same config &mdash; a much better page.</h2>
+      <p class="lede">Everything 0.80-preview2 did, pisg 1.0a still does: the same log formats, the same
+      statistics, the same <code>pisg.cfg</code>. Nothing you have set up has to change.</p>
+    </header>
+
+    <div class="grid g3">
+      <div class="card">
+        <span class="ico">&#9635;</span>
+        <h3>Who talks to whom</h3>
+        <p>An interactive map of the channel's conversations: who addresses, mentions and answers whom.
+        Click a nick or a line for the detail. Bots are left out.</p>
+      </div>
+      <div class="card">
+        <span class="ico">&#9636;</span>
+        <h3>Four new themes</h3>
+        <p><code>modern</code>, <code>midnight</code>, <code>amoled</code> and <code>terminal</code>,
+        all generated from one stylesheet. The eight classic schemes are untouched &mdash; and a theme
+        of your own is one CSS file, or <a href="themes/">two minutes in the creator</a>.</p>
+      </div>
+      <div class="card">
+        <span class="ico">&#9776;</span>
+        <h3>Section navigation</h3>
+        <p>A menu down the left on wide screens, a slim bar on phones, and a marker on the section
+        you are reading. It works with JavaScript switched off.</p>
+      </div>
+      <div class="card">
+        <span class="ico">&#8962;</span>
+        <h3>A landing page</h3>
+        <p>The statistics of your statistics: every channel compared, a 24-hour profile each, the last
+        30 days, and a button into each page. One static file, no PHP.</p>
+      </div>
+      <div class="card">
+        <span class="ico">&#9673;</span>
+        <h3>Seven new sections</h3>
+        <p>Channel overview, closest pairs, social roles, time personalities, who carries the channel,
+        and the word each person uses that nobody else does.</p>
+      </div>
+      <div class="card">
+        <span class="ico">&#9881;</span>
+        <h3>Profiles from IRC</h3>
+        <p>An optional eggdrop script lets people set their own picture, link and merged nicks with
+        <code>!pisginfo</code> &mdash; authenticated against their network account.</p>
+      </div>
+      <div class="card">
+        <span class="ico">&#8635;</span>
+        <h3>Several channels, one run</h3>
+        <p>One config, any number of channels. A channel that cannot be read no longer stops the
+        others, and pisg exits with a real error status when something fails.</p>
+      </div>
+      <div class="card">
+        <span class="ico">&#9878;</span>
+        <h3>Safer output</h3>
+        <p>A page is written to a temporary file and moved into place only when it is complete, so a
+        failure can never replace a good page with half of one.</p>
+      </div>
+      <div class="card">
+        <span class="ico">&#9744;</span>
+        <h3>Phones included</h3>
+        <p>Readable from 360&nbsp;px up, with a viewport tag, full UTF-8 handling, and wide tables that
+        scroll inside their own section instead of dragging the page sideways.</p>
+      </div>
+    </div>
+
+    <div class="cta-row">
+      <a class="btn primary" href="changelog/">Full 1.0a changelog <span class="arrow" aria-hidden="true">&rarr;</span></a>
+      <a class="btn" href="docs/#reference-new">The new options</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== EXAMPLE ===================== -->
+<section id="example">
+  <div class="wrap">
+    <header>
+      <p class="kicker">Live example</p>
+      <h2>What a busy channel looks like.</h2>
+      <p class="lede">A full 1.0a page for <code>#nightshift</code> &mdash; 133,944 lines from 915
+      nicks over 50 days &mdash; plus the landing page that ties it to a second, much quieter channel.
+      Invented channels, invented people; the numbers, the graphs and the markup are a real pisg run.</p>
+    </header>
+
+    <div class="grid g2">
+      <a class="card" href="demo/nightshift.html">
+        <span class="ico">&#9635; stats page</span>
+        <h3>#nightshift &mdash; a very busy channel</h3>
+        <p>Every section 1.0a can produce, at the scale of a channel that never really sleeps: 2,679
+        lines a day, a relation map with 30 nicks in it, and 19 sections to navigate.</p>
+        <span class="more">Open the stats page &rarr;</span>
+      </a>
+      <a class="card" href="demo/">
+        <span class="ico">&#8962; landing page</span>
+        <h3>Two channels, one front door</h3>
+        <p>The statistics of the statistics: totals across every channel, share of all lines, each
+        channel's busiest hour, and its last 30 days at a glance. <code>site/index.html</code>, reading
+        the <code>channels.json</code> pisg wrote beside it.</p>
+        <span class="more">Open the landing page &rarr;</span>
+      </a>
+      <a class="card" href="demo/basement.html">
+        <span class="ico">&#9635; stats page</span>
+        <h3>#basement &mdash; a quiet room</h3>
+        <p>The other end of the scale: 37 lines a day over half a year, user pictures switched on, and
+        a bot sitting at the top of the table where a person usually is.</p>
+        <span class="more">Open the stats page &rarr;</span>
+      </a>
+      <a class="card" href="demo/themes/modern.html">
+        <span class="ico">&#9636; themes</span>
+        <h3>The same page, six ways</h3>
+        <p>A short sample page in each colour scheme, so you can see what one line of config does before
+        you commit to it.</p>
+        <span class="more">Open the theme previews &rarr;</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== THEMES ===================== -->
+<section id="themes">
+  <div class="wrap">
+    <header>
+      <p class="kicker">Themes</p>
+      <h2>Pick a look with one line of config.</h2>
+      <p class="lede"><code>&lt;set ColorScheme="modern"&gt;</code> is the whole change. Four modern
+      schemes ship with 1.0a; <code>modern</code> follows the reader's light/dark setting, the other
+      three stay dark on purpose. Each preview is the short sample page pisg generates for that
+      scheme.</p>
+    </header>
+
+    <div class="grid g3">
+      <a class="card themecard" href="demo/themes/modern.html">
+        <div class="sw" aria-hidden="true">
+          <span style="background:#f5f6f8"></span><span style="background:#2563eb"></span><span style="background:#34d399"></span><span style="background:#fbbf24"></span><span style="background:#f87171"></span>
+        </div>
+        <div class="meta">
+          <h3>modern</h3>
+          <p>Clean cards on paper, blue accent. Follows light/dark.</p>
+          <span class="more">Preview &rarr;</span>
+        </div>
+      </a>
+      <a class="card themecard" href="demo/themes/midnight.html">
+        <div class="sw" aria-hidden="true">
+          <span style="background:#131722"></span><span style="background:#7aa2ff"></span><span style="background:#2fbf8f"></span><span style="background:#e5b13a"></span><span style="background:#ef6b6b"></span>
+        </div>
+        <div class="meta">
+          <h3>midnight</h3>
+          <p>Deep blue-black, low contrast on the eyes, colour kept for the data.</p>
+          <span class="more">Preview &rarr;</span>
+        </div>
+      </a>
+      <a class="card themecard" href="demo/themes/amoled.html">
+        <div class="sw" aria-hidden="true">
+          <span style="background:#000"></span><span style="background:#b18cff"></span><span style="background:#2fbf8f"></span><span style="background:#e5b13a"></span><span style="background:#ef6b6b"></span>
+        </div>
+        <div class="meta">
+          <h3>amoled</h3>
+          <p>True black for OLED screens and for people who like it that way.</p>
+          <span class="more">Preview &rarr;</span>
+        </div>
+      </a>
+      <a class="card themecard" href="demo/themes/terminal.html">
+        <div class="sw" aria-hidden="true">
+          <span style="background:#050805"></span><span style="background:#3dff7a"></span><span style="background:#f0e040"></span><span style="background:#2f9bff"></span><span style="background:#ff5f5f"></span>
+        </div>
+        <div class="meta">
+          <h3>terminal</h3>
+          <p>Monospace and phosphor green, for the people who never left the console.</p>
+          <span class="more">Preview &rarr;</span>
+        </div>
+      </a>
+      <a class="card themecard" href="demo/themes/default.html">
+        <div class="sw" aria-hidden="true">
+          <span style="background:#fff"></span><span style="background:#bbbbdb"></span><span style="background:#ccc"></span><span style="background:#000080"></span><span style="background:#ff0000"></span>
+        </div>
+        <div class="meta">
+          <h3>default</h3>
+          <p>The page pisg has written since 2001, unchanged. Also <code>darkgalaxy</code>,
+          <code>ocean</code>, <code>softgreen</code> and four more classics.</p>
+          <span class="more">Preview &rarr;</span>
+        </div>
+      </a>
+      <a class="card themecard" href="themes/">
+        <div class="sw" aria-hidden="true">
+          <span style="background:linear-gradient(135deg,#3fd18b,#58a6ff)"></span>
+          <span style="background:linear-gradient(135deg,#58a6ff,#bc8cff)"></span>
+          <span style="background:linear-gradient(135deg,#bc8cff,#e5b567)"></span>
+          <span style="background:linear-gradient(135deg,#e5b567,#e8615d)"></span>
+          <span style="background:linear-gradient(135deg,#e8615d,#3fd18b)"></span>
+        </div>
+        <div class="meta">
+          <h3>make your own</h3>
+          <p>A theme is one CSS file with sixteen colours in it. The creator lets you set them, shows a
+          real stats page changing as you go, and hands you the file.</p>
+          <span class="more">Open the theme creator &rarr;</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="note">The eight classic schemes &mdash; <code>darkgalaxy</code>, <code>ocean</code>,
+    <code>softgreen</code> and the rest &mdash; still work exactly as they did, and they have also been
+    <a href="themes/#shipped">converted to the 1.0a palette</a>, so you can have the old colours with
+    the new layout. Rolling your own by hand is still a CSS file in <code>layout/</code> and
+    <code>&lt;set ColorScheme="myfile"&gt;</code>. See <a href="themes/">Themes</a> and
+    <a href="docs/#using-css">Changing the layout</a>.</div>
+  </div>
+</section>
+
+<!-- ===================== FORMATS ===================== -->
+<section id="formats">
+  <div class="wrap">
+    <header>
+      <p class="kicker">Log formats</p>
+      <h2>Whatever is already writing your logs.</h2>
+      <p class="lede">Set <code>Format</code> to one of these. If the file ends in <code>.gz</code> or
+      <code>.bz2</code> pisg decompresses it on the way in. Full details and per-format notes live in
+      the <code>docs/FORMATS</code> file in the distribution.</p>
+    </header>
+
+    <p class="kicker" style="color:var(--faint)">Bots</p>
+    <div class="chips" style="margin-bottom:24px">
+      <span class="chip on">eggdrop</span><span class="chip on">energymech</span><span class="chip">znc</span>
+      <span class="chip">grufti</span><span class="chip">mbot</span><span class="chip">winbot</span>
+      <span class="chip">zcbot</span><span class="chip">muh</span><span class="chip">infobot</span>
+      <span class="chip">blootbot</span><span class="chip">supybot</span><span class="chip">moobot</span>
+      <span class="chip">perlbot</span><span class="chip">bobot++</span><span class="chip">pircbot</span>
+      <span class="chip">axur</span><span class="chip">oer</span><span class="chip">dircproxy</span>
+      <span class="chip">psybnc</span>
+    </div>
+
+    <p class="kicker" style="color:var(--faint)">Clients</p>
+    <div class="chips" style="margin-bottom:24px">
+      <span class="chip on">mIRC</span><span class="chip on">irssi</span><span class="chip on">AdiIRC</span>
+      <span class="chip">X-Chat</span><span class="chip">KVIrc</span><span class="chip">BitchX (bxlog)</span>
+      <span class="chip">HydraIRC</span><span class="chip">ircII</span><span class="chip">sirc</span>
+      <span class="chip">ircle</span><span class="chip">Trillian</span><span class="chip">virc98</span>
+      <span class="chip">dancer</span><span class="chip">Vision</span>
+    </div>
+
+    <div class="note warn">ZNC logs are read with <code>Format="energymech"</code> and a
+    <code>LogDir</code> per channel. Moving an old client log into that shape is what
+    <code>scripts/adiirc2eggdrop.py</code> is for.</div>
+  </div>
+</section>
+
+<!-- ===================== TOOLS ===================== -->
+<section id="tools">
+  <div class="wrap">
+    <header>
+      <p class="kicker">Optional tools</p>
+      <h2>For the people who run the channel.</h2>
+      <p class="lede">None of these are required to use pisg. They live in <code>scripts/</code> and
+      solve the things that otherwise mean editing config files by hand.</p>
+    </header>
+
+    <div class="rowlist">
+      <div class="lrow">
+        <span class="lname">eggdrop-pisg.tcl <em>tcl 8.6</em></span>
+        <span class="ldesc">Lets people manage their own profile from the channel: <code>!pisginfo</code>
+        for sex, picture and link, <code>!pisgmerge</code> to count their other nicks as one person,
+        <code>!pisgstats</code> for the page address. Identified by network account, rate limited, and
+        it can never overwrite a <code>&lt;user&gt;</code> line you wrote yourself. 107 tests ship with it.</span>
+        <a class="lget" href="docs/#tool-eggdrop">Docs &rarr;</a>
+      </div>
+      <div class="lrow">
+        <span class="lname">pisg-autoalias.py <em>python 3</em></span>
+        <span class="ldesc">Nicks seen on the same authenticated host are the same person. Writes an
+        include file for pisg and can run before every pisg run. Your own <code>&lt;user&gt;</code>
+        lines always win; shared hosts, gateways and bouncers are never merged.</span>
+        <a class="lget" href="docs/#tool-autoalias">Docs &rarr;</a>
+      </div>
+      <div class="lrow">
+        <span class="lname">adiirc2eggdrop.py <em>python 3</em></span>
+        <span class="ldesc">Turns an AdiIRC (or similar) client log into eggdrop or ZNC logs, so years
+        of history you kept by accident can join the statistics. Public events only, local time
+        converted to UTC, never overwrites a file, and it stops where your real logging starts.</span>
+        <a class="lget" href="docs/#tool-adiirc">Docs &rarr;</a>
+      </div>
+      <div class="lrow">
+        <span class="lname">znc-setup.sh <em>shell</em></span>
+        <span class="ldesc">Puts converted logs into a ZNC account's log folder and gives pisg &mdash;
+        running as a different Unix user &mdash; read access to exactly the channel folders it needs.
+        It prints what it would do before it changes anything.</span>
+        <a class="lget" href="docs/#tool-znc">Docs &rarr;</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FAQ ===================== -->
+<section id="faq">
+  <div class="wrap">
+    <header>
+      <p class="kicker">FAQ</p>
+      <h2>Questions people actually ask.</h2>
+    </header>
+
+    <details class="faq">
+      <summary>I have no bot. Can I still make stats?</summary>
+      <div class="answer"><p>Yes, if your client keeps logs with timestamps. mIRC, AdiIRC, irssi,
+      XChat, KVIrc and others are all supported formats &mdash; turn timestamped logging on, point
+      <code>Logfile</code> at the file and run pisg. A bot or a bouncer is only better because it is
+      online when you are not.</p></div>
+    </details>
+
+    <details class="faq">
+      <summary>Do I need a web server?</summary>
+      <div class="answer"><p>No. The page is a single HTML file with the stylesheet and the bar
+      graphics inside it, so opening it from your disk works. To share it, any static host will do
+      &mdash; GitHub Pages, a shared account, the <code>public_html</code> folder you have had since
+      1999. The landing page is static too: no PHP and no cron job.</p></div>
+    </details>
+
+    <details class="faq">
+      <summary>Will 1.0a break my existing setup?</summary>
+      <div class="answer"><p>It is an alpha, so keep the version you run now until you have tried this one on a copy. That said: your <code>pisg.cfg</code> keeps working as it is, and every old colour
+      scheme looks as it did. Two things to know: the new sections are on by default (set
+      <code>ShowOverview</code>, <code>ShowRelations</code>, <code>ShowTimePersonalities</code>,
+      <code>ShowConcentration</code>, <code>ShowSignatureWords</code> and <code>ShowNavBar</code> to
+      <code>0</code> for the old page exactly), and pisg now exits with status 1 when it fails instead
+      of pretending everything went fine. Check any script that read its exit code.</p></div>
+    </details>
+
+    <details class="faq">
+      <summary>How long does a run take?</summary>
+      <div class="answer"><p>Minutes for years of logs, seconds once the cache is warm. Set
+      <code>CacheDir</code> and pisg keeps the parsed result of each log file, so a nightly run only
+      reads what changed. The example on this site &mdash; 617,000 lines across three channels &mdash;
+      takes about forty seconds from cold.</p></div>
+    </details>
+
+    <details class="faq">
+      <summary>Can I keep people out of the statistics?</summary>
+      <div class="answer"><p><code>&lt;user nick="somebot" ignore="y"&gt;</code> leaves a nick out
+      entirely, and <code>sex="b"</code> marks it as a bot so the relation map skips it.
+      <code>BadUrls</code> keeps image hosts and spam out of the URL list, and
+      <code>IgnoreWords</code> does the same for words. If someone asks to be left out, that one line
+      is the whole answer.</p></div>
+    </details>
+
+    <details class="faq">
+      <summary>Is anything sent anywhere?</summary>
+      <div class="answer"><p>No. pisg reads local files and writes local files. The only feature that
+      would send anything is <code>ShareStats</code>, it is off unless you turn it on, and
+      <code>ShareStats="preview"</code> prints exactly what would be sent and sends nothing.</p></div>
+    </details>
+
+    <details class="faq">
+      <summary>Where do I get help?</summary>
+      <div class="answer"><p>The channel: <code>#PISG</code> on Undernet
+      (<code>irc.undernet.org</code>). For bugs and patches, the
+      <a href="https://github.com/PISG/pisg/issues">issue tracker</a> on GitHub. The old SourceForge
+      trackers and mailing list are read-only history now.</p></div>
+    </details>
+  </div>
+</section>
+
+<!-- ===================== CREDITS ===================== -->
+<section id="credits">
+  <div class="wrap">
+    <header>
+      <p class="kicker">Credits</p>
+      <h2>Whose work this is.</h2>
+    </header>
+    <div class="grid g2">
+      <div class="card">
+        <h3>Written by Morten &ldquo;mbrix&rdquo; Brix Pedersen</h3>
+        <p>pisg was started in 2001 by <strong>mbrix</strong>, because IRCStats was not open source and
+        a channel deserved to be able to read itself. It lived on SourceForge for a decade and a half
+        and is still there:
+        <a href="https://sourceforge.net/projects/pisg/">sourceforge.net/projects/pisg</a>. Everything
+        since &mdash; including 1.0a &mdash; is built on that code and keeps its licence.</p>
+      </div>
+      <div class="card">
+        <h3>Kept going on GitHub</h3>
+        <p>Development moved to <a href="https://github.com/PISG/pisg">github.com/PISG/pisg</a>, where
+        the current maintainer is <a href="https://github.com/DooubleTap">Seb</a>. Translations,
+        log-format patches and colour schemes have come from more people than this page can list &mdash;
+        see <code>docs/CREDITS</code> in the distribution.</p>
+      </div>
+    </div>
+    <div class="note">pisg is free software under the
+    <a href="https://www.gnu.org/licenses/old-licenses/gpl-2.0.html">GNU GPL, version 2 or later</a>.
+    You can read it, change it, and ship your changes &mdash; under the same licence.</div>
+  </div>
+</section>
 
 </main>
-</div>
 
-<footer class="site-footer">
-<span class="site-footer-owner"><a href="https://pisg.github.io/">Pisg</a> is maintained by <a href="https://github.com/DooubleTap">Seb</a>.</span>
+<!-- ===================== FOOTER ===================== -->
+<footer class="site">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-col">
+        <h2>pisg</h2>
+        <a href="#install">Quick start</a>
+        <a href="docs/">Documentation</a>
+        <a href="changelog/">Changelog</a>
+        <a href="#formats">Log formats</a>
+      </div>
+      <div class="foot-col">
+        <h2>Example</h2>
+        <a href="demo/">Landing page</a>
+        <a href="demo/nightshift.html">Busy channel</a>
+        <a href="themes/">Themes</a>
+      </div>
+      <div class="foot-col">
+        <h2>Source</h2>
+        <a href="https://github.com/PISG/pisg">github.com/PISG/pisg</a>
+        <a href="https://github.com/PISG/pisg/releases">Releases</a>
+        <a href="https://github.com/PISG/pisg/issues">Report a bug</a>
+        <a href="https://sourceforge.net/projects/pisg/">Original project (SourceForge)</a>
+      </div>
+      <div class="foot-col">
+        <h2>Channel</h2>
+        <a href="irc://irc.undernet.org/PISG">#PISG on Undernet</a>
+        <a href="https://www.undernet.org/">undernet.org</a>
+      </div>
+      <div class="foot-col">
+        <h2>Legal</h2>
+        <a href="privacy/">Privacy policy</a>
+        <a href="cookies/">Cookie policy</a>
+        <a href="terms/">Terms of use</a>
+        <a href="https://www.gnu.org/licenses/old-licenses/gpl-2.0.html">GPL-2.0 licence</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span class="foot-mark"><span style="color:var(--accent)">$</span> pisg 1.0a &mdash; GPL-2.0-or-later</span>
+      <span>Started by <a href="https://sourceforge.net/projects/pisg/">mbrix</a> in 2001 &middot;
+      maintained by <a href="https://github.com/DooubleTap">Seb</a></span>
+    </div>
+    <p class="disclaimer">pisg is not affiliated with Undernet, with any IRC client or bot project, or
+    with SourceForge, and the names of those projects belong to their owners. Channel names, nicknames,
+    messages and pictures in the example pages on this site are invented. This site sets no cookies and
+    collects nothing &mdash; see the <a href="privacy/">privacy policy</a>. If you publish
+    statistics of your own, the people in them are your responsibility:
+    <a href="privacy/#yourstats">what that means</a>.</p>
+  </div>
 </footer>
 
+<script src="assets/site.js?v=ae94b127"></script>
+<script>
+/* Until 2026 the whole manual lived on this page, so links like
+   pisg.github.io/#ShowRandQuote are still out there. The manual is at /docs/ now:
+   if the hash names nothing on this page, hand it over. */
+(function () {
+  var h = location.hash.slice(1);
+  if (!h || document.getElementById(h)) return;
+  if (/^[A-Za-z][A-Za-z0-9_-]{1,40}$/.test(h)) location.replace('docs/#' + h);
+})();
+</script>
 </body>
 </html>

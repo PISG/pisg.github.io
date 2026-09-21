@@ -7,7 +7,8 @@ the two example channels.
 import io, re, os
 
 SRCDIR = r'C:\Users\admin\Desktop\output\themes'
-DSTDIR = r'C:\Users\admin\Desktop\Github\pisg.github.io\new\demo\themes'
+SITE   = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DSTDIR = os.path.join(SITE, 'demo', 'themes')
 THEMES = ['modern', 'midnight', 'amoled', 'terminal', 'default']
 
 MAP = {
