@@ -5,30 +5,30 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#0b0e13">
-<link rel="canonical" href="https://pisg.github.io/changelog.html">
+<link rel="canonical" href="https://pisg.github.io/changelog/">
 <title>Changelog — pisg</title>
-<meta name="description" content="What changed in each release of pisg, newest first. Version 1.0: new themes, new sections, a landing page, several channels in one run, and tools for channel staff.">
+<meta name="description" content="What changed in each release of pisg, newest first. Version 1.0a: new themes, new sections, a landing page, several channels in one run, and tools for channel staff.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%230d1117'/><rect x='18' y='52' width='14' height='30' fill='%2358a6ff'/><rect x='38' y='34' width='14' height='48' fill='%233fd18b'/><rect x='58' y='44' width='14' height='38' fill='%23e5b567'/><rect x='78' y='24' width='14' height='58' fill='%23bc8cff'/></svg>">
-<link rel="stylesheet" href="assets/site.css">
+<link rel="stylesheet" href="../assets/site.css">
 </head>
 <body id="top">
 <a class="skip" href="#main">Skip to content</a>
 
 <header class="top">
   <div class="wrap">
-    <a class="brand" href="index.html" aria-label="pisg — home">
+    <a class="brand" href="../" aria-label="pisg — home">
       <span><span class="dollar">$</span>&nbsp;pisg</span>
-      <span class="ver">1.0</span>
+      <span class="ver">1.0a</span>
     </a>
     <button class="menu-btn" id="menu-btn" aria-expanded="false" aria-controls="navlinks"><span aria-hidden="true">&#9776;</span><span class="sr-only">Menu</span></button>
     <nav class="links" id="navlinks" aria-label="Main">
-      <a href="index.html">Home</a>
-      <a href="index.html#install">Install</a>
-      <a href="index.html#themes">Themes</a>
-      <a href="docs.html">Documentation</a>
-      <a href="changelog.html" aria-current="page">Changelog</a>
+      <a href="../">Home</a>
+      <a href="../#install">Install</a>
+      <a href="../docs/">Documentation</a>
+      <a href="../themes/">Themes</a>
+      <a href="./" aria-current="page">Changelog</a>
       <span class="sep" aria-hidden="true"></span>
-      <a class="ext" href="demo/">Live example &#8599;</a>
+      <a class="ext" href="../demo/">Live example &#8599;</a>
       <a class="x-reg" href="https://github.com/PISG/pisg/releases">Releases &#8599;</a>
     </nav>
   </div>
@@ -44,7 +44,7 @@
     <a href="https://github.com/PISG/pisg/releases">releases page</a>. The complete pre-0.73 history
     &mdash; every change since 2001 &mdash; is in <code>docs/Changelog</code> in the distribution.</p>
     <div class="cta-row">
-      <a class="btn" href="#v1.0">1.0</a>
+      <a class="btn" href="#v1.0">1.0a</a>
       <a class="btn" href="#v0.80-preview2">0.80-preview2</a>
       <a class="btn" href="#v0.80-preview">0.80-preview</a>
       <a class="btn" href="#v0.73">0.73</a>
@@ -57,10 +57,10 @@
 
   <!-- ================================================================= 1.0 -->
   <article class="rel now" id="v1.0">
-    <h2>1.0 <span class="tag cur">current</span></h2>
-    <p class="when">September 2026 &mdash; what changed since 0.80-preview2</p>
+    <h2>1.0a <span class="tag cur">current</span> <span class="tag pre">alpha</span></h2>
+    <p class="when">September 2026 &mdash; what changed since 0.80-preview2. The <code>a</code> is for alpha: it is complete, not yet weathered.</p>
 
-    <p>pisg 1.0 keeps everything 0.80-preview2 does: the same parsers, the same statistics, the same
+    <p>pisg 1.0a keeps everything 0.80-preview2 does: the same parsers, the same statistics, the same
     <code>pisg.cfg</code>. On top of that it has a new look, a set of new sections, a way to run
     several channels from one folder, safer output, and tools to keep the statistics tidy without
     editing files by hand.</p>
@@ -71,9 +71,10 @@
 
     <h3>Highlights</h3>
     <ul>
-      <li><strong>Five modern themes</strong>, light and dark, that follow the reader's system setting:
-      <code>modern</code>, <code>midnight</code>, <code>amoled</code>, <code>terminal</code> and
-      <code>canada</code>.</li>
+      <li><strong>Four modern themes</strong>: <code>modern</code> &mdash; which follows the reader's
+      light/dark setting &mdash; plus <code>midnight</code>, <code>amoled</code> and
+      <code>terminal</code>. A theme of your own is one CSS file, or a few minutes in the
+      <a href="../themes/#creator">theme creator</a>.</li>
       <li><strong>Seven new sections</strong>: an overview, an interactive <em>who talks to whom</em>
       map, closest pairs, social roles, time personalities, <em>who carries the channel</em> and
       signature words.</li>
@@ -92,7 +93,7 @@
 
     <h3 id="v1.0-look">New look</h3>
     <ul>
-      <li>Five new colour schemes, all generated from one stylesheet
+      <li>Four new colour schemes, all generated from one stylesheet
       (<code>layout/build-themes.py</code>), so they stay consistent. Use one with
       <code>&lt;set ColorScheme="modern"&gt;</code>. The old themes are unchanged.</li>
       <li>Design: ink on paper with colour kept for data. Sections are separated by a thin rule instead
@@ -163,7 +164,7 @@
       <strong>View stats</strong> button;</li>
       <li>the five busiest people in each channel.</li>
     </ul>
-    <p>Old links such as <code>index.html#canada</code> still jump to that channel. Names from the JSON
+    <p>Old links such as <code>index.html#mychannel</code> still jump to that channel. Names from the JSON
     are always shown as plain text, and only plain relative <code>.html</code> paths are accepted as
     links.</p>
 
@@ -277,7 +278,8 @@
       <code>ShowRelations</code>, <code>ShowTimePersonalities</code>, <code>ShowConcentration</code>,
       <code>ShowSignatureWords</code> and <code>ShowNavBar</code> to <code>0</code>.</li>
       <li>To use the new look, add <code>&lt;set ColorScheme="modern"&gt;</code> (or
-      <code>midnight</code>, <code>amoled</code>, <code>terminal</code>, <code>canada</code>).</li>
+      <code>midnight</code>, <code>amoled</code>, <code>terminal</code>) &mdash; or build your own in
+      the <a href="../themes/#creator">theme creator</a>.</li>
       <li><code>pisg</code> now returns exit status 1 on failure. If a script or cron job treated any
       exit as success, check what it does with the error.</li>
       <li>For the landing page, copy <code>site/index.html</code> into your output folder and run pisg
@@ -289,9 +291,9 @@
     <code>JSON::PP</code>, part of core Perl, for <code>ChannelIndex</code>.</p>
 
     <div class="note good">Everything above is live on this site:
-    <a href="demo/nightshift.html">a busy channel's page</a>,
-    <a href="demo/">the landing page</a>, and
-    <a href="index.html#themes">the themes</a>.</div>
+    <a href="../demo/nightshift.html">a busy channel's page</a>,
+    <a href="../demo/">the landing page</a>, and
+    <a href="../themes/">the themes</a>.</div>
   </article>
 
   <!-- ====================================================== 0.80-preview2 -->
@@ -344,13 +346,13 @@
 <footer class="site">
   <div class="wrap">
     <div class="foot-bottom" style="border-top:0;padding-top:0">
-      <span class="foot-mark"><span style="color:var(--accent)">$</span> pisg 1.0 &mdash; GPL-2.0-or-later</span>
-      <span><a href="index.html">Home</a> &middot; <a href="privacy.html">Privacy</a> &middot;
-      <a href="cookies.html">Cookies</a> &middot; <a href="terms.html">Terms</a></span>
+      <span class="foot-mark"><span style="color:var(--accent)">$</span> pisg 1.0a &mdash; GPL-2.0-or-later</span>
+      <span><a href="../">Home</a> &middot; <a href="../privacy/">Privacy</a> &middot;
+      <a href="../cookies/">Cookies</a> &middot; <a href="../terms/">Terms</a></span>
     </div>
   </div>
 </footer>
 
-<script src="assets/site.js"></script>
+<script src="../assets/site.js"></script>
 </body>
 </html>

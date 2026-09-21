@@ -93,7 +93,7 @@ EXAMPLES = [
     ('* J[a]zz slaps joob', '* Br[i]xie slaps joob'),
     ('&lt;|KaBoOm|&gt; fuck pk personne me parle',
      '&lt;|KaBoOm|&gt; oh for f**ks sake, the bouncer died again'),
-    ('</a> v1.0.a', '</a> v1.0'),
+    ('</a> v1.0.a', '</a> v1.0a'),
 ]
 
 WORDS = [                                    # (old, new) most used words

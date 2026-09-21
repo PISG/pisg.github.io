@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#0b0e13">
+<meta name="robots" content="noindex">
+<title>Not found — pisg</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%230d1117'/><rect x='18' y='52' width='14' height='30' fill='%2358a6ff'/><rect x='38' y='34' width='14' height='48' fill='%233fd18b'/><rect x='58' y='44' width='14' height='38' fill='%23e5b567'/><rect x='78' y='24' width='14' height='58' fill='%23bc8cff'/></svg>">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body id="top">
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="/" aria-label="pisg — home">
+      <span><span class="dollar">$</span>&nbsp;pisg</span>
+      <span class="ver">1.0a</span>
+    </a>
+    <nav class="links" id="navlinks" aria-label="Main">
+      <a href="/">Home</a>
+      <a href="/docs/">Documentation</a>
+      <a href="/changelog/">Changelog</a>
+      <a class="x-reg" href="https://github.com/PISG/pisg">GitHub &#8599;</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main" tabindex="-1">
+<div class="hero">
+  <div class="wrap" style="display:block;max-width:70ch">
+    <p class="eyebrow"><span class="dot" style="background:var(--gold);box-shadow:0 0 0 3px rgba(229,181,103,.15)" aria-hidden="true"></span>Error 404</p>
+    <h1 style="font-size:38px">Nothing here</h1>
+    <p class="tagline">That page does not exist on this site. It may have moved when the pages lost
+    their <code>.html</code> endings.</p>
+
+    <div class="term" style="margin-top:28px">
+      <div class="bar"><i></i><i></i><i></i><span>where things are now</span></div>
+      <div class="body"><span class="out">/index.html   </span><span class="pr">&rarr;</span><span class="hl">  /</span>
+<span class="out">/docs.html    </span><span class="pr">&rarr;</span><span class="hl">  /docs/</span>
+<span class="out">/changelog.html </span><span class="pr">&rarr;</span><span class="hl">  /changelog/</span>
+<span class="out">/#SomeOption  </span><span class="pr">&rarr;</span><span class="hl">  /docs/#SomeOption</span></div>
+    </div>
+
+    <div class="cta-row">
+      <a class="btn primary" href="/">Home <span class="arrow" aria-hidden="true">&rarr;</span></a>
+      <a class="btn" href="/docs/">Documentation</a>
+      <a class="btn" href="/demo/">Live example</a>
+      <a class="btn" href="https://github.com/PISG/pisg">GitHub</a>
+    </div>
+  </div>
+</div>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="foot-bottom" style="border-top:0;padding-top:0">
+      <span class="foot-mark"><span style="color:var(--accent)">$</span> pisg 1.0a &mdash; GPL-2.0-or-later</span>
+      <span><a href="/privacy/">Privacy</a> &middot; <a href="/cookies/">Cookies</a> &middot;
+      <a href="/terms/">Terms</a></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* Old deep links pointed at option anchors on the home page; those live in /docs/ now.
+   If someone lands here with such a hash, send them to the right place. */
+(function () {
+  var h = location.hash.slice(1);
+  if (h && /^[A-Za-z][A-Za-z0-9_-]{1,40}$/.test(h)) {
+    location.replace('/docs/#' + h);
+  }
+})();
+</script>
+</body>
+</html>

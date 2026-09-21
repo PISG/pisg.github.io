@@ -27,6 +27,10 @@
      or a button inside a .copyline / .crow, which copies that row's code. */
   function textFor(el) {
     if (el.dataset.copy) return el.dataset.copy;
+    if (el.dataset.target) {
+      var named = document.getElementById(el.dataset.target);
+      return named ? named.textContent : '';
+    }
     var host = el.closest('.copyline') || el.closest('.crow');
     if (!host) return '';
     var src = host.querySelector('code, .cmdline');
@@ -68,75 +72,129 @@
     }
   });
 
-  /* ---- docs: filter the contents -------------------------------------- */
-  var filter = document.getElementById('toc-filter');
-  if (filter) {
-    var groups = [].slice.call(document.querySelectorAll('.toc-group'));
-    var none = document.getElementById('toc-none');
+  /* ---- docs: sidebar toggle on narrow screens ------------------------- */
+  var sideBtn = document.getElementById('side-btn');
+  var sidebar = document.getElementById('sidebar');
+  if (sideBtn && sidebar) {
+    sideBtn.addEventListener('click', function () {
+      var open = sidebar.classList.toggle('open');
+      sideBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    sidebar.addEventListener('click', function (e) {
+      if (e.target.tagName === 'A' && window.innerWidth <= 1000) {
+        sidebar.classList.remove('open');
+        sideBtn.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
+
+  /* ---- docs: filter the options --------------------------------------- */
+  var search = document.getElementById('search');
+  if (search) {
+    var count = document.getElementById('search-count');
+    var opts = [].slice.call(document.querySelectorAll('.opt'));
+    var pills = [].slice.call(document.querySelectorAll('.pill'));
+    var sections = [].slice.call(document.querySelectorAll('.main section[id]'));
+
+    /* the shipped manual spells it "color", the 1.0 text spells it "colour";
+       whichever the reader types should find both */
+    var norm = function (t) { return t.toLowerCase().replace(/colour/g, 'color'); };
 
     var apply = function () {
-      var q = filter.value.trim().toLowerCase();
-      var shown = 0;
-      groups.forEach(function (g) {
-        var items = [].slice.call(g.querySelectorAll('li'));
-        var head = g.querySelector('h2');
-        var headMatch = !q || head.textContent.toLowerCase().indexOf(q) !== -1;
-        var kept = 0;
-        items.forEach(function (li) {
-          var hit = !q || headMatch || li.textContent.toLowerCase().indexOf(q) !== -1;
-          li.hidden = !hit;
-          if (hit) kept++;
-        });
-        var keep = kept > 0 || (headMatch && items.length === 0);
-        g.hidden = !keep;
-        if (keep) shown++;
+      var q = norm(search.value.trim());
+      var n = 0;
+
+      opts.forEach(function (c) {
+        var hit = !q
+          || norm(c.getAttribute('data-k') || '').indexOf(q) !== -1
+          || norm(c.textContent).indexOf(q) !== -1;
+        c.classList.toggle('hidden', !hit);
+        if (hit) n++;
       });
-      if (none) none.hidden = shown !== 0;
+
+      pills.forEach(function (p) {
+        var id = p.getAttribute('href').slice(1);
+        var card = document.getElementById(id);
+        p.classList.toggle('hidden', !!card && card.classList.contains('hidden'));
+      });
+
+      /* while filtering, hide chapters that have nothing left to show */
+      sections.forEach(function (sec) {
+        if (!q) { sec.hidden = false; return; }
+        var own = sec.querySelectorAll('.opt');
+        if (!own.length) {
+          sec.hidden = norm(sec.textContent).indexOf(q) === -1;
+          return;
+        }
+        sec.hidden = !sec.querySelector('.opt:not(.hidden)');
+      });
+
+      if (count) {
+        count.style.display = q ? 'inline' : 'none';
+        count.textContent = n + (n === 1 ? ' option' : ' options');
+      }
+
+      /* take the reader to the first match instead of leaving them where they were */
+      if (q && n) {
+        var first = document.querySelector('.opt:not(.hidden)');
+        if (first) {
+          var y = first.getBoundingClientRect().top + window.scrollY - 90;
+          window.scrollTo(0, y < 0 ? 0 : y);
+        }
+      }
     };
 
-    filter.addEventListener('input', apply);
-    filter.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape') { filter.value = ''; apply(); filter.blur(); }
-    });
-    /* "/" focuses the filter, the way a search box on a docs page usually does */
+    search.addEventListener('input', apply);
     document.addEventListener('keydown', function (e) {
-      if (e.key !== '/' || e.ctrlKey || e.metaKey || e.altKey) return;
       var t = e.target;
-      if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
-      e.preventDefault();
-      filter.focus();
-      filter.select();
+      var typing = t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable);
+      if (e.key === '/' && !typing && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        e.preventDefault();
+        if (sidebar) sidebar.classList.add('open');
+        search.focus();
+        search.select();
+      }
+      if (e.key === 'Escape' && document.activeElement === search) {
+        search.value = '';
+        apply();
+        search.blur();
+      }
     });
   }
 
-  /* ---- docs: highlight the section you are reading -------------------- */
-  var toc = document.querySelector('.toc-body') || document.querySelector('.docs-toc');
-  if (toc && 'IntersectionObserver' in window) {
-    var links = {};
-    Array.prototype.forEach.call(toc.querySelectorAll('a[href^="#"]'), function (a) {
-      links[a.getAttribute('href').slice(1)] = a;
+  /* ---- docs: mark the section being read, and the back-to-top button --- */
+  var navLinks = [].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+  var topBtn = document.getElementById('top-btn');
+  if (navLinks.length || topBtn) {
+    var targets = navLinks.map(function (a) {
+      return document.getElementById(a.getAttribute('href').slice(1));
     });
-    var targets = Object.keys(links)
-      .map(function (id) { return document.getElementById(id); })
-      .filter(Boolean);
 
-    var current = null;
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (en) {
-        if (!en.isIntersecting) return;
-        var a = links[en.target.id];
-        if (!a || a === current) return;
-        if (current) current.classList.remove('on');
-        a.classList.add('on');
-        current = a;
-        /* keep the active entry in view inside the sticky column */
-        if (toc.scrollHeight > toc.clientHeight) {
-          var top = a.offsetTop - toc.clientHeight / 2;
-          toc.scrollTo({ top: top < 0 ? 0 : top, behavior: 'smooth' });
-        }
+    var spy = function () {
+      var y = window.scrollY + 130, cur = null;
+      targets.forEach(function (t) {
+        if (t && !t.hidden && t.offsetTop <= y) cur = t.id;
       });
-    }, { rootMargin: '-74px 0px -70% 0px', threshold: 0 });
+      navLinks.forEach(function (a) {
+        a.classList.toggle('active', a.getAttribute('href') === '#' + cur);
+      });
+      if (topBtn) topBtn.style.display = window.scrollY > 600 ? 'block' : 'none';
+    };
 
-    targets.forEach(function (t) { io.observe(t); });
+    var ticking = false;
+    window.addEventListener('scroll', function () {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(function () { spy(); ticking = false; });
+    });
+    spy();
+
+    if (topBtn) {
+      topBtn.addEventListener('click', function () {
+        /* animate a short hop, jump a long one */
+        window.scrollTo({ top: 0, behavior: window.scrollY > 4000 ? 'auto' : 'smooth' });
+      });
+    }
   }
+
 })();

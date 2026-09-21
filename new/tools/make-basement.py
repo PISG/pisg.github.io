@@ -112,7 +112,7 @@ TEXT = [
      '((vox) that is enough for tonight. Come back when you have slept, and leave the floodbots at home.)'),
     # examples
     ('* Th3^On3 goodday!', '* Th3^0th3r puts the kettle on'),
-    ('pisg</a> v1.0.a', 'pisg</a> v1.0'),
+    ('pisg</a> v1.0.a', 'pisg</a> v1.0a'),
 ]
 
 # user pictures: the source page links to the maintainer's own image host.

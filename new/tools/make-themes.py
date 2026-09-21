@@ -8,7 +8,7 @@ import io, re, os
 
 SRCDIR = r'C:\Users\admin\Desktop\output\themes'
 DSTDIR = r'C:\Users\admin\Desktop\Github\pisg.github.io\new\demo\themes'
-THEMES = ['modern', 'midnight', 'amoled', 'terminal', 'canada', 'default']
+THEMES = ['modern', 'midnight', 'amoled', 'terminal', 'default']
 
 MAP = {
     'Seb': 'vox', 'humility': 'humbug', 'Isa': 'Iris', 'Clairvoyant': 'Fortuna',
@@ -29,6 +29,8 @@ QUOTES = [
 TEXT = [
     ('* humility smax Agent', '* humbug smax Ledger'),
     ('Isabelle', 'kettle'),
+    # the shipped samples were generated before 1.0
+    ('</a> v0.80-preview2', '</a> v1.0a'),
 ]
 
 NICKCH = r'A-Za-z0-9_\[\]\\|`\^\-'
@@ -58,7 +60,7 @@ for theme in THEMES:
     # a line saying what the page is, and a way back
     h = h.replace(
       '<p class="subtitle">',
-      '<p class="subtitle"><a href="../../index.html#themes">&larr; all themes</a> &middot; '
+      '<p class="subtitle"><a href="../../themes/">&larr; all themes</a> &middot; '
       'colour scheme <b>%s</b> &middot; sample page, invented people</p>\n<p class="subtitle">' % theme,
       1)
 

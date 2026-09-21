@@ -7,7 +7,7 @@
 <meta name="theme-color" content="#0b0e13">
 <link rel="canonical" href="https://pisg.github.io/">
 <title>pisg — Perl IRC Statistics Generator</title>
-<meta name="description" content="pisg turns IRC logfiles into statistics pages: who talks, when, to whom. Perl, GPL, no database, 30+ log formats, thirteen themes. Version 1.0.">
+<meta name="description" content="pisg turns IRC logfiles into statistics pages: who talks, when, to whom. Perl, GPL, no database, 30+ log formats, twelve themes. Version 1.0.">
 <meta property="og:title" content="pisg — Perl IRC Statistics Generator">
 <meta property="og:description" content="Point it at your channel logs, run it, upload the page. Who talks, when, to whom — since 2001.">
 <meta property="og:type" content="website">
@@ -23,18 +23,18 @@
   <div class="wrap">
     <a class="brand" href="#top" aria-label="pisg — top of page">
       <span><span class="dollar">$</span>&nbsp;pisg</span>
-      <span class="ver">1.0</span>
+      <span class="ver">1.0a</span>
     </a>
     <button class="menu-btn" id="menu-btn" aria-expanded="false" aria-controls="navlinks"><span aria-hidden="true">&#9776;</span><span class="sr-only">Menu</span></button>
     <nav class="links" id="navlinks" aria-label="Main">
       <a href="#install">Install</a>
-      <a href="#whatsnew">New in 1.0</a>
-      <a href="#themes">Themes</a>
+      <a href="#whatsnew">New in 1.0a</a>
+      <a href="themes/">Themes</a>
       <a href="#formats">Formats</a>
       <a href="#faq">FAQ</a>
       <span class="sep" aria-hidden="true"></span>
-      <a href="docs.html">Documentation</a>
-      <a href="changelog.html">Changelog</a>
+      <a href="docs/">Documentation</a>
+      <a href="changelog/">Changelog</a>
       <a class="ext" href="demo/">Live example &#8599;</a>
       <a class="x-reg" href="https://github.com/PISG/pisg">GitHub &#8599;</a>
     </nav>
@@ -47,7 +47,7 @@
 <div class="hero">
   <div class="wrap">
     <div>
-      <p class="eyebrow"><span class="dot" aria-hidden="true"></span>Version 1.0 &middot; September 2026</p>
+      <p class="eyebrow"><span class="dot" style="background:var(--gold);box-shadow:0 0 0 3px rgba(229,181,103,.15)" aria-hidden="true"></span>Version 1.0a &mdash; alpha &middot; September 2026</p>
       <h1><span class="dollar">$</span> pisg</h1>
       <p class="tagline">The Perl IRC Statistics Generator. Point it at your channel logs, run it,
       upload one HTML file. It tells you who talks, when they talk, and who they talk to &mdash;
@@ -55,16 +55,18 @@
       <div class="cta-row">
         <a class="btn primary" href="#install">Get started <span class="arrow" aria-hidden="true">&rarr;</span></a>
         <a class="btn" href="demo/nightshift.html">See a real page</a>
-        <a class="btn" href="docs.html">Documentation</a>
+        <a class="btn" href="docs/">Documentation</a>
       </div>
-      <p class="lede" style="margin-top:22px;font-size:14px">Free software since 2001, GPL-2.0-or-later.
-      Runs anywhere Perl runs.</p>
+      <p class="lede" style="margin-top:22px;font-size:14px">Free software since 2001,
+      GPL-2.0-or-later. Runs anywhere Perl runs. <strong>1.0a is an alpha</strong>: everything
+      described here works, but it has not had a long run in the wild yet &mdash;
+      <a href="https://github.com/PISG/pisg/issues">tell us what breaks</a>.</p>
     </div>
 
     <div class="term" aria-hidden="false">
       <div class="bar"><i></i><i></i><i></i><span>~/pisg</span></div>
       <div class="body"><span class="pr">$</span> <span class="cmd">./pisg</span>
-<span class="out">pisg v1.0 - Perl IRC Statistics Generator</span>
+<span class="out">pisg v1.0a - Perl IRC Statistics Generator</span>
 <span class="out">Reading config file: </span><span class="hl">pisg.cfg</span>
 <span class="out">Parsing </span><span class="n">#nightshift</span><span class="out"> logs in </span><span class="hl">logs/nightshift/</span><span class="out"> ...</span>
 <span class="out">  50 files, </span><span class="n">164,019</span><span class="out"> lines, 915 nicks</span>
@@ -81,10 +83,10 @@
 <!-- ===================== FACTS ===================== -->
 <div class="facts">
   <dl class="wrap">
-    <div class="fact"><dt>Latest</dt><dd class="hl">1.0</dd></div>
+    <div class="fact"><dt>Latest</dt><dd class="hl">1.0a</dd></div>
     <div class="fact"><dt>Needs</dt><dd>Perl 5</dd></div>
     <div class="fact"><dt>Log formats</dt><dd>30+</dd></div>
-    <div class="fact"><dt>Themes</dt><dd>13</dd></div>
+    <div class="fact"><dt>Themes</dt><dd>12</dd></div>
     <div class="fact"><dt>Licence</dt><dd>GPL-2.0+</dd></div>
     <div class="fact"><dt>Since</dt><dd>2001</dd></div>
   </dl>
@@ -122,9 +124,9 @@
     </div>
 
     <div class="note good" style="margin-top:26px">
-      <strong>New in 1.0 &mdash;</strong> a relation map, five new themes that follow the reader's
+      <strong>New in 1.0a &mdash;</strong> a relation map, four new themes that follow the reader's
       light/dark setting, a landing page for several channels, and profiles your users manage from IRC.
-      <a href="changelog.html">Read the 1.0 changelog &rarr;</a>
+      <a href="changelog/">Read the 1.0a changelog &rarr;</a>
     </div>
   </div>
 </section>
@@ -199,7 +201,7 @@
 
     <div class="note">Want it updated by itself? Add one crontab line &mdash; see
     <code>scripts/crontab</code> in the distribution, or
-    <a href="docs.html#running-pisg">Running pisg</a> in the manual.</div>
+    <a href="docs/#running-pisg">Running pisg</a> in the manual.</div>
   </div>
 </section>
 
@@ -207,9 +209,9 @@
 <section id="whatsnew">
   <div class="wrap">
     <header>
-      <p class="kicker">New in 1.0</p>
+      <p class="kicker">New in 1.0a</p>
       <h2>Same parsers, same config &mdash; a much better page.</h2>
-      <p class="lede">Everything 0.80-preview2 did, pisg 1.0 still does: the same log formats, the same
+      <p class="lede">Everything 0.80-preview2 did, pisg 1.0a still does: the same log formats, the same
       statistics, the same <code>pisg.cfg</code>. Nothing you have set up has to change.</p>
     </header>
 
@@ -222,10 +224,10 @@
       </div>
       <div class="card">
         <span class="ico">&#9636;</span>
-        <h3>Five new themes</h3>
-        <p><code>modern</code>, <code>midnight</code>, <code>amoled</code>, <code>terminal</code> and
-        <code>canada</code>, all generated from one stylesheet, all following the reader's system
-        setting. The eight classic schemes are untouched.</p>
+        <h3>Four new themes</h3>
+        <p><code>modern</code>, <code>midnight</code>, <code>amoled</code> and <code>terminal</code>,
+        all generated from one stylesheet. The eight classic schemes are untouched &mdash; and a theme
+        of your own is one CSS file, or <a href="themes/#creator">two minutes in the creator</a>.</p>
       </div>
       <div class="card">
         <span class="ico">&#9776;</span>
@@ -272,8 +274,8 @@
     </div>
 
     <div class="cta-row">
-      <a class="btn primary" href="changelog.html">Full 1.0 changelog <span class="arrow" aria-hidden="true">&rarr;</span></a>
-      <a class="btn" href="docs.html#reference-new">The new options</a>
+      <a class="btn primary" href="changelog/">Full 1.0a changelog <span class="arrow" aria-hidden="true">&rarr;</span></a>
+      <a class="btn" href="docs/#reference-new">The new options</a>
     </div>
   </div>
 </section>
@@ -284,7 +286,7 @@
     <header>
       <p class="kicker">Live example</p>
       <h2>What a busy channel looks like.</h2>
-      <p class="lede">A full 1.0 page for <code>#nightshift</code> &mdash; 133,944 lines from 915
+      <p class="lede">A full 1.0a page for <code>#nightshift</code> &mdash; 133,944 lines from 915
       nicks over 50 days &mdash; plus the landing page that ties it to a second, much quieter channel.
       Invented channels, invented people; the numbers, the graphs and the markup are a real pisg run.</p>
     </header>
@@ -293,7 +295,7 @@
       <a class="card" href="demo/nightshift.html">
         <span class="ico">&#9635; stats page</span>
         <h3>#nightshift &mdash; a very busy channel</h3>
-        <p>Every section 1.0 can produce, at the scale of a channel that never really sleeps: 2,679
+        <p>Every section 1.0a can produce, at the scale of a channel that never really sleeps: 2,679
         lines a day, a relation map with 30 nicks in it, and 19 sections to navigate.</p>
         <span class="more">Open the stats page &rarr;</span>
       </a>
@@ -329,10 +331,10 @@
     <header>
       <p class="kicker">Themes</p>
       <h2>Pick a look with one line of config.</h2>
-      <p class="lede"><code>&lt;set ColorScheme="modern"&gt;</code> is the whole change. The five new
-      schemes follow the reader's light/dark setting; <code>amoled</code> and <code>terminal</code>
-      stay dark on purpose. Each preview is the short sample page pisg ships for that scheme &mdash;
-      six nicks and two days, so the theme is the thing you see, not the data.</p>
+      <p class="lede"><code>&lt;set ColorScheme="modern"&gt;</code> is the whole change. Four modern
+      schemes ship with 1.0a; <code>modern</code> follows the reader's light/dark setting, the other
+      three stay dark on purpose. Each preview is the short sample page pisg generates for that
+      scheme.</p>
     </header>
 
     <div class="grid g3">
@@ -358,7 +360,7 @@
       </a>
       <a class="card themecard" href="demo/themes/amoled.html">
         <div class="sw" aria-hidden="true">
-          <span style="background:#000"></span><span style="background:#5eead4"></span><span style="background:#22c55e"></span><span style="background:#eab308"></span><span style="background:#f43f5e"></span>
+          <span style="background:#000"></span><span style="background:#b18cff"></span><span style="background:#2fbf8f"></span><span style="background:#e5b13a"></span><span style="background:#ef6b6b"></span>
         </div>
         <div class="meta">
           <h3>amoled</h3>
@@ -368,21 +370,11 @@
       </a>
       <a class="card themecard" href="demo/themes/terminal.html">
         <div class="sw" aria-hidden="true">
-          <span style="background:#0c0f0c"></span><span style="background:#3fd18b"></span><span style="background:#9ae65c"></span><span style="background:#e3d24a"></span><span style="background:#e8615d"></span>
+          <span style="background:#050805"></span><span style="background:#3dff7a"></span><span style="background:#f0e040"></span><span style="background:#2f9bff"></span><span style="background:#ff5f5f"></span>
         </div>
         <div class="meta">
           <h3>terminal</h3>
           <p>Monospace and phosphor green, for the people who never left the console.</p>
-          <span class="more">Preview &rarr;</span>
-        </div>
-      </a>
-      <a class="card themecard" href="demo/themes/canada.html">
-        <div class="sw" aria-hidden="true">
-          <span style="background:#fdfaf8"></span><span style="background:#c62f2b"></span><span style="background:#4ec98a"></span><span style="background:#e5b567"></span><span style="background:#58a6ff"></span>
-        </div>
-        <div class="meta">
-          <h3>canada</h3>
-          <p>Red on off-white. Built for a Canadian channel, yours to borrow.</p>
           <span class="more">Preview &rarr;</span>
         </div>
       </a>
@@ -392,18 +384,32 @@
         </div>
         <div class="meta">
           <h3>default</h3>
-          <p>The page pisg has written since 2001, unchanged. Also: <code>darkgalaxy</code>,
-          <code>darkred</code>, <code>justgrey</code>, <code>ocean</code>, <code>orange_grey</code>,
-          <code>pisg</code>, <code>softgreen</code>.</p>
+          <p>The page pisg has written since 2001, unchanged. Also <code>darkgalaxy</code>,
+          <code>ocean</code>, <code>softgreen</code> and four more classics.</p>
           <span class="more">Preview &rarr;</span>
+        </div>
+      </a>
+      <a class="card themecard" href="themes/#creator">
+        <div class="sw" aria-hidden="true">
+          <span style="background:linear-gradient(135deg,#3fd18b,#58a6ff)"></span>
+          <span style="background:linear-gradient(135deg,#58a6ff,#bc8cff)"></span>
+          <span style="background:linear-gradient(135deg,#bc8cff,#e5b567)"></span>
+          <span style="background:linear-gradient(135deg,#e5b567,#e8615d)"></span>
+          <span style="background:linear-gradient(135deg,#e8615d,#3fd18b)"></span>
+        </div>
+        <div class="meta">
+          <h3>make your own</h3>
+          <p>A theme is one CSS file with sixteen colours in it. The creator lets you set them, shows a
+          real stats page changing as you go, and hands you the file.</p>
+          <span class="more">Open the theme creator &rarr;</span>
         </div>
       </a>
     </div>
 
-    <div class="note">Rolling your own is still a CSS file in <code>layout/</code> and
-    <code>&lt;set ColorScheme="myfile"&gt;</code>. The five new ones are generated from one palette by
-    <code>layout/build-themes.py</code>, so a change there keeps them all in step. See
-    <a href="docs.html#using-css">Changing the layout</a>.</div>
+    <div class="note">Rolling your own by hand is still a CSS file in <code>layout/</code> and
+    <code>&lt;set ColorScheme="myfile"&gt;</code>. The four modern ones are generated from one palette
+    by <code>layout/build-themes.py</code>, so a change there keeps them all in step. See
+    <a href="themes/">Themes</a> and <a href="docs/#using-css">Changing the layout</a>.</div>
   </div>
 </section>
 
@@ -461,28 +467,28 @@
         for sex, picture and link, <code>!pisgmerge</code> to count their other nicks as one person,
         <code>!pisgstats</code> for the page address. Identified by network account, rate limited, and
         it can never overwrite a <code>&lt;user&gt;</code> line you wrote yourself. 107 tests ship with it.</span>
-        <a class="lget" href="docs.html#tool-eggdrop">Docs &rarr;</a>
+        <a class="lget" href="docs/#tool-eggdrop">Docs &rarr;</a>
       </div>
       <div class="lrow">
         <span class="lname">pisg-autoalias.py <em>python 3</em></span>
         <span class="ldesc">Nicks seen on the same authenticated host are the same person. Writes an
         include file for pisg and can run before every pisg run. Your own <code>&lt;user&gt;</code>
         lines always win; shared hosts, gateways and bouncers are never merged.</span>
-        <a class="lget" href="docs.html#tool-autoalias">Docs &rarr;</a>
+        <a class="lget" href="docs/#tool-autoalias">Docs &rarr;</a>
       </div>
       <div class="lrow">
         <span class="lname">adiirc2eggdrop.py <em>python 3</em></span>
         <span class="ldesc">Turns an AdiIRC (or similar) client log into eggdrop or ZNC logs, so years
         of history you kept by accident can join the statistics. Public events only, local time
         converted to UTC, never overwrites a file, and it stops where your real logging starts.</span>
-        <a class="lget" href="docs.html#tool-adiirc">Docs &rarr;</a>
+        <a class="lget" href="docs/#tool-adiirc">Docs &rarr;</a>
       </div>
       <div class="lrow">
         <span class="lname">znc-setup.sh <em>shell</em></span>
         <span class="ldesc">Puts converted logs into a ZNC account's log folder and gives pisg &mdash;
         running as a different Unix user &mdash; read access to exactly the channel folders it needs.
         It prints what it would do before it changes anything.</span>
-        <a class="lget" href="docs.html#tool-znc">Docs &rarr;</a>
+        <a class="lget" href="docs/#tool-znc">Docs &rarr;</a>
       </div>
     </div>
   </div>
@@ -513,8 +519,8 @@
     </details>
 
     <details class="faq">
-      <summary>Will 1.0 break my existing setup?</summary>
-      <div class="answer"><p>Your <code>pisg.cfg</code> keeps working as it is, and every old colour
+      <summary>Will 1.0a break my existing setup?</summary>
+      <div class="answer"><p>It is an alpha, so keep the version you run now until you have tried this one on a copy. That said: your <code>pisg.cfg</code> keeps working as it is, and every old colour
       scheme looks as it did. Two things to know: the new sections are on by default (set
       <code>ShowOverview</code>, <code>ShowRelations</code>, <code>ShowTimePersonalities</code>,
       <code>ShowConcentration</code>, <code>ShowSignatureWords</code> and <code>ShowNavBar</code> to
@@ -570,7 +576,7 @@
         a channel deserved to be able to read itself. It lived on SourceForge for a decade and a half
         and is still there:
         <a href="https://sourceforge.net/projects/pisg/">sourceforge.net/projects/pisg</a>. Everything
-        since &mdash; including 1.0 &mdash; is built on that code and keeps its licence.</p>
+        since &mdash; including 1.0a &mdash; is built on that code and keeps its licence.</p>
       </div>
       <div class="card">
         <h3>Kept going on GitHub</h3>
@@ -595,15 +601,15 @@
       <div class="foot-col">
         <h2>pisg</h2>
         <a href="#install">Quick start</a>
-        <a href="docs.html">Documentation</a>
-        <a href="changelog.html">Changelog</a>
+        <a href="docs/">Documentation</a>
+        <a href="changelog/">Changelog</a>
         <a href="#formats">Log formats</a>
       </div>
       <div class="foot-col">
         <h2>Example</h2>
         <a href="demo/">Landing page</a>
         <a href="demo/nightshift.html">Busy channel</a>
-        <a href="#themes">Themes</a>
+        <a href="themes/">Themes</a>
       </div>
       <div class="foot-col">
         <h2>Source</h2>
@@ -619,26 +625,36 @@
       </div>
       <div class="foot-col">
         <h2>Legal</h2>
-        <a href="privacy.html">Privacy policy</a>
-        <a href="cookies.html">Cookie policy</a>
-        <a href="terms.html">Terms of use</a>
+        <a href="privacy/">Privacy policy</a>
+        <a href="cookies/">Cookie policy</a>
+        <a href="terms/">Terms of use</a>
         <a href="https://www.gnu.org/licenses/old-licenses/gpl-2.0.html">GPL-2.0 licence</a>
       </div>
     </div>
     <div class="foot-bottom">
-      <span class="foot-mark"><span style="color:var(--accent)">$</span> pisg 1.0 &mdash; GPL-2.0-or-later</span>
+      <span class="foot-mark"><span style="color:var(--accent)">$</span> pisg 1.0a &mdash; GPL-2.0-or-later</span>
       <span>Started by <a href="https://sourceforge.net/projects/pisg/">mbrix</a> in 2001 &middot;
       maintained by <a href="https://github.com/DooubleTap">Seb</a></span>
     </div>
     <p class="disclaimer">pisg is not affiliated with Undernet, with any IRC client or bot project, or
     with SourceForge, and the names of those projects belong to their owners. Channel names, nicknames,
     messages and pictures in the example pages on this site are invented. This site sets no cookies and
-    collects nothing &mdash; see the <a href="privacy.html">privacy policy</a>. If you publish
+    collects nothing &mdash; see the <a href="privacy/">privacy policy</a>. If you publish
     statistics of your own, the people in them are your responsibility:
-    <a href="privacy.html#yourstats">what that means</a>.</p>
+    <a href="privacy/#yourstats">what that means</a>.</p>
   </div>
 </footer>
 
 <script src="assets/site.js"></script>
+<script>
+/* Until 2026 the whole manual lived on this page, so links like
+   pisg.github.io/#ShowRandQuote are still out there. The manual is at /docs/ now:
+   if the hash names nothing on this page, hand it over. */
+(function () {
+  var h = location.hash.slice(1);
+  if (!h || document.getElementById(h)) return;
+  if (/^[A-Za-z][A-Za-z0-9_-]{1,40}$/.test(h)) location.replace('docs/#' + h);
+})();
+</script>
 </body>
 </html>

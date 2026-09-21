@@ -75,20 +75,22 @@ guide2 = tidy(chapter('setting-up-pisg'))
 guide2 = re.sub(
   r'<p>There are a few predefined color schemes.*?softgreen\.</p>',
   '<p>There are predefined colour schemes for you to use &mdash; set one with the '
-  '<a href="#ColorScheme">ColorScheme</a> option. pisg 1.0 added five modern ones, which follow the '
-  'reader\'s light/dark setting: <code>modern</code>, <code>midnight</code>, <code>amoled</code>, '
-  '<code>terminal</code> and <code>canada</code>. The eight classic schemes are unchanged: '
+  '<a href="#ColorScheme">ColorScheme</a> option. pisg 1.0a added four modern ones &mdash; '
+  '<code>modern</code>, <code>midnight</code>, <code>amoled</code> and <code>terminal</code>; '
+  '<code>modern</code> follows the reader\'s light/dark setting. The eight classic schemes are '
+  'unchanged: '
   '<code>default</code> (still the default), <code>darkgalaxy</code>, <code>darkred</code>, '
   '<code>justgrey</code>, <code>ocean</code>, <code>orange_grey</code>, <code>pisg</code> and '
-  '<code>softgreen</code>. <a href="../#themes">See all of them side by side</a>.</p>',
+  '<code>softgreen</code>. <a href="../themes/">See them side by side, or build your own</a>.</p>',
   guide2, flags=re.S)
 
 guide2 = re.sub(
   r'<p>If you have created a nice stylesheet which other can take advantage of,.*?next version of pisg\.</p>',
-  '<p>The five modern schemes are generated from one palette by '
-  '<code>layout/build-themes.py</code>, so to change them all at once &mdash; or add a sixth in the '
+  '<p>The four modern schemes are generated from one palette by '
+  '<code>layout/build-themes.py</code>, so to change them all at once &mdash; or add a fifth in the '
   'same style &mdash; edit the palette in that script and run it, rather than editing the CSS files '
-  'one by one.</p>\n'
+  'one by one. There is also a <a href="../themes/#creator">theme creator</a> on this site that '
+  'builds the file for you.</p>\n'
   '<p>If you have made a stylesheet others could use, open a pull request on '
   '<a href="https://github.com/PISG/pisg">GitHub</a> so it can ship with the next version.</p>',
   guide2, flags=re.S)
@@ -121,7 +123,14 @@ ref_misc     = cards(chapter('reference-misc'))
 copyright_ch = tidy(chapter('copyright'))
 example_ch   = tidy(chapter('example-config'))
 
-# the example config chapter ships its own copy button; give it the site's class names
+# the shipped example config still offers a theme that is no longer distributed
+example_ch = example_ch.replace('midnight, amoled, terminal, canada, or default',
+                                'midnight, amoled, terminal, or default')
+example_ch = example_ch.replace('midnight%2C%20amoled%2C%20terminal%2C%20canada%2C%20or%20default',
+                                'midnight%2C%20amoled%2C%20terminal%2C%20or%20default')
+
+# the example config chapter ships its own copy/download bar; give it the site's classes
+example_ch = example_ch.replace('class="btn copy"', 'class="btn small copybtn"')
 example_ch = example_ch.replace('class="btn"', 'class="btn small"')
 
 # ---------------------------------------------------------------------------
@@ -130,7 +139,7 @@ example_ch = example_ch.replace('class="btn"', 'class="btn small"')
 def opt(oid, purpose, code, desc, default):
     return ('<article class="opt" id="%s" data-k="%s %s">\n'
             '<h3><a class="anchor" href="#%s" aria-label="Link to %s">%s</a>'
-            '<span class="purpose">%s</span> <span class="since">1.0</span></h3>\n'
+            '<span class="purpose">%s</span> <span class="since">1.0a</span></h3>\n'
             '<pre>%s</pre>\n<p>%s</p>\n'
             '<p class="meta"><b>Default:</b> %s</p>\n</article>\n'
             % (oid, oid.lower(), purpose.lower(), oid, oid, oid, purpose, code, desc, default))
@@ -223,7 +232,7 @@ new_opts.append(opt('ShareLink', 'what gets shared, and where',
   'of your own, which is how you feed a channel list or a bot you run yourself. Both do nothing while '
   '<a href="#ShareStats">ShareStats</a> is off.', 'Unset'))
 
-ref_new = ('<p class="sec-intro">The seven sections added in 1.0 are on by default in every colour '
+ref_new = ('<p class="sec-intro">The seven sections added in 1.0a are on by default in every colour '
            'scheme. Set them to <code>0</code> for the page pisg wrote before 1.0 &mdash; see the '
            '<a href="../changelog/#v1.0-upgrading">upgrade notes</a>.</p>\n' + ''.join(new_opts))
 
@@ -327,7 +336,7 @@ CHAPTERS = [
   ('setting-up-pisg',   'Setting up pisg',          guide2,       None),
   ('reference',         'General options',          ref_general,  'General options'),
   ('reference-stats',   'Statistics options',       ref_stats,    'Statistics options'),
-  ('reference-new',     'Options added in 1.0',     ref_new,      'Options added in 1.0'),
+  ('reference-new',     'Options added in 1.0a',     ref_new,      'Options added in 1.0'),
   ('reference-pictures','Picture options',          ref_pictures, 'Picture options'),
   ('reference-misc',    'Misc options',             ref_misc,     'Misc options'),
   ('tools',             'Optional tools',           tools,        None),
@@ -383,7 +392,7 @@ PAGE = u'''<!DOCTYPE html>
 <nav class="sidebar" id="sidebar" aria-label="Documentation">
   <a class="logo" href="../">
     <span class="dollar">$</span>
-    <span><b>pisg</b><small>1.0 &middot; DOCUMENTATION</small></span>
+    <span><b>pisg</b><small>1.0a &middot; DOCUMENTATION</small></span>
   </a>
   <input id="search" type="search" placeholder="Filter options… ( / )" autocomplete="off" spellcheck="false" aria-label="Filter options">
   <p class="search-hint"><span id="search-count"></span>&nbsp;</p>
@@ -392,6 +401,7 @@ PAGE = u'''<!DOCTYPE html>
     <h5>Elsewhere</h5>
     <a class="out" href="../">Home</a>
     <a class="out" href="../changelog/">Changelog</a>
+    <a class="out" href="../themes/">Themes &amp; creator</a>
     <a class="out" href="../demo/">Live example</a>
     <a class="out" href="https://github.com/PISG/pisg">GitHub ↗</a>
   </div>
@@ -407,14 +417,14 @@ PAGE = u'''<!DOCTYPE html>
   <h1>pisg <span>documentation</span></h1>
   <p class="tagline">How to set pisg up, how to write <code>pisg.cfg</code>, and what every option does.</p>
   <div class="badges">
-    <span class="badge hot">1.0</span>
+    <span class="badge hot">1.0a</span>
     <span class="badge">@@NOPTS@@ options</span>
     <span class="badge">Perl 5</span>
     <span class="badge gold">GPL-2.0-or-later</span>
     <span class="badge">also ships as <code>docs/pisg-doc.html</code></span>
   </div>
   <p class="sec-intro" style="margin-top:18px">Everything here applies to 0.73 as well, except the
-  options marked <span class="since">1.0</span>. Use the filter in the sidebar, or press
+  options marked <span class="since">1.0a</span>. Use the filter in the sidebar, or press
   <kbd>/</kbd>, to find an option by name or by what it does.</p>
 </div>
 
@@ -427,7 +437,7 @@ PAGE = u'''<!DOCTYPE html>
   <a href="https://sourceforge.net/projects/pisg/">Original project</a></p>
   <p style="margin-top:8px"><a href="../privacy/">Privacy</a> &middot;
   <a href="../cookies/">Cookies</a> &middot; <a href="../terms/">Terms</a></p>
-  <p style="margin-top:8px">pisg is free software under the GPL, version 2 or later. Started in 2001 by
+  <p style="margin-top:8px">pisg 1.0a is free software under the GPL, version 2 or later. Started in 2001 by
   Morten “mbrix” Brix Pedersen.</p>
 </footer>
 
